@@ -1,0 +1,2 @@
+${spring.application.name} v${app.version}
+Powered by Spring Boot v${spring-boot.version}
