@@ -70,8 +70,8 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
+        <finalName>app</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

@@ -3,6 +3,7 @@ package io.hb3nce04.keykeeperapp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+// TODO: dockerize
 @SpringBootApplication
 public class KeyKeeperAppApplication {
 
