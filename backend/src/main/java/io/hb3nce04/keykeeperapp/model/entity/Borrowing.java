@@ -23,7 +23,7 @@ public class Borrowing extends BaseEntity {
     @Column(nullable = false)
     private LocalTime startTime;
 
-    @Column(nullable = false)
+    @Column
     private LocalTime endTime;
 
     @Column(nullable = false)
