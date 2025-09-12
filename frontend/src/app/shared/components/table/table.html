@@ -1,12 +1,13 @@
 <nz-table #basicTable [nzData]="data()">
-  <thead>
+  <thead class="ant-table-thead">
   <tr>
     @for (column of columns(); track $index) {
       <th>{{ column.header }}</th>
     }
+    <th></th>
   </tr>
   </thead>
-  <tbody>
+  <tbody class="ant-table-tbody">
     @for (data of basicTable.data; track $index) {
       <tr>
         @for (column of columns(); track $index) {

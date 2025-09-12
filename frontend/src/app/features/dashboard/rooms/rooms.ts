@@ -13,7 +13,7 @@ import {HttpClient} from '@angular/common/http';
   `
 })
 export class Rooms implements OnInit {
-  private http: HttpClient = inject(HttpClient);
+  private httpClient: HttpClient = inject(HttpClient);
 
   columns: Column<RoomDto>[] = [
     {
@@ -51,7 +51,7 @@ export class Rooms implements OnInit {
   data: WritableSignal<RoomDto[]> = signal([])
 
   ngOnInit(): void {
-    this.http.get<RoomDto[]>('http://localhost:8080/rooms').subscribe({
+    this.httpClient.get<RoomDto[]>('http://localhost:8080/rooms').subscribe({
       next: (data: RoomDto[]) => {
         this.data.set(data)
       },

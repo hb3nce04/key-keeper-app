@@ -3,6 +3,10 @@ import {NzFormControlComponent, NzFormDirective, NzFormItemComponent} from 'ng-z
 import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
 import {NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {AuthService} from '../../../core/services/auth.service';
+import {Router} from '@angular/router';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   templateUrl: 'login.html',
@@ -13,18 +17,34 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
     NzInputGroupComponent,
     ReactiveFormsModule,
     NzButtonComponent,
-    NzInputDirective
-  ]
+    NzInputDirective,
+    NzColDirective,
+    NzRowDirective
+  ],
+  styleUrl: 'login.scss',
 })
 export class Login {
   private fb = inject(NonNullableFormBuilder);
+  private router: Router = inject(Router);
+  private message: NzMessageService = inject(NzMessageService);
+  private authService: AuthService = inject(AuthService);
+
   validateForm = this.fb.group({
     username: this.fb.control('', [Validators.required]),
     password: this.fb.control('', [Validators.required]),
-    remember: this.fb.control(true)
   });
 
   submitForm(): void {
-    console.log('submit', this.validateForm.value);
+    const {username, password} = this.validateForm.value;
+    this.authService.login(username!, password!).subscribe(
+      data => {
+        if (data) {
+          this.router.navigate(['/dashboard/records']);
+          this.message.success("Sikeres bejelentkezés!")
+        } else {
+          this.message.error("Hibás felhasználónév vagy jelszó!")
+        }
+      }
+    );
   }
 }

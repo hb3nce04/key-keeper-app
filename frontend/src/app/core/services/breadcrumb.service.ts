@@ -33,7 +33,7 @@ export class BreadcrumbService {
       if (route.data['breadcrumb']) {
         const breadcrumb = {
           label: this.getLabel(route.data),
-          url:  '/' + url.join('/'),
+          url:  route.data['link'] ? route.data['link'] : '/' + url.join('/'),
         }
         breadcrumbs.push(breadcrumb);
       }

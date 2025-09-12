@@ -11,7 +11,7 @@ import {Breadcrumb} from './breadcrumb/breadcrumb';
     NzLayoutComponent,
     RouterOutlet,
     Header,
-    Breadcrumb
+    Breadcrumb,
   ],
   template: `
     <nz-layout class="app-layout">

@@ -1,0 +1,27 @@
+.login-container {
+  background: black;
+  background: -webkit-linear-gradient(to right, black, #00093e);
+  background: linear-gradient(to right, black, #00093e);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  h2 {
+    color: white;
+  }
+
+  .login-form {
+    padding: 32px;
+    width: 300px;
+    background: white;
+    border: 1px solid white;
+    border-radius: 12px;
+    box-shadow: 32px -32px 12px rgba(255,255,255,0.3);
+  }
+
+  .login-form-button {
+    width: 100%;
+  }
+}

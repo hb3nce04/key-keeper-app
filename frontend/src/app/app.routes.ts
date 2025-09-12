@@ -14,7 +14,8 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     data: {
-      breadcrumb: 'Főoldal'
+      breadcrumb: 'Főoldal',
+      link: '/dashboard/records'
     },
     component: Layout,
     loadChildren: () => import('./features/dashboard/dashboard.routes')
