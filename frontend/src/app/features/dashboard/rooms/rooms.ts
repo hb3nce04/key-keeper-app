@@ -5,6 +5,7 @@ import {Column} from '../../../shared/components/table/table.type';
 import {HttpClient} from '@angular/common/http';
 
 @Component({
+  selector: 'app-rooms',
   imports: [
     Table
   ],
