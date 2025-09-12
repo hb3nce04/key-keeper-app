@@ -2,10 +2,10 @@ import {Component} from '@angular/core';
 import {NzHeaderComponent} from 'ng-zorro-antd/layout';
 import {NzMenuDirective, NzMenuItemComponent} from 'ng-zorro-antd/menu';
 import {RouterLink, RouterLinkActive} from '@angular/router';
-import {NAV_LINKS} from './nav-link.const';
+import {NAV_LINKS} from '../../../core/constants/nav-link.const';
 
 @Component({
-  selector: 'app-header',
+  selector: 'app-layout-header',
   imports: [
     NzHeaderComponent,
     NzMenuDirective,
