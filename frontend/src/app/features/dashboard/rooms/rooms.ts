@@ -1,8 +1,63 @@
-import {Component} from '@angular/core';
+import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
+import {Table} from '../../../shared/components/table/table';
+import {RoomDto, RoomType} from './room.dto';
+import {Column} from '../../../shared/components/table/table.type';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
-  template: `Helyiségek`
+  imports: [
+    Table
+  ],
+  template: `
+    <app-table [columns]="columns" [data]="data()"/>
+  `
 })
-export class Rooms {
+export class Rooms implements OnInit {
+  private http: HttpClient = inject(HttpClient);
 
+  columns: Column<RoomDto>[] = [
+    {
+      field: 'code',
+      header: 'Terem',
+    },
+    {
+      field: 'name',
+      header: 'Név'
+    },
+    {
+      field: 'floor',
+      header: 'Szint',
+    },
+    {
+      field: 'building',
+      header: 'Épület'
+    },
+    {
+      field: 'capacity',
+      header: 'Kapacitás',
+      valueFn: (value) => `${value} fő`
+    },
+    {
+      field: 'area',
+      header: 'Terület',
+      valueFn: (value) => `${value} nm`
+    },
+    {
+      field: 'type',
+      header: 'Típus',
+      valueFn: (value: keyof typeof RoomType) => RoomType[value]
+    }
+  ]
+  data: WritableSignal<RoomDto[]> = signal([])
+
+  ngOnInit(): void {
+    this.http.get<RoomDto[]>('http://localhost:8080/rooms').subscribe({
+      next: (data: RoomDto[]) => {
+        this.data.set(data)
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
 }

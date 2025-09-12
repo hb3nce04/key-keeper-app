@@ -1,0 +1,22 @@
+<nz-table #basicTable [nzData]="data()">
+  <thead>
+  <tr>
+    @for (column of columns(); track $index) {
+      <th>{{ column.header }}</th>
+    }
+  </tr>
+  </thead>
+  <tbody>
+    @for (data of basicTable.data; track $index) {
+      <tr>
+        @for (column of columns(); track $index) {
+          <td>{{ !!column.valueFn ? column.valueFn(data[column.field]) : data[column.field] }}</td>
+        }
+        <td>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a>Törlés</a>
+        </td>
+      </tr>
+    }
+  </tbody>
+</nz-table>
