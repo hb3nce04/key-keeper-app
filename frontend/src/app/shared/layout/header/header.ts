@@ -17,7 +17,7 @@ import {NAV_LINKS} from './nav-link.const';
     <nz-header>
       <div class="logo">
         <a routerLink="/">
-          <img src="https://cdn-icons-png.flaticon.com/512/2339/2339738.png" alt="logo">
+          <img src="assets/icon.png" alt="logo">
           <h1>Kulcsnyilvántartó rendszer</h1>
         </a>
       </div>

@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 
 @Component({
-  template: `dashboard works`
+  template: `Helyiségek`
 })
-export class Dashboard {
+export class Rooms {
 
 }
