@@ -35,16 +35,19 @@ export class Login {
   });
 
   submitForm(): void {
-    const {username, password} = this.validateForm.value;
-    this.authService.login(username!, password!).subscribe(
-      data => {
-        if (data) {
+    if (this.validateForm.valid) {
+      const {username, password} = this.validateForm.value;
+      this.authService.login(username!, password!).subscribe({
+        next: () => {
           this.router.navigate(['/dashboard/records']);
           this.message.success("Sikeres bejelentkezés!")
-        } else {
-          this.message.error("Hibás felhasználónév vagy jelszó!")
+        },
+        error: (error) => {
+          if (error.status === 403) {
+            this.message.error("Hibás felhasználónév vagy jelszó!");
+          }
         }
-      }
-    );
+      })
+    }
   }
 }

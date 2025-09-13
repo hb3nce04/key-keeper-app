@@ -12,11 +12,11 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
     const authRequired = route?.data['authRequired'] ?? true;
 
-    if (authRequired && !this.authService.loggedIn) {
+    if (authRequired && !this.authService.isLoggedIn()) {
       return this.router.createUrlTree(['/auth/login']);
     }
 
-    if (!authRequired && this.authService.loggedIn) {
+    if (!authRequired && this.authService.isLoggedIn()) {
       return this.router.createUrlTree(['/dashboard/records']);
     }
 

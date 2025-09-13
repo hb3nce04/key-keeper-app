@@ -2,11 +2,12 @@ import {ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChange
 import {provideRouter} from '@angular/router';
 
 import {routes} from './app.routes';
-import {provideHttpClient} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {provideNzIcons} from 'ng-zorro-antd/icon';
 import {IconDefinition} from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
+import {TokenInterceptor} from './core/interceptors/token.interceptor';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -18,8 +19,13 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptorsFromDi()),
     provideNzIcons(icons),
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ]
 };
