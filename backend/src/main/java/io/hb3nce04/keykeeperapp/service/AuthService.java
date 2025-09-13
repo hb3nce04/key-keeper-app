@@ -1,8 +1,11 @@
 package io.hb3nce04.keykeeperapp.service;
 
+import java.util.List;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,10 @@ public class AuthService {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return new AuthResponseDto(jwtUtils.generateToken(userDetails.getUsername()));
+        List<String> roles = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+        return new AuthResponseDto(jwtUtils.generateToken(userDetails.getUsername(), roles.getFirst()));
     }
 }
