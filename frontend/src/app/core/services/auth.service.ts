@@ -1,6 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
+import {Role} from '../enums/role.enum';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -21,5 +22,9 @@ export class AuthService {
 
   logout() {
     this.loggedIn = false;
+  }
+
+  getRole() {
+    return Role.ADMIN
   }
 }

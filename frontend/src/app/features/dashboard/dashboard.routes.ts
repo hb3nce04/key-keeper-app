@@ -10,5 +10,6 @@ export default [
   {path: 'keys', component: Keys, data: {breadcrumb: 'Kulcsok'}},
   {path: 'rooms', component: Rooms, data: {breadcrumb: 'Helyiségek'}},
   {path: 'requesters', component: Requesters, data: {breadcrumb: 'Igénylők'}},
-  {path: 'users', component: Users, data: {breadcrumb: 'Felhasználók'}}
+  {path: 'users', component: Users, data: {breadcrumb: 'Felhasználók'}},
+  { path: '', redirectTo: '/dashboard/records', pathMatch: 'full' },
 ] as Routes;

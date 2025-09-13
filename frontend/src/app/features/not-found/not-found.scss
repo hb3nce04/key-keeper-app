@@ -1,0 +1,22 @@
+.not-found {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+
+  .code {
+    font-size: 4rem;
+    font-weight: lighter;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h1 {
+      margin: 0;
+    }
+  }
+}
