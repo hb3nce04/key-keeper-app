@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {Role} from '../enums/role.enum';
-import {ENVIRONMENT} from '../../../environments/environment';
+import {environment} from '../../../environments/environment';
 import {AuthResponseDto} from '../dtos/auth-response.dto';
 import {LocalStorageService} from './local-storage.service';
 import {jwtDecode, JwtPayload} from 'jwt-decode';
@@ -11,7 +11,7 @@ import {jwtDecode, JwtPayload} from 'jwt-decode';
 export class AuthService {
   private httpClient: HttpClient = inject(HttpClient)
   private localStorageService: LocalStorageService = inject(LocalStorageService);
-  private url = ENVIRONMENT.apiUrl + '/auth';
+  private url = environment.apiUrl + '/auth';
 
   login(username: string, password: string): Observable<AuthResponseDto> {
     return this.httpClient.post<AuthResponseDto>(this.url+'/login', {username, password}).pipe(

@@ -28,6 +28,6 @@ public class BorrowingController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User foundUser = repository.findByUsername(userDetails.getUsername());
-        return ResponseEntity.ok(service.findAllByUserId(foundUser.getId()));
+        return ResponseEntity.ok(service.findAll());
     }
 }

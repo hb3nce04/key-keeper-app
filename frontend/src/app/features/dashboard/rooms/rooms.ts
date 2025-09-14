@@ -2,8 +2,7 @@ import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
 import {Table} from '../../../shared/components/table/table';
 import {RoomDto, RoomType} from './room.dto';
 import {Column} from '../../../shared/components/table/table.type';
-import {HttpClient} from '@angular/common/http';
-import {ENVIRONMENT} from '../../../../environments/environment';
+import {RoomService} from './room.service';
 
 @Component({
   selector: 'app-rooms',
@@ -15,7 +14,7 @@ import {ENVIRONMENT} from '../../../../environments/environment';
   `
 })
 export class Rooms implements OnInit {
-  private httpClient: HttpClient = inject(HttpClient);
+  private service: RoomService = inject(RoomService);
 
   columns: Column<RoomDto>[] = [
     {
@@ -29,6 +28,12 @@ export class Rooms implements OnInit {
     {
       field: 'floor',
       header: 'Szint',
+      valueFn: (val) => {
+        if (val == 0) {
+          return 'Földszint'
+        }
+        return `${val}. emelet`
+      }
     },
     {
       field: 'building',
@@ -53,13 +58,10 @@ export class Rooms implements OnInit {
   data: WritableSignal<RoomDto[]> = signal([])
 
   ngOnInit(): void {
-    this.httpClient.get<RoomDto[]>(`${ENVIRONMENT.apiUrl}/rooms`).subscribe({
+    this.service.getAll().subscribe({
       next: (data: RoomDto[]) => {
         this.data.set(data)
       },
-      error: (err) => {
-        console.log(err)
-      }
     })
   }
 }

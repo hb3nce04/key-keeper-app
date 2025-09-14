@@ -11,7 +11,7 @@
     @for (data of basicTable.data; track $index) {
       <tr>
         @for (column of columns(); track $index) {
-          <td>{{ !!column.valueFn ? column.valueFn(data[column.field]) : data[column.field] }}</td>
+          <td>{{ this.getRenderedValue(column, data) }}</td>
         }
         <td>
           <nz-divider nzType="vertical"></nz-divider>

@@ -2,6 +2,7 @@ import {Routes} from '@angular/router';
 import {Layout} from './shared/layout/layout';
 import {NotFound} from './features/not-found/not-found';
 import {AuthGuard} from './core/guards/auth.guard';
+import {MAIN_PAGE} from './core/constants/nav-link.const';
 
 export const routes: Routes = [
   {
@@ -17,11 +18,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: {
       breadcrumb: 'Főoldal',
-      link: '/dashboard/records'
+      link: MAIN_PAGE
     },
     component: Layout,
     loadChildren: () => import('./features/dashboard/dashboard.routes')
   },
-  { path: '', redirectTo: '/dashboard/records', pathMatch: 'full' },
+  { path: '', redirectTo: MAIN_PAGE, pathMatch: 'full' },
   { path: '**', component: NotFound },
 ];

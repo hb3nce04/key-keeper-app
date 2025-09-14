@@ -39,7 +39,7 @@ export class Login {
       const {username, password} = this.validateForm.value;
       this.authService.login(username!, password!).subscribe({
         next: () => {
-          this.router.navigate(['/dashboard/records']);
+          this.router.navigate(['/dashboard/borrowings']);
           this.message.success("Sikeres bejelentkezés!")
         },
         error: (error) => {

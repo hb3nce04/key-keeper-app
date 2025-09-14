@@ -1,6 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, UrlTree} from '@angular/router';
 import {AuthService} from '../services/auth.service';
+import {MAIN_PAGE} from '../constants/nav-link.const';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class AuthGuard implements CanActivate {
     }
 
     if (!authRequired && this.authService.isLoggedIn()) {
-      return this.router.createUrlTree(['/dashboard/records']);
+      return this.router.createUrlTree([MAIN_PAGE]);
     }
 
     return true;
