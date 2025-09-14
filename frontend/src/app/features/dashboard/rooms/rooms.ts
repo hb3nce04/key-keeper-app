@@ -3,6 +3,7 @@ import {Table} from '../../../shared/components/table/table';
 import {RoomDto, RoomType} from './room.dto';
 import {Column} from '../../../shared/components/table/table.type';
 import {HttpClient} from '@angular/common/http';
+import {ENVIRONMENT} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-rooms',
@@ -52,7 +53,7 @@ export class Rooms implements OnInit {
   data: WritableSignal<RoomDto[]> = signal([])
 
   ngOnInit(): void {
-    this.httpClient.get<RoomDto[]>('http://localhost:8080/rooms').subscribe({
+    this.httpClient.get<RoomDto[]>(`${ENVIRONMENT.apiUrl}/rooms`).subscribe({
       next: (data: RoomDto[]) => {
         this.data.set(data)
       },

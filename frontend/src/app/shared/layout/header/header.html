@@ -1,10 +1,4 @@
 <nz-header>
-  <div class="logo">
-    <a routerLink="/">
-      <img src="assets/icon.png" alt="logo">
-      <h1>Kulcsnyilvántartó rendszer</h1>
-    </a>
-  </div>
   <ul nz-menu class="top-nav" nzTheme="dark" nzMode="horizontal">
     @for (link of NAV_LINKS; track $index) {
       <li nz-menu-item routerLinkActive="ant-menu-item-selected" [routerLink]="link.path">{{ link.label }}</li>

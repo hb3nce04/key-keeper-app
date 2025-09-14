@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NzContentComponent, NzLayoutComponent} from 'ng-zorro-antd/layout';
+import {NzContentComponent, NzFooterComponent, NzLayoutComponent} from 'ng-zorro-antd/layout';
 import {RouterOutlet} from '@angular/router';
 import {Header} from './header/header';
 import {Breadcrumb} from './breadcrumb/breadcrumb';
@@ -12,30 +12,11 @@ import {Breadcrumb} from './breadcrumb/breadcrumb';
     RouterOutlet,
     Header,
     Breadcrumb,
+    NzFooterComponent,
   ],
-  template: `
-    <nz-layout class="app-layout">
-      <app-layout-header/>
-      <nz-content>
-        <app-layout-breadcrumb/>
-        <div class="inner-content">
-          <router-outlet></router-outlet>
-        </div>
-      </nz-content>
-    </nz-layout>
-  `,
-  styles: `
-    .app-layout {
-      height: 100vh;
-    }
-    nz-content {
-      padding: 24px 50px;
-    }
-    .inner-content {
-      padding: 24px;
-      background: #fff;
-      height: calc(100% - 10px - 5%);
-    }
-  `
+  templateUrl: 'layout.html',
+  styleUrl: 'layout.scss',
 })
-export class Layout {}
+export class Layout {
+  protected readonly date = new Date();
+}
