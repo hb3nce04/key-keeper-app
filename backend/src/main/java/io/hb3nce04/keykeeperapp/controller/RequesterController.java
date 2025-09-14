@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.hb3nce04.keykeeperapp.model.dto.RoomDto;
-import io.hb3nce04.keykeeperapp.service.RoomService;
+import io.hb3nce04.keykeeperapp.model.dto.RequesterDto;
+import io.hb3nce04.keykeeperapp.service.RequesterService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/rooms")
+@RequestMapping("/requesters")
 @RequiredArgsConstructor
-public class RoomController {
-    private final RoomService service;
+public class RequesterController {
+    private final RequesterService service;
 
     @GetMapping
-    public ResponseEntity<List<RoomDto>> findAll() {
+    public ResponseEntity<List<RequesterDto>> findAll() {
         return ResponseEntity.ok(service.findAll());
     }
 }

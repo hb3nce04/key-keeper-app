@@ -16,6 +16,6 @@ public class BorrowingService {
     private final BorrowingRepository borrowingRepository;
 
     public List<BorrowingDto> findAllByUserId(Long userId) {
-        return this.mapper.toDtoList(borrowingRepository.findAllByUserId(userId));
+        return mapper.toDtoList(borrowingRepository.findAllByUserId(userId));
     }
 }
