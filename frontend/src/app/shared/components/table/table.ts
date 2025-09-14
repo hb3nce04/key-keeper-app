@@ -1,18 +1,19 @@
 import {Component, input, InputSignal} from '@angular/core';
 import {NzTableComponent} from 'ng-zorro-antd/table';
-import {NzDividerComponent} from 'ng-zorro-antd/divider';
-import {Column} from './table.type';
+import {Button, Column} from './table.type';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
 
 @Component({
   selector: 'app-table',
   imports: [
     NzTableComponent,
-    NzDividerComponent
+    NzButtonComponent
   ],
   templateUrl: 'table.html'
 })
 export class Table<T> {
   columns: InputSignal<Column<T>[]> = input.required();
+  buttons: InputSignal<Button[] | undefined> = input();
   data: InputSignal<T[]> = input.required();
 
   getRenderedValue(column: Column<T>, data: T) {

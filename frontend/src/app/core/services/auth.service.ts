@@ -40,8 +40,12 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  getUsername() {
+    return this.getDecodedToken()!.sub;
+  }
+
   getUser() {
-    return `${this.getDecodedToken()!.sub} (${Role[this.getDecodedToken()!.role as keyof typeof Role]})`;
+    return `${this.getUsername()} (${Role[this.getDecodedToken()!.role as keyof typeof Role]})`;
   }
 
   logout() {

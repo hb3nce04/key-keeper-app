@@ -1,21 +1,60 @@
-import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit, signal, TemplateRef, ViewChild, WritableSignal} from '@angular/core';
 import {Table} from '../../../shared/components/table/table';
 import {KeyService} from './key.service';
 import {KeyDto} from './key.dto';
-import {Column} from '../../../shared/components/table/table.type';
+import {Button, Column} from '../../../shared/components/table/table.type';
+import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
+import {kjua, NgxKjuaComponent} from 'ngx-kjua';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
+import jspdf from 'jspdf';
+import {AuthService} from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-keys',
   imports: [
-    Table
+    Table,
+    NzModalModule,
+    NgxKjuaComponent,
+    NzButtonComponent
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()"/>
+    <button nz-button nzType="primary" (click)="handlePrint()">QR-kódok nyomtatása</button>
+    <app-table [buttons]="buttons" [columns]="columns" [data]="data()"/>
+    <ng-template #codeTemplate>
+      <div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">
+        <ngx-kjua [text]="this.code()"></ngx-kjua>
+      </div>
+    </ng-template>
+  `,
+  styles: `
+    button {
+      margin-bottom: 10px;
+    }
   `
 })
 export class Keys implements OnInit {
+  private authService: AuthService = inject(AuthService);
   private service: KeyService = inject(KeyService);
+  private modalService: NzModalService = inject(NzModalService);
 
+  @ViewChild('codeTemplate') codeTemplate!: TemplateRef<any>;
+
+  code: WritableSignal<string> = signal('');
+
+  marginX = 2;
+  marginY = 2;
+  cellWidth = 16;
+  cellHeight = 16;
+  rowsPerPage = 18;
+  columnsPerPage = 13;
+
+  buttons: Button[] = [
+    {
+      label: "QR-kód",
+      type: "dashed",
+      click: (data: KeyDto) => this.showCode(data.code)
+    }
+  ]
   columns: Column<KeyDto>[] = [
     {
       field: 'code',
@@ -36,4 +75,75 @@ export class Keys implements OnInit {
     })
   }
 
+  private showCode(code: string) {
+    this.code.set(code)
+    this.modalService.info({
+      nzTitle: "QR-kód",
+      nzContent: this.codeTemplate,
+      nzOkText: "Bezárás"
+    });
+  }
+
+  handlePrint() {
+    const document = new jspdf();
+
+    let columnIndex = 0;
+    let rowIndex = 0;
+
+    for (const data of this.data()) {
+      const barcodeData = Keys.getBarcodeData(data);
+      const x = this.marginX + columnIndex * this.cellWidth;
+      const y = this.marginY + rowIndex * this.cellHeight;
+      document.addImage(barcodeData, "PNG", x, y, this.cellWidth - 2, this.cellHeight - 2);
+
+      rowIndex++;
+
+      if (rowIndex >= this.rowsPerPage) {
+        rowIndex = 0;
+        columnIndex++;
+      }
+
+      if (columnIndex >= this.columnsPerPage) {
+        columnIndex = 0;
+        rowIndex = 0;
+        document.addPage();
+      }
+    }
+
+    const totalPages = document.getNumberOfPages();
+    const timestamp = new Date().toLocaleString();
+    for (let i = 1; i <= totalPages; i++) {
+      document.setPage(i);
+      document.setFontSize(8);
+      document.text(
+        `Oldal: ${i}/${totalPages}, generálva: ${timestamp}, általa: ${this.authService.getUsername()}`,
+        this.marginX,
+        document.internal.pageSize.getHeight() - this.marginY
+      );
+    }
+
+    document.save(`qr.pdf`);
+  }
+
+  static getBarcodeData(data: KeyDto) {
+    return kjua({
+      render: "canvas",
+      crisp: true,
+      minVersion: 1,
+      ecLevel: "Q",
+      size: 900,
+      fill: "#000",
+      back: "#F0F0F0",
+      text: data.code,
+      rounded: 10,
+      quiet: 2,
+      mode: "label",
+      mSize: 5,
+      mPosX: 50,
+      mPosY: 100,
+      label: `${data.code}: ${data.room.code} - ${data.room.name} (${data.room.building})`,
+      fontname: "sans-serif",
+      fontcolor: "#3F51B5",
+    });
+  }
 }

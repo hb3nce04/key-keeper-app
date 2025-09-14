@@ -21,7 +21,6 @@ export class BreadcrumbService {
       const root = this.router.routerState.snapshot.root;
       const breadcrumbs: BreadcrumbModel[] = [];
       this.addBreadcrumb(root, [], breadcrumbs);
-      console.log(breadcrumbs)
       this._breadcrumbs$.next(breadcrumbs);
     })
   }

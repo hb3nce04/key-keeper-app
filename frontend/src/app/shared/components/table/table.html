@@ -14,8 +14,11 @@
           <td>{{ this.getRenderedValue(column, data) }}</td>
         }
         <td>
-          <nz-divider nzType="vertical"></nz-divider>
-          <a>Törlés</a>
+          @if (this.buttons()?.length) {
+            @for (button of this.buttons(); track $index) {
+              <button nz-button [nzType]="button.type!" (click)="button.click(data)">{{ button.label }}</button>
+            }
+          }
         </td>
       </tr>
     }
