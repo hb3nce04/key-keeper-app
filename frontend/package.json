@@ -27,8 +27,13 @@
     "@angular/platform-browser": "^20.0.0",
     "@angular/router": "^20.0.0",
     "@types/jwt-decode": "^2.2.1",
+    "@zxing/browser": "^0.1.5",
+    "@zxing/library": "^0.21.3",
+    "@zxing/ngx-scanner": "^20.0.0",
+    "jspdf": "^3.0.2",
     "jwt-decode": "^4.0.0",
     "ng-zorro-antd": "^20.2.1",
+    "ngx-kjua": "^20.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
