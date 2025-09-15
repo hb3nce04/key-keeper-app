@@ -15,6 +15,6 @@
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
-    <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Bejelentkezés</button>
+    <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'" [disabled]="this.loadingService.$loading | async">Bejelentkezés</button>
   </form>
 </div>

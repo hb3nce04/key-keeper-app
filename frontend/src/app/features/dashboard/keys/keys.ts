@@ -8,6 +8,8 @@ import {kjua, NgxKjuaComponent} from 'ngx-kjua';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import jspdf from 'jspdf';
 import {AuthService} from '../../../core/services/auth.service';
+import {LoadingService} from '../../../core/services/loading.service';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-keys',
@@ -15,16 +17,19 @@ import {AuthService} from '../../../core/services/auth.service';
     Table,
     NzModalModule,
     NgxKjuaComponent,
-    NzButtonComponent
+    NzButtonComponent,
+    AsyncPipe,
   ],
   template: `
-    <button nz-button nzType="primary" (click)="handlePrint()">QR-kódok nyomtatása</button>
-    <app-table [buttons]="buttons" [columns]="columns" [data]="data()"/>
+    <button nz-button nzType="primary" (click)="handlePrint()" [disabled]="this.loadingService.$loading | async">
+      QR-kódok nyomtatása
+    </button>
     <ng-template #codeTemplate>
       <div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">
         <ngx-kjua [text]="this.code()"></ngx-kjua>
       </div>
     </ng-template>
+    <app-table [buttons]="buttons" [columns]="columns" [data]="data()"/>
   `,
   styles: `
     button {
@@ -33,6 +38,7 @@ import {AuthService} from '../../../core/services/auth.service';
   `
 })
 export class Keys implements OnInit {
+  protected loadingService: LoadingService = inject(LoadingService);
   private authService: AuthService = inject(AuthService);
   private service: KeyService = inject(KeyService);
   private modalService: NzModalService = inject(NzModalService);

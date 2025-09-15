@@ -8,18 +8,22 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import {Scanner} from '../../../shared/components/scanner/scanner';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {LoadingService} from '../../../core/services/loading.service';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-records',
   imports: [
     Table,
     NzButtonComponent,
-    NzModalModule
+    NzModalModule,
+    AsyncPipe,
   ],
   template: `
-    <button nz-button nzType="primary" (click)="handleRequest()">Kulcsigénylés QR-kód alapján</button>
+    <button nz-button nzType="primary" (click)="handleRequest()" [disabled]="this.loadingService.$loading | async">
+      Kulcsigénylés QR-kód alapján
+    </button>
     <app-table [columns]="columns" [data]="data()"/>
-
   `,
   styles: `
     button {
@@ -28,6 +32,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
   `
 })
 export class Borrowings implements OnInit {
+  protected loadingService: LoadingService = inject(LoadingService);
   private service: BorrowingService = inject(BorrowingService);
   private modalService: NzModalService = inject(NzModalService);
   private message: NzMessageService = inject(NzMessageService);

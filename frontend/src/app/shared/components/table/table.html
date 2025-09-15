@@ -1,4 +1,4 @@
-<nz-table #basicTable [nzData]="data()">
+<nz-table #basicTable [nzData]="data()" [nzLoading]="this.loadingService.$loading | async">
   <thead class="ant-table-thead">
   <tr>
     @for (column of columns(); track $index) {

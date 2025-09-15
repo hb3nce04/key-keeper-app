@@ -7,6 +7,8 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {AuthService} from '../../../core/services/auth.service';
 import {Router} from '@angular/router';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {LoadingService} from '../../../core/services/loading.service';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   templateUrl: 'login.html',
@@ -19,7 +21,8 @@ import {NzMessageService} from 'ng-zorro-antd/message';
     NzButtonComponent,
     NzInputDirective,
     NzColDirective,
-    NzRowDirective
+    NzRowDirective,
+    AsyncPipe
   ],
   styleUrl: 'login.scss',
 })
@@ -28,6 +31,7 @@ export class Login {
   private router: Router = inject(Router);
   private message: NzMessageService = inject(NzMessageService);
   private authService: AuthService = inject(AuthService);
+  protected loadingService: LoadingService = inject(LoadingService);
 
   validateForm = this.fb.group({
     username: this.fb.control('', [Validators.required]),

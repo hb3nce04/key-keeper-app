@@ -8,6 +8,7 @@ import {IconDefinition} from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {TokenInterceptor} from './core/interceptors/token.interceptor';
+import {LoadingInterceptor} from './core/interceptors/loading.interceptor';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -25,6 +26,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
       multi: true
     }
   ]
