@@ -1,0 +1,20 @@
+@if (hasDevices) {
+  <label for="deviceSelect">Válassz kamerát:</label>
+  <select id="deviceSelect" (change)="onDeviceSelectChange($event)">
+    @for (device of availableDevices; track $index) {
+      <option [value]="device.deviceId">
+        {{ device.label || 'Ismeretlen kamera' }}
+      </option>
+    }
+  </select>
+}
+<zxing-scanner
+  [formats]="[BarcodeFormat.QR_CODE]"
+  [autostart]="true"
+  [device]="selectedDevice"
+  (scanSuccess)="onCodeResult($event)"
+  (camerasFound)="onDevicesFound($event)"
+  (camerasNotFound)="onHasDevices(false)"
+  (scanError)="onError($event)"
+  (permissionResponse)="onPermission($event)"
+/>
