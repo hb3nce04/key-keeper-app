@@ -34,8 +34,24 @@ nz-header {
 
   .control {
     display: flex;
-    gap: 16px;
     justify-content: center;
     align-items: center;
+    gap: 16px;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+}
+
+@media (max-width: 992px) {
+  nz-header {
+    .menu, .control {
+      display: none;
+    }
+
+    .nav-toggle {
+      display: block;
+    }
   }
 }
