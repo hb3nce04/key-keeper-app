@@ -1,0 +1,22 @@
+<form nz-form [formGroup]="formGroup" (ngSubmit)="handleSubmit()" [class]="class()" nzLayout="vertical">
+  @for (field of fields(); track $index) {
+    <nz-form-item>
+      @if (field.label) {
+        <nz-form-label [nzRequired]="formGroup.get(field.name)?.hasValidator(Validators.required)">
+          {{field.label}}
+        </nz-form-label>
+      }
+      <nz-form-control [nzErrorTip]="errorTpl">
+        <nz-input-group [nzPrefixIcon]="field.icon">
+          <input [type]="field.type" nz-input [formControlName]="field.name" [placeholder]="field.placeholder ?? ''"/>
+          <ng-template let-control #errorTpl>
+            @if (control.errors?.['required']) {
+              {{ field.label || field.placeholder }} kitöltése kötelező!
+            }
+          </ng-template>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+  }
+  <ng-content select="[submit-button]"></ng-content>
+</form>

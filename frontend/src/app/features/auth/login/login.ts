@@ -1,57 +1,68 @@
 import {Component, inject} from '@angular/core';
-import {NzFormControlComponent, NzFormDirective, NzFormItemComponent} from 'ng-zorro-antd/form';
-import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
-import {NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../../core/services/auth.service';
 import {Router} from '@angular/router';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {LoadingService} from '../../../core/services/loading.service';
+import {Form} from '../../../shared/components/form/form';
+import {FieldConfig} from '../../../shared/components/form/form.type';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {AsyncPipe} from '@angular/common';
 
 @Component({
-  templateUrl: 'login.html',
+  template: `
+    <div class="login-container">
+      <h2>Kérem jelentkezzen be!</h2>
+      <app-form [fields]="fields" (validSubmit)="handleLogin($event)" class="login-form">
+        <button submit-button nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
+                [disabled]="this.loadingService.$loading | async">Bejelentkezés
+        </button>
+      </app-form>
+    </div>
+  `,
   imports: [
-    NzFormDirective,
-    NzFormItemComponent,
-    NzFormControlComponent,
-    NzInputGroupComponent,
     ReactiveFormsModule,
+    Form,
     NzButtonComponent,
-    NzInputDirective,
-    NzColDirective,
-    NzRowDirective,
     AsyncPipe
   ],
   styleUrl: 'login.scss',
 })
 export class Login {
-  private fb = inject(NonNullableFormBuilder);
   private router: Router = inject(Router);
   private message: NzMessageService = inject(NzMessageService);
   private authService: AuthService = inject(AuthService);
   protected loadingService: LoadingService = inject(LoadingService);
 
-  validateForm = this.fb.group({
-    username: this.fb.control('', [Validators.required]),
-    password: this.fb.control('', [Validators.required]),
-  });
-
-  submitForm(): void {
-    if (this.validateForm.valid) {
-      const {username, password} = this.validateForm.value;
-      this.authService.login(username!, password!).subscribe({
-        next: () => {
-          this.router.navigate(['/dashboard/borrowings']);
-          this.message.success("Sikeres bejelentkezés!")
-        },
-        error: (error) => {
-          if (error.status === 403) {
-            this.message.error("Hibás felhasználónév vagy jelszó!");
-          }
-        }
-      })
+  fields: FieldConfig[] = [
+    {
+      name: 'username',
+      placeholder: 'Felhasználónév',
+      type: 'text',
+      icon: 'user',
+      validators: [Validators.required],
+    },
+    {
+      name: 'password',
+      placeholder: 'Jelszó',
+      type: 'password',
+      icon: 'lock',
+      validators: [Validators.required],
     }
+  ]
+
+  handleLogin(form: FormGroup): void {
+    const {username, password} = form.value;
+    this.authService.login(username!, password!).subscribe({
+      next: () => {
+        this.router.navigate(['/dashboard/borrowings']);
+        this.message.success("Sikeres bejelentkezés!")
+      },
+      error: (error) => {
+        if (error.status === 403) {
+          this.message.error("Hibás felhasználónév vagy jelszó!");
+        }
+      }
+    })
   }
 }

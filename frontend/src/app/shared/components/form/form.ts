@@ -1,0 +1,65 @@
+import {
+  Component,
+  ContentChild,
+  inject,
+  input,
+  model,
+  ModelSignal,
+  OnInit,
+  output,
+  OutputEmitterRef
+} from '@angular/core';
+import {FieldConfig} from './form.type';
+import {NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {NzRowDirective} from 'ng-zorro-antd/grid';
+import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
+
+@Component({
+  selector: 'app-form',
+  imports: [
+    NzFormDirective,
+    ReactiveFormsModule,
+    NzFormItemComponent,
+    NzRowDirective,
+    NzInputGroupComponent,
+    NzInputDirective,
+    NzFormLabelComponent,
+    NzFormControlComponent
+  ],
+  templateUrl: 'form.html'
+})
+export class Form implements OnInit {
+  private formBuilder: FormBuilder = inject(FormBuilder);
+  formGroup!: FormGroup
+  fields: ModelSignal<FieldConfig[]> = model.required();
+  validSubmit: OutputEmitterRef<FormGroup> = output()
+
+  class = input();
+
+  @ContentChild('submitButton') customButton: any;
+
+  ngOnInit(): void {
+    const group: any = {};
+    this.fields().forEach((field: FieldConfig) => {
+      group[field.name] = [field.value, field.validators || []];
+    });
+    this.formGroup = this.formBuilder.group(group)
+    console.log(this.fields()[0].validators)
+  }
+
+  handleSubmit() {
+    if (this.formGroup.valid) {
+      this.validSubmit.emit(this.formGroup);
+    } else {
+      Object.values(this.formGroup.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
+  }
+
+  protected readonly Validators = Validators;
+}
