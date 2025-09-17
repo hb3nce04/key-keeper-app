@@ -1,12 +1,13 @@
 package io.hb3nce04.keykeeperapp.model.dto;
 
+import io.hb3nce04.keykeeperapp.model.dto.common.BaseDto;
 import io.hb3nce04.keykeeperapp.model.enums.RoomType;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class RoomDto {
+public class RoomDto extends BaseDto {
     private String code;
 
     private String name;

@@ -1,12 +1,13 @@
 package io.hb3nce04.keykeeperapp.model.dto;
 
+import io.hb3nce04.keykeeperapp.model.dto.common.BaseDto;
 import io.hb3nce04.keykeeperapp.model.enums.RequesterType;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class RequesterDto {
+public class RequesterDto extends BaseDto {
     private String firstName;
 
     private String lastName;
