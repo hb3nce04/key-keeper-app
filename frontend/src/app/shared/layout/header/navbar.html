@@ -6,7 +6,18 @@
   </ul>
   <div class="control">
     <b>{{ this.authService.getUser() }}</b>
-    <button nz-button nzType="link" (click)="handleLogout()">Kijelentkezés</button>
+    <button
+      nz-button
+      nzType="link"
+      nz-popconfirm
+      nzPopconfirmTitle="Biztosan ki szeretnél jelentkezni?"
+      nzOkText="Igen"
+      nzCancelText="Nem"
+      [nzIcon]="iconTpl"
+      (nzOnConfirm)="handleLogout()"
+    >
+      Kijelentkezés
+    </button>
   </div>
   <div class="nav-toggle">
     <button
@@ -31,6 +42,20 @@
     </ul>
     <nz-divider/>
     <button nz-button nzType="text">{{ this.authService.getUser() }}</button>
-    <button nz-button nzType="link" (click)="handleLogout()">Kijelentkezés</button>
+    <button
+      nz-button
+      nzType="link"
+      nz-popconfirm
+      nzPopconfirmTitle="Biztosan ki szeretnél jelentkezni?"
+      nzOkText="Igen"
+      nzCancelText="Nem"
+      [nzIcon]="iconTpl"
+      (nzOnConfirm)="handleLogout()"
+    >
+      Kijelentkezés
+    </button>
   </ng-container>
 </nz-drawer>
+<ng-template #iconTpl>
+  <nz-icon nzType="question-circle-o"/>
+</ng-template>

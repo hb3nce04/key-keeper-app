@@ -9,6 +9,7 @@ import * as AllIcons from '@ant-design/icons-angular/icons';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {TokenInterceptor} from './core/interceptors/token.interceptor';
 import {LoadingInterceptor} from './core/interceptors/loading.interceptor';
+import {hu_HU, provideNzI18n} from 'ng-zorro-antd/i18n';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -22,6 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
     provideNzIcons(icons),
+    provideNzI18n(hu_HU),
     provideAnimationsAsync(),
     {
       provide: HTTP_INTERCEPTORS,

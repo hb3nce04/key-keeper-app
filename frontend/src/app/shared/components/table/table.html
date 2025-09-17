@@ -19,6 +19,10 @@
               <button nz-button [nzType]="button.type!" (click)="button.click(data)">{{ button.label }}</button>
             }
           }
+          <nz-divider nzType="vertical"/>
+          <button nz-button nz-tooltip nzType="text" nzTooltipTitle="Törlés" nzTooltipPlacement="bottomLeft">
+            <nz-icon nzType="delete" nzTheme="outline" />
+          </button>
         </td>
       </tr>
     }

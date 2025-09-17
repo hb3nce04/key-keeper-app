@@ -10,9 +10,10 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzDrawerComponent, NzDrawerContentDirective} from 'ng-zorro-antd/drawer';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
 
 @Component({
-  selector: 'app-layout-header',
+  selector: 'app-layout-navbar',
   imports: [
     NzHeaderComponent,
     NzMenuDirective,
@@ -23,19 +24,20 @@ import {NzDividerComponent} from 'ng-zorro-antd/divider';
     NzIconDirective,
     NzDrawerComponent,
     NzDrawerContentDirective,
-    NzDividerComponent
+    NzDividerComponent,
+    NzPopconfirmDirective
   ],
-  templateUrl: 'header.html',
-  styleUrl: 'header.scss'
+  templateUrl: 'navbar.html',
+  styleUrl: 'navbar.scss'
 })
-export class Header implements OnInit {
+export class Navbar implements OnInit {
   protected readonly NAV_LINKS = NAV_LINKS;
 
   protected authService: AuthService = inject(AuthService);
   private router: Router = inject(Router);
   private message: NzMessageService = inject(NzMessageService);
   private breakpointObserver: BreakpointObserver = inject(BreakpointObserver);
-  
+
   isVisible: WritableSignal<boolean> = signal(true);
 
   ngOnInit() {

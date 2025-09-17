@@ -4,13 +4,19 @@ import {Button, Column} from './table.type';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {LoadingService} from '../../../core/services/loading.service';
 import {AsyncPipe} from '@angular/common';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
 
 @Component({
   selector: 'app-table',
   imports: [
     NzTableComponent,
     NzButtonComponent,
-    AsyncPipe
+    AsyncPipe,
+    NzDividerModule,
+    NzIconDirective,
+    NzTooltipDirective
   ],
   templateUrl: 'table.html'
 })

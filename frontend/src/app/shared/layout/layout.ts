@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NzContentComponent, NzFooterComponent, NzLayoutComponent} from 'ng-zorro-antd/layout';
 import {RouterOutlet} from '@angular/router';
-import {Header} from './header/header';
+import {Navbar} from './header/navbar';
 import {Breadcrumb} from './breadcrumb/breadcrumb';
 
 @Component({
@@ -10,7 +10,7 @@ import {Breadcrumb} from './breadcrumb/breadcrumb';
     NzContentComponent,
     NzLayoutComponent,
     RouterOutlet,
-    Header,
+    Navbar,
     Breadcrumb,
     NzFooterComponent,
   ],
