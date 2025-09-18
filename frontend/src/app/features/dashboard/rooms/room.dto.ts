@@ -1,4 +1,6 @@
-export interface RoomDto {
+import {BaseDto} from '../../../core/dtos/base.dto';
+
+export interface RoomDto extends BaseDto {
   code: string;
   name: string;
   floor: number;
