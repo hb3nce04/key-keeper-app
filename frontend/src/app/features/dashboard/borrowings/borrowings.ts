@@ -20,13 +20,20 @@ import {AsyncPipe} from '@angular/common';
     AsyncPipe,
   ],
   template: `
-    <button nz-button nzType="primary" (click)="handleRequest()" [disabled]="this.loadingService.$loading | async">
-      Kulcsigénylés QR-kód alapján
-    </button>
+    <div class="buttons">
+      <button nz-button nzType="primary" (click)="handleRequest()" [disabled]="this.loadingService.$loading | async">
+        Kulcsigénylés
+      </button>
+      <button nz-button nzType="primary" (click)="handleRequest()" [disabled]="this.loadingService.$loading | async">
+        Kulcsigénylés QR-kód alapján
+      </button>
+    </div>
     <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)"/>
   `,
   styles: `
-    button {
+    .buttons {
+      display: flex;
+      gap: 10px;
       margin-bottom: 10px;
     }
   `
@@ -38,6 +45,11 @@ export class Borrowings implements OnInit {
   private message: NzMessageService = inject(NzMessageService);
 
   columns: Column<BorrowingDto>[] = [
+    {
+      field: 'name',
+      header: 'Név',
+      valueFn: (dto: BorrowingDto) => dto.requester.firstName + ' ' + dto.requester.lastName,
+    },
     {
       field: 'date',
       header: 'Dátum',

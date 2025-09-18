@@ -10,6 +10,7 @@ import jspdf from 'jspdf';
 import {AuthService} from '../../../core/services/auth.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {AsyncPipe} from '@angular/common';
+import {CreateKey} from './create/create';
 
 @Component({
   selector: 'app-keys',
@@ -21,9 +22,14 @@ import {AsyncPipe} from '@angular/common';
     AsyncPipe,
   ],
   template: `
-    <button nz-button nzType="primary" (click)="handlePrint()" [disabled]="this.loadingService.$loading | async">
-      QR-kódok nyomtatása
-    </button>
+    <div class="buttons">
+      <button nz-button nzType="primary" (click)="handleCreate()" [disabled]="this.loadingService.$loading | async">
+        Új kulcs rögzítése
+      </button>
+      <button nz-button nzType="primary" (click)="handlePrint()" [disabled]="this.loadingService.$loading | async">
+        QR-kódok nyomtatása
+      </button>
+    </div>
     <ng-template #codeTemplate>
       <div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">
         <ngx-kjua [text]="this.code()"></ngx-kjua>
@@ -32,7 +38,9 @@ import {AsyncPipe} from '@angular/common';
     <app-table [buttons]="buttons" [columns]="columns" [data]="data()"/>
   `,
   styles: `
-    button {
+    .buttons {
+      display: flex;
+      gap: 10px;
       margin-bottom: 10px;
     }
   `
@@ -151,5 +159,12 @@ export class Keys implements OnInit {
       fontname: "sans-serif",
       fontcolor: "#3F51B5",
     });
+  }
+
+  handleCreate() {
+    this.modalService.create({
+      nzTitle: 'Új kulcs rögzítése',
+      nzContent: CreateKey
+    })
   }
 }

@@ -14,6 +14,7 @@ import {NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabe
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
+import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 
 @Component({
   selector: 'app-form',
@@ -25,7 +26,9 @@ import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
     NzInputGroupComponent,
     NzInputDirective,
     NzFormLabelComponent,
-    NzFormControlComponent
+    NzFormControlComponent,
+    NzSelectComponent,
+    NzOptionComponent
   ],
   templateUrl: 'form.html'
 })
