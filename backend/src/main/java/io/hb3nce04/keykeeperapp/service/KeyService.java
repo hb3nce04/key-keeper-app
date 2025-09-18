@@ -1,6 +1,7 @@
 package io.hb3nce04.keykeeperapp.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -17,5 +18,9 @@ public class KeyService {
 
     public List<KeyDto> findAll() {
         return mapper.toDtoList(keyRepository.findAll());
+    }
+
+    public Optional<KeyDto> findByCode(String code) {
+        return Optional.ofNullable(mapper.toDTO(keyRepository.findByCode(code)));
     }
 }

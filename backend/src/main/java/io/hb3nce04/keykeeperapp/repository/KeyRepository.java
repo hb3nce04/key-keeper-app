@@ -7,4 +7,5 @@ import io.hb3nce04.keykeeperapp.repository.common.BaseRepository;
 
 @Repository
 public interface KeyRepository extends BaseRepository<Key> {
+    Key findByCode(String code);
 }
