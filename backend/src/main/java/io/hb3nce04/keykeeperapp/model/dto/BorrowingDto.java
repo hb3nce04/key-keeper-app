@@ -22,4 +22,6 @@ public class BorrowingDto extends BaseDto {
     private BorrowingStatus status;
 
     private KeyDto key;
+
+    private RequesterDto requester;
 }
