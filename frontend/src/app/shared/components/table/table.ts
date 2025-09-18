@@ -7,6 +7,8 @@ import {AsyncPipe} from '@angular/common';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
+import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
+import {BaseDto} from '../../../core/dtos/base.dto';
 
 @Component({
   selector: 'app-table',
@@ -16,12 +18,14 @@ import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
     AsyncPipe,
     NzDividerModule,
     NzIconDirective,
-    NzTooltipDirective
+    NzTooltipDirective,
+    NzModalModule,
   ],
   templateUrl: 'table.html'
 })
-export class Table<T> {
+export class Table<T extends BaseDto> {
   protected loadingService: LoadingService = inject(LoadingService);
+  private modalService: NzModalService = inject(NzModalService);
 
   columns: InputSignal<Column<T>[]> = input.required();
   buttons: InputSignal<Button[] | undefined> = input();
@@ -40,5 +44,18 @@ export class Table<T> {
 
   private getNestedValue(obj: any, path: string) {
     return path.split('.').reduce((acc, key) => acc?.[key], obj);
+  }
+
+  handleView(data: T) {
+    this.modalService.info({
+      nzTitle: `Adatok #${data.id}`,
+      nzContent: `${this.columns().map(column => `
+            <div>
+              <span>${column.header}:</span>
+              <span>${this.getRenderedValue(column, data)}</span>
+            </div>`).join('')}`,
+      nzOkType: "default",
+      nzOkText: "Bezárás"
+    })
   }
 }

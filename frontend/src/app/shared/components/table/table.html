@@ -20,8 +20,11 @@
             }
           }
           <nz-divider nzType="vertical"/>
-          <button nz-button nz-tooltip nzType="text" nzTooltipTitle="Törlés" nzTooltipPlacement="bottomLeft">
-            <nz-icon nzType="delete" nzTheme="outline" />
+          <button nz-button nz-tooltip nzType="text" nzTooltipTitle="Megtekintés" (click)="handleView(data)">
+            <nz-icon nzType="eye" />
+          </button>
+          <button nz-button nz-tooltip nzType="text" nzTooltipTitle="Törlés">
+            <nz-icon nzType="delete"  />
           </button>
         </td>
       </tr>
