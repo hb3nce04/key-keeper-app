@@ -29,7 +29,7 @@ export class Users implements OnInit {
     {
       field: 'role',
       header: 'Jogosultság',
-      valueFn: (value: keyof typeof Role) => Role[value]
+      valueFn: (dto: UserDto) => Role[dto.role as unknown as keyof typeof Role]
     }
   ]
   data: WritableSignal<UserDto[]> = signal([])

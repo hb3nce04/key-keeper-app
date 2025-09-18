@@ -57,7 +57,7 @@ export class Borrowings implements OnInit {
     {
       field: 'status',
       header: 'Állapot',
-      valueFn: (value: keyof typeof BorrowingStatus) => BorrowingStatus[value]
+      valueFn: (dto: BorrowingDto) => BorrowingStatus[dto.status as unknown as keyof typeof BorrowingStatus]
     }
   ]
   data: WritableSignal<BorrowingDto[]> = signal([])

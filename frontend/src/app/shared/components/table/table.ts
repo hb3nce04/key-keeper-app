@@ -36,7 +36,7 @@ export class Table<T extends BaseDto> {
       return this.getNestedValue(data, column.field.toString());
     }
     if (!!column.valueFn) {
-      return column.valueFn(data[column.field as keyof T]);
+      return column.valueFn(data);
     } else {
       return data[column.field as keyof T];
     }

@@ -28,11 +28,11 @@ export class Rooms implements OnInit {
     {
       field: 'floor',
       header: 'Szint',
-      valueFn: (val) => {
-        if (val == 0) {
+      valueFn: (dto: RoomDto) => {
+        if (dto.floor == 0) {
           return 'Földszint'
         }
-        return `${val}. emelet`
+        return `${dto.floor}. emelet`
       }
     },
     {
@@ -42,17 +42,17 @@ export class Rooms implements OnInit {
     {
       field: 'capacity',
       header: 'Kapacitás',
-      valueFn: (value) => `${value} fő`
+      valueFn: (dto: RoomDto) => `${dto.capacity} fő`
     },
     {
       field: 'area',
       header: 'Terület',
-      valueFn: (value) => `${value} nm`
+      valueFn: (dto: RoomDto) => `${dto.area} nm`
     },
     {
       field: 'type',
       header: 'Típus',
-      valueFn: (value: keyof typeof RoomType) => RoomType[value]
+      valueFn: (dto: RoomDto) => RoomType[dto.type as unknown as keyof typeof RoomType]
     }
   ]
   data: WritableSignal<RoomDto[]> = signal([])

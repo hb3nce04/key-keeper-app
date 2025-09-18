@@ -19,12 +19,9 @@ export class Requesters implements OnInit {
 
   columns: Column<RequesterDto>[] = [
     {
-      field: 'lastName',
+      field: 'name',
       header: 'Név',
-    },
-    {
-      field: 'firstName',
-      header: 'Név',
+      valueFn: (value: RequesterDto) => `${value.firstName} ${value.lastName}`
     },
     {
       field: 'personalIdNumber',
@@ -41,7 +38,7 @@ export class Requesters implements OnInit {
     {
       field: 'type',
       header: 'Típus',
-      valueFn: (value: keyof typeof RequesterType) => RequesterType[value]
+      valueFn: (dto: RequesterDto) => RequesterType[dto.type as unknown as keyof typeof RequesterType]
     }
   ]
   data: WritableSignal<RequesterDto[]> = signal([])
