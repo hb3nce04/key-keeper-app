@@ -24,7 +24,18 @@
             <button nz-button nz-tooltip nzType="text" nzTooltipTitle="Megtekintés" (click)="handleView(data)">
               <nz-icon nzType="eye" />
             </button>
-            <button nz-button nz-tooltip nzType="text" nzTooltipTitle="Törlés">
+            <button
+              nz-button
+              nz-tooltip
+              nzType="text"
+              nzTooltipTitle="Törlés"
+              nz-popconfirm
+              nzPopconfirmTitle="Biztosan törölni szeretnéd ezt az elemet?"
+              nzOkText="Igen"
+              nzCancelText="Nem"
+              [nzIcon]="iconTpl"
+              (nzOnConfirm)="handleDelete(data.id)"
+            >
               <nz-icon nzType="delete"  />
             </button>
           }
@@ -33,3 +44,6 @@
     }
   </tbody>
 </nz-table>
+<ng-template #iconTpl>
+  <nz-icon nzType="question-circle-o"/>
+</ng-template>

@@ -1,4 +1,4 @@
-import {Component, inject, input, InputSignal} from '@angular/core';
+import {Component, inject, input, InputSignal, output} from '@angular/core';
 import {NzTableComponent} from 'ng-zorro-antd/table';
 import {Button, Column} from './table.type';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -9,6 +9,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import {BaseDto} from '../../../core/dtos/base.dto';
+import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
 
 @Component({
   selector: 'app-table',
@@ -20,6 +21,7 @@ import {BaseDto} from '../../../core/dtos/base.dto';
     NzIconDirective,
     NzTooltipDirective,
     NzModalModule,
+    NzPopconfirmDirective,
   ],
   templateUrl: 'table.html'
 })
@@ -30,6 +32,8 @@ export class Table<T extends BaseDto> {
   columns: InputSignal<Column<T>[]> = input.required();
   buttons: InputSignal<Button[] | undefined> = input();
   data: InputSignal<T[]> = input.required();
+
+  delete = output<number>();
 
   getRenderedValue(column: Column<T>, data: T) {
     if (column.field.toString().includes('.')) {
@@ -57,5 +61,9 @@ export class Table<T extends BaseDto> {
       nzOkType: "default",
       nzOkText: "Bezárás"
     })
+  }
+
+  handleDelete(id: number) {
+    this.delete.emit(id);
   }
 }

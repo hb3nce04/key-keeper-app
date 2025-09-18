@@ -23,7 +23,7 @@ import {AsyncPipe} from '@angular/common';
     <button nz-button nzType="primary" (click)="handleRequest()" [disabled]="this.loadingService.$loading | async">
       Kulcsigénylés QR-kód alapján
     </button>
-    <app-table [columns]="columns" [data]="data()"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)"/>
   `,
   styles: `
     button {
@@ -82,5 +82,9 @@ export class Borrowings implements OnInit {
         modalRef.close();
       })
     })
+  }
+
+  handleDelete(id: number) {
+    console.log(id)
   }
 }
