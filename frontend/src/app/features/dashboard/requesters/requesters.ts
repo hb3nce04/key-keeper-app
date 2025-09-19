@@ -44,7 +44,7 @@ export class Requesters implements OnInit {
   data: WritableSignal<RequesterDto[]> = signal([])
 
   ngOnInit(): void {
-    this.service.getAll().subscribe({
+    this.service.findAll().subscribe({
       next: (data: RequesterDto[]) => {
         this.data.set(data)
       },

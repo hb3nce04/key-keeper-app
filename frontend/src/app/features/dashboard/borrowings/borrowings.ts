@@ -75,7 +75,7 @@ export class Borrowings implements OnInit {
   data: WritableSignal<BorrowingDto[]> = signal([])
 
   ngOnInit(): void {
-    this.service.getAll().subscribe({
+    this.service.findAll().subscribe({
       next: (data: BorrowingDto[]) => {
         this.data.set(data);
       }

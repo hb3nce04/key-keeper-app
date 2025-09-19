@@ -35,7 +35,7 @@ export class Users implements OnInit {
   data: WritableSignal<UserDto[]> = signal([])
 
   ngOnInit(): void {
-    this.service.getAll().subscribe({
+    this.service.findAll().subscribe({
       next: (data: UserDto[]) => {
         this.data.set(data)
       },

@@ -1,15 +1,11 @@
-import {inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
 import {RoomDto} from './room.dto';
-import {Observable} from 'rxjs';
+import {AbstractCrudService} from '../../../core/services/abstract-crud.service';
 
 @Injectable({providedIn: 'root'})
-export class RoomService {
-  private httpClient: HttpClient = inject(HttpClient)
-  private url = environment.apiUrl + '/rooms';
-
-  getAll(): Observable<RoomDto[]> {
-    return this.httpClient.get<RoomDto[]>(this.url);
+export class RoomService extends AbstractCrudService<RoomDto> {
+  constructor(http: HttpClient) {
+    super(http, '/rooms');
   }
 }

@@ -33,7 +33,7 @@ export class CreateKey implements OnInit {
   ]
 
   ngOnInit(): void {
-    this.roomService.getAll().subscribe(
+    this.roomService.findAll().subscribe(
       data => {
         this.fields[1].options = data.map(room => ({
           value: room.id,

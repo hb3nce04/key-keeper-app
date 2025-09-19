@@ -58,7 +58,7 @@ export class Rooms implements OnInit {
   data: WritableSignal<RoomDto[]> = signal([])
 
   ngOnInit(): void {
-    this.service.getAll().subscribe({
+    this.service.findAll().subscribe({
       next: (data: RoomDto[]) => {
         this.data.set(data)
       },
