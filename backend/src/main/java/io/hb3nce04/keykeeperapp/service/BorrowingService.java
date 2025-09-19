@@ -1,25 +1,24 @@
 package io.hb3nce04.keykeeperapp.service;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import io.hb3nce04.keykeeperapp.mapper.BorrowingMapper;
 import io.hb3nce04.keykeeperapp.model.dto.BorrowingDto;
+import io.hb3nce04.keykeeperapp.model.entity.Borrowing;
 import io.hb3nce04.keykeeperapp.repository.BorrowingRepository;
-import lombok.RequiredArgsConstructor;
+import io.hb3nce04.keykeeperapp.service.common.AbstractCrudService;
 
 @Service
-@RequiredArgsConstructor
-public class BorrowingService {
-    private final BorrowingMapper mapper;
-    private final BorrowingRepository borrowingRepository;
-
-    public List<BorrowingDto> findAllByUserId(Long userId) {
-        return mapper.toDtoList(borrowingRepository.findAllByUserId(userId));
+public class BorrowingService extends AbstractCrudService<Borrowing, BorrowingDto, BorrowingRepository, BorrowingMapper> {
+    public BorrowingService(
+            BorrowingRepository repository,
+            BorrowingMapper mapper) {
+        super(repository, mapper);
     }
 
-    public List<BorrowingDto> findAll() {
-        return mapper.toDtoList(borrowingRepository.findAll());
+    public Optional<BorrowingDto> findByCode(String code) {
+        return Optional.ofNullable(mapper.toDto(repository.findByKeyCode(code)));
     }
 }

@@ -1,21 +1,18 @@
 package io.hb3nce04.keykeeperapp.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import io.hb3nce04.keykeeperapp.mapper.RequesterMapper;
 import io.hb3nce04.keykeeperapp.model.dto.RequesterDto;
+import io.hb3nce04.keykeeperapp.model.entity.Requester;
 import io.hb3nce04.keykeeperapp.repository.RequesterRepository;
-import lombok.RequiredArgsConstructor;
+import io.hb3nce04.keykeeperapp.service.common.AbstractCrudService;
 
 @Service
-@RequiredArgsConstructor
-public class RequesterService {
-    private final RequesterMapper mapper;
-    private final RequesterRepository repository;
-
-    public List<RequesterDto> findAll() {
-        return mapper.toDtoList(repository.findAll());
+public class RequesterService extends AbstractCrudService<Requester, RequesterDto, RequesterRepository, RequesterMapper> {
+    public RequesterService(
+            RequesterRepository repository,
+            RequesterMapper mapper) {
+        super(repository, mapper);
     }
 }
