@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Fiók létrehozva</title>
+    </head>
+    <body>
+        <p>Kedves <strong th:text="${username}">Felhasználó</strong>!</p>
+        <p>Értesítjük, hogy fiókja sikeresen létre lett hozva a rendszerben.</p>
+        <p>
+            <strong>Felhasználónév:</strong> <span th:text="${username}"></span><br>
+            <strong>Jelszó:</strong> <span th:text="${password}"></span>
+        </p>
+    </body>
+</html>

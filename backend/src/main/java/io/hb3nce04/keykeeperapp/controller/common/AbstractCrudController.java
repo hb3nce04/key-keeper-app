@@ -24,8 +24,8 @@ public abstract class AbstractCrudController<S extends AbstractCrudService<E, D,
     protected final S service;
 
     @PostMapping
-    public ResponseEntity<D> create(@RequestBody @Validated D student) {
-        D createdDto = service.create(student);
+    public ResponseEntity<D> create(@RequestBody @Validated D dto) throws Exception {
+        D createdDto = service.create(dto);
         return ResponseEntity.created(ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
