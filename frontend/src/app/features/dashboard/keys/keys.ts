@@ -11,6 +11,7 @@ import {AuthService} from '../../../core/services/auth.service';
 import {LoadingService} from '../../../core/services/loading.service';
 import {AsyncPipe} from '@angular/common';
 import {CreateKey} from './create/create';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-keys',
@@ -35,7 +36,7 @@ import {CreateKey} from './create/create';
         <ngx-kjua [text]="this.code()"></ngx-kjua>
       </div>
     </ng-template>
-    <app-table [buttons]="buttons" [columns]="columns" [data]="data()"/>
+    <app-table [buttons]="buttons" [columns]="columns" [data]="data()" (delete)="handleDelete($event)"/>
   `,
   styles: `
     .buttons {
@@ -48,8 +49,9 @@ import {CreateKey} from './create/create';
 export class Keys implements OnInit {
   protected loadingService: LoadingService = inject(LoadingService);
   private authService: AuthService = inject(AuthService);
-  private service: KeyService = inject(KeyService);
+  private keyService: KeyService = inject(KeyService);
   private modalService: NzModalService = inject(NzModalService);
+  private message: NzMessageService = inject(NzMessageService);
 
   @ViewChild('codeTemplate') codeTemplate!: TemplateRef<any>;
 
@@ -82,7 +84,7 @@ export class Keys implements OnInit {
   data: WritableSignal<KeyDto[]> = signal([])
 
   ngOnInit(): void {
-    this.service.getAll().subscribe({
+    this.keyService.findAll().subscribe({
       next: (data: KeyDto[]) => {
         this.data.set(data);
       }
@@ -165,6 +167,15 @@ export class Keys implements OnInit {
     this.modalService.create({
       nzTitle: 'Új kulcs rögzítése',
       nzContent: CreateKey
+    })
+  }
+
+  handleDelete(id: number) {
+    this.keyService.delete(id).subscribe({
+      next: () => {
+        this.message.success("Kulcs sikeresen törölve!")
+        this.data.set(this.data().filter(d => d.id !== id))
+      }
     })
   }
 }

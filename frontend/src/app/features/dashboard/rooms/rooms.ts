@@ -3,6 +3,7 @@ import {Table} from '../../../shared/components/table/table';
 import {RoomDto, RoomType} from './room.dto';
 import {Column} from '../../../shared/components/table/table.type';
 import {RoomService} from './room.service';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-rooms',
@@ -10,11 +11,12 @@ import {RoomService} from './room.service';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)"/>
   `
 })
 export class Rooms implements OnInit {
   private service: RoomService = inject(RoomService);
+  private message: NzMessageService = inject(NzMessageService);
 
   columns: Column<RoomDto>[] = [
     {
@@ -62,6 +64,15 @@ export class Rooms implements OnInit {
       next: (data: RoomDto[]) => {
         this.data.set(data)
       },
+    })
+  }
+
+  handleDelete(id: number) {
+    this.service.delete(id).subscribe({
+      next: () => {
+        this.message.success("Helyiség sikeresen törölve!")
+        this.data.set(this.data().filter(d => d.id !== id))
+      }
     })
   }
 }

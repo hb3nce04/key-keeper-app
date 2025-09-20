@@ -4,6 +4,7 @@ import {Table} from '../../../shared/components/table/table';
 import {Column} from '../../../shared/components/table/table.type';
 import {RequesterDto} from './requester.dto';
 import {RequesterType} from './requester.enum';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-requesters',
@@ -11,11 +12,12 @@ import {RequesterType} from './requester.enum';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)"/>
   `
 })
 export class Requesters implements OnInit {
   private service: RequesterService = inject(RequesterService);
+  private message: NzMessageService = inject(NzMessageService);
 
   columns: Column<RequesterDto>[] = [
     {
@@ -48,6 +50,15 @@ export class Requesters implements OnInit {
       next: (data: RequesterDto[]) => {
         this.data.set(data)
       },
+    })
+  }
+
+  handleDelete(id: number) {
+    this.service.delete(id).subscribe({
+      next: () => {
+        this.message.success("Igénylő sikeresen törölve!")
+        this.data.set(this.data().filter(d => d.id !== id))
+      }
     })
   }
 }

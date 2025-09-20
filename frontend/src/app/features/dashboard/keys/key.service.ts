@@ -1,15 +1,11 @@
-import {inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
-import {Observable} from 'rxjs';
 import {KeyDto} from './key.dto';
+import {AbstractCrudService} from '../../../core/services/abstract-crud.service';
 
 @Injectable({providedIn: 'root'})
-export class KeyService {
-  private httpClient: HttpClient = inject(HttpClient)
-  private url = environment.apiUrl + '/keys';
-
-  getAll(): Observable<KeyDto[]> {
-    return this.httpClient.get<KeyDto[]>(this.url);
+export class KeyService extends AbstractCrudService<KeyDto>{
+  constructor(http: HttpClient) {
+    super(http, '/keys');
   }
 }

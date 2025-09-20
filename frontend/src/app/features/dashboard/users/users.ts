@@ -4,6 +4,7 @@ import {UserService} from './user.service';
 import {Column} from '../../../shared/components/table/table.type';
 import {UserDto} from './user.dto';
 import {Role} from '../../../core/enums/role.enum';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-users',
@@ -11,11 +12,12 @@ import {Role} from '../../../core/enums/role.enum';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)"/>
   `
 })
 export class Users implements OnInit {
   private service: UserService = inject(UserService);
+  private message: NzMessageService = inject(NzMessageService);
 
   columns: Column<UserDto>[] = [
     {
@@ -42,4 +44,12 @@ export class Users implements OnInit {
     })
   }
 
+  handleDelete(id: number) {
+    this.service.delete(id).subscribe({
+      next: () => {
+        this.message.success("Felhasználó sikeresen törölve!")
+        this.data.set(this.data().filter(d => d.id !== id))
+      }
+    })
+  }
 }

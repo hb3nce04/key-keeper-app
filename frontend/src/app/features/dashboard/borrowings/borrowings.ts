@@ -97,6 +97,11 @@ export class Borrowings implements OnInit {
   }
 
   handleDelete(id: number) {
-    console.log(id)
+    this.service.delete(id).subscribe({
+      next: () => {
+        this.message.success("Foglalás sikeresen törölve!")
+        this.data.set(this.data().filter(d => d.id !== id))
+      }
+    })
   }
 }
