@@ -1,3 +1,10 @@
+@if (!(this.loadingService.$loading | async)) {
+  <div class="buttons">
+    <ng-content/>
+  </div>
+} @else {
+  <nz-skeleton nzActive="true" [nzParagraph]="false"/>
+}
 <nz-table #basicTable [nzData]="data()" [nzLoading]="this.loadingService.$loading | async">
   <thead class="ant-table-thead">
   <tr>

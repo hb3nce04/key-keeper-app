@@ -8,8 +8,6 @@ import {kjua, NgxKjuaComponent} from 'ngx-kjua';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import jspdf from 'jspdf';
 import {AuthService} from '../../../core/services/auth.service';
-import {LoadingService} from '../../../core/services/loading.service';
-import {AsyncPipe} from '@angular/common';
 import {CreateKey} from './create/create';
 import {NzMessageService} from 'ng-zorro-antd/message';
 
@@ -20,34 +18,25 @@ import {NzMessageService} from 'ng-zorro-antd/message';
     NzModalModule,
     NgxKjuaComponent,
     NzButtonComponent,
-    AsyncPipe,
+
   ],
   template: `
-    <div class="buttons">
-      <button nz-button nzType="primary" (click)="handleCreate()" [disabled]="this.loadingService.$loading | async">
+    <app-table [buttons]="buttons" [columns]="columns" [data]="data()" (delete)="handleDelete($event)">
+      <button nz-button nzType="primary" (click)="handleCreate()">
         Új kulcs rögzítése
       </button>
-      <button nz-button nzType="primary" (click)="handlePrint()" [disabled]="this.loadingService.$loading | async">
+      <button nz-button nzType="primary" (click)="handlePrint()">
         QR-kódok nyomtatása
       </button>
-    </div>
+    </app-table>
     <ng-template #codeTemplate>
       <div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">
         <ngx-kjua [text]="this.code()"></ngx-kjua>
       </div>
     </ng-template>
-    <app-table [buttons]="buttons" [columns]="columns" [data]="data()" (delete)="handleDelete($event)"/>
-  `,
-  styles: `
-    .buttons {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
   `
 })
 export class Keys implements OnInit {
-  protected loadingService: LoadingService = inject(LoadingService);
   private authService: AuthService = inject(AuthService);
   private keyService: KeyService = inject(KeyService);
   private modalService: NzModalService = inject(NzModalService);

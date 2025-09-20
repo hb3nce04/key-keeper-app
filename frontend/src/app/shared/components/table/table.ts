@@ -10,6 +10,7 @@ import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import {BaseDto} from '../../../core/dtos/base.dto';
 import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
+import {NzSkeletonComponent} from 'ng-zorro-antd/skeleton';
 
 @Component({
   selector: 'app-table',
@@ -22,8 +23,16 @@ import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
     NzTooltipDirective,
     NzModalModule,
     NzPopconfirmDirective,
+    NzSkeletonComponent,
   ],
-  templateUrl: 'table.html'
+  templateUrl: 'table.html',
+  styles: `
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+  `
 })
 export class Table<T extends BaseDto> {
   protected loadingService: LoadingService = inject(LoadingService);

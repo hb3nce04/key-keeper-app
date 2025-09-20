@@ -8,8 +8,6 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import {Scanner} from '../../../shared/components/scanner/scanner';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {LoadingService} from '../../../core/services/loading.service';
-import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-records',
@@ -17,29 +15,19 @@ import {AsyncPipe} from '@angular/common';
     Table,
     NzButtonComponent,
     NzModalModule,
-    AsyncPipe,
   ],
   template: `
-    <div class="buttons">
-      <button nz-button nzType="primary" (click)="handleRequest()" [disabled]="this.loadingService.$loading | async">
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)">
+      <button nz-button nzType="primary" (click)="handleRequest()">
         Kulcsigénylés
       </button>
-      <button nz-button nzType="primary" (click)="handleRequest()" [disabled]="this.loadingService.$loading | async">
+      <button nz-button nzType="primary" (click)="handleRequest()">
         Kulcsigénylés QR-kód alapján
       </button>
-    </div>
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)"/>
-  `,
-  styles: `
-    .buttons {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
+    </app-table>
   `
 })
 export class Borrowings implements OnInit {
-  protected loadingService: LoadingService = inject(LoadingService);
   private service: BorrowingService = inject(BorrowingService);
   private modalService: NzModalService = inject(NzModalService);
   private message: NzMessageService = inject(NzMessageService);
