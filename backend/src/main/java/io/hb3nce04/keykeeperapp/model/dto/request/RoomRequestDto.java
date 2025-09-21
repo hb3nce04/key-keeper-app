@@ -1,6 +1,5 @@
-package io.hb3nce04.keykeeperapp.model.dto;
+package io.hb3nce04.keykeeperapp.model.dto.request;
 
-import io.hb3nce04.keykeeperapp.model.dto.common.BaseDto;
 import io.hb3nce04.keykeeperapp.model.enums.RoomType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RoomDto extends BaseDto {
+public class RoomRequestDto {
     @NotEmpty(message = "Kitöltése kötelező")
     private String code;
 

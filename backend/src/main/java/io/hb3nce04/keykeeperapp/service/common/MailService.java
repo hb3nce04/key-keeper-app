@@ -12,6 +12,9 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Felelős a HTML alapú e-mailek küldéséért.
+ */
 @Service
 @RequiredArgsConstructor
 public class MailService {

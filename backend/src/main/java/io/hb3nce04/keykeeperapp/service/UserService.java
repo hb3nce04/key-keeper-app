@@ -7,7 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import io.hb3nce04.keykeeperapp.mapper.UserMapper;
-import io.hb3nce04.keykeeperapp.model.dto.UserDto;
+import io.hb3nce04.keykeeperapp.model.dto.request.UserRequestDto;
+import io.hb3nce04.keykeeperapp.model.dto.response.UserResponseDto;
 import io.hb3nce04.keykeeperapp.model.entity.User;
 import io.hb3nce04.keykeeperapp.repository.UserRepository;
 import io.hb3nce04.keykeeperapp.service.common.AbstractCrudService;
@@ -16,7 +17,7 @@ import io.hb3nce04.keykeeperapp.util.PasswordUtil;
 import jakarta.mail.MessagingException;
 
 @Service
-public class UserService extends AbstractCrudService<User, UserDto, UserRepository, UserMapper> {
+public class UserService extends AbstractCrudService<User, UserRequestDto, UserResponseDto, UserRepository, UserMapper> {
     private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
 
@@ -31,7 +32,7 @@ public class UserService extends AbstractCrudService<User, UserDto, UserReposito
     }
 
     @Override
-    public UserDto create(UserDto dto) throws MessagingException {
+    public UserResponseDto create(UserRequestDto dto) throws MessagingException {
         String rawPassword = PasswordUtil.generate();
 
         User newUser = new User();

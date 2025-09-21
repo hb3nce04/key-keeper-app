@@ -10,20 +10,28 @@ import io.hb3nce04.keykeeperapp.repository.common.BaseRepository;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Absztrakt CRUD Service osztály.
+ * @param <E> JPA Entity típus
+ * @param <REQ> Request DTO típus (input a kliens felől)
+ * @param <RES> Response DTO típus (output a kliens felé)
+ * @param <R> Repository típus (Spring Data JPA)
+ * @param <M> Mapper típus (BaseMapper, ami tudja konvertálni REQ <-> E <-> RES)
+ */
 @RequiredArgsConstructor
-public abstract class AbstractCrudService<E extends BaseEntity, D extends BaseDto, R extends BaseRepository<E>, M extends BaseMapper<D, E>> {
+public abstract class AbstractCrudService<E extends BaseEntity, REQ, RES extends BaseDto, R extends BaseRepository<E>, M extends BaseMapper<REQ, RES, E>> {
     protected final R repository;
     protected final M mapper;
 
-    public D create(D dto) throws MessagingException {
+    public RES create(REQ dto) throws MessagingException {
         return mapper.toDto(repository.save(mapper.toEntity(dto)));
     }
 
-    public List<D> findAll() {
+    public List<RES> findAll() {
         return mapper.toDtoList(repository.findAll());
     }
 
-    public D findById(Long id) {
+    public RES findById(Long id) {
         return mapper.toDto(findEntityByIdOrThrow(id));
     }
 
@@ -32,7 +40,7 @@ public abstract class AbstractCrudService<E extends BaseEntity, D extends BaseDt
         repository.delete(entity);
     }
 
-    public D update(Long id, D dto) {
+    public RES update(Long id, REQ dto) {
         E entity = findEntityByIdOrThrow(id);
         mapper.updateEntity(dto, entity);
         return mapper.toDto(repository.save(entity));

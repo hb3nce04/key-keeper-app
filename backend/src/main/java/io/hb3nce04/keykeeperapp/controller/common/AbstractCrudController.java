@@ -19,32 +19,39 @@ import io.hb3nce04.keykeeperapp.repository.common.BaseRepository;
 import io.hb3nce04.keykeeperapp.service.common.AbstractCrudService;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Absztrakt CRUD controller generikus CRUD műveletekhez.
+ * @param <S> Service típusa, ami kezeli az üzleti logikát (AbstractCrudService)
+ * @param <E> Entity típus (JPA entitás)
+ * @param <REQ> Request DTO típus (klienstől érkező adatok)
+ * @param <RES> Response DTO típus (visszaküldött adatok, BaseDto leszármazott)
+ * @param <R> Repository típus (Spring Data JPA Repository)
+ * @param <M> Mapper típus (BaseMapper, ami tudja konvertálni REQ <-> E <-> RES)
+ */
 @RequiredArgsConstructor
-public abstract class AbstractCrudController<S extends AbstractCrudService<E, D, R, M>, E extends BaseEntity, D extends BaseDto, R extends BaseRepository<E>, M extends BaseMapper<D, E>> {
+public abstract class AbstractCrudController<S extends AbstractCrudService<E, REQ, RES, R, M>, E extends BaseEntity, REQ, RES extends BaseDto, R extends BaseRepository<E>, M extends BaseMapper<REQ, RES, E>> {
     protected final S service;
 
     @PostMapping
-    public ResponseEntity<D> create(@RequestBody @Validated D dto) throws Exception {
-        D createdDto = service.create(dto);
-        return ResponseEntity.created(ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(1)
-                .toUri()).body(createdDto);
+    public ResponseEntity<RES> create(@RequestBody @Validated REQ dto) throws Exception {
+        RES createdDto = service.create(dto);
+        return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(1).toUri()).body(createdDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<D>> findAll() {
+    public ResponseEntity<List<RES>> findAll() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<D> findById(@PathVariable Long id) {
+    public ResponseEntity<RES> findById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<D> update(@PathVariable Long id, @RequestBody @Validated D dto) {
+    public ResponseEntity<RES> update(
+            @PathVariable Long id,
+            @RequestBody @Validated REQ dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
