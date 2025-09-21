@@ -8,6 +8,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {LoadingService} from '../../../../../core/services/loading.service';
 import {UserService} from '../../user.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzDrawerRef} from 'ng-zorro-antd/drawer';
 
 @Component({
   selector: 'app-create-user',
@@ -26,6 +27,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
   `
 })
 export class CreateUser {
+  private drawerRef = inject(NzDrawerRef<CreateUser>);
   protected loadingService: LoadingService = inject(LoadingService);
   protected userService: UserService = inject(UserService);
   protected messageService: NzMessageService = inject(NzMessageService);
@@ -64,6 +66,7 @@ export class CreateUser {
     this.userService.create({username, email_address, role}).subscribe({
       next: () => {
         this.messageService.success("Felhasználó sikeresen létrehozva! Az ideiglenes jelszó hamarosan kiküldésre kerül.")
+        this.drawerRef.close();
       },
       error: () => {
         this.messageService.error("Hiba történt a felhasználó létrehozása során!");

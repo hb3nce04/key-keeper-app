@@ -8,6 +8,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {LoadingService} from '../../../../../core/services/loading.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {KeyService} from '../../key.service';
+import {NzDrawerRef} from 'ng-zorro-antd/drawer';
 
 @Component({
   selector: 'app-create-key',
@@ -26,6 +27,7 @@ import {KeyService} from '../../key.service';
   `
 })
 export class CreateKey implements OnInit {
+  private drawerRef = inject(NzDrawerRef<CreateKey>);
   private keyService: KeyService = inject(KeyService);
   private roomService: RoomService = inject(RoomService);
   protected loadingService: LoadingService = inject(LoadingService);
@@ -43,8 +45,8 @@ export class CreateKey implements OnInit {
       name: 'roomId',
       label: 'Helyiség kiválasztása',
       type: 'select',
-      showSearch: true
-      //validators: [Validators.required],
+      showSearch: true,
+      validators: [Validators.required],
     }
   ]
 
@@ -64,6 +66,7 @@ export class CreateKey implements OnInit {
     this.keyService.create({code, roomId}).subscribe({
       next: () => {
         this.messageService.success("Kulcs sikeresen létrehozva!")
+        this.drawerRef.close();
       },
       error: () => {
         this.messageService.error("Hiba történt a kulcs létrehozása során!");

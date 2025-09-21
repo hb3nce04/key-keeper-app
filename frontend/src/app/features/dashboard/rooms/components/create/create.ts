@@ -6,6 +6,7 @@ import {LoadingService} from '../../../../../core/services/loading.service';
 import {FormGroup, Validators} from '@angular/forms';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
 import {RoomType} from '../../enums/room.enum';
+import {NzDrawerRef} from 'ng-zorro-antd/drawer';
 
 @Component({
   selector: 'app-create-room',
@@ -24,6 +25,7 @@ import {RoomType} from '../../enums/room.enum';
   `
 })
 export class CreateRoom {
+  private drawerRef = inject(NzDrawerRef<CreateRoom>);
   protected loadingService: LoadingService = inject(LoadingService);
 
   fields: FieldConfig[] = [
@@ -72,6 +74,6 @@ export class CreateRoom {
   ]
 
   handleSubmit(form: FormGroup) {
-
+    this.drawerRef.close();
   }
 }

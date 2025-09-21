@@ -6,6 +6,7 @@ import {LoadingService} from '../../../../../core/services/loading.service';
 import {FormGroup, Validators} from '@angular/forms';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
 import {RequesterType} from '../../enums/requester.enum';
+import {NzDrawerRef} from 'ng-zorro-antd/drawer';
 
 @Component({
   selector: 'app-create-requester',
@@ -23,6 +24,7 @@ import {RequesterType} from '../../enums/requester.enum';
     </app-form>`
 })
 export class CreateRequester {
+  private drawerRef = inject(NzDrawerRef<CreateRequester>);
   protected loadingService: LoadingService = inject(LoadingService);
 
   fields: FieldConfig[] = [
@@ -66,6 +68,6 @@ export class CreateRequester {
   ]
 
   handleSubmit(form: FormGroup) {
-
+    this.drawerRef.close();
   }
 }
