@@ -4,7 +4,7 @@ import {Button, Column} from './table.type';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {LoadingService} from '../../../core/services/loading.service';
 import {AsyncPipe} from '@angular/common';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
+import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
@@ -43,17 +43,20 @@ export class Table<T extends BaseResponseDto> {
   data: InputSignal<T[]> = input.required();
 
   create = output<void>();
+  edit = output<number>();
   delete = output<number>();
 
-  getRenderedValue(column: Column<T>, data: T) {
-    if (column.field.toString().includes('.')) {
+  getRenderedValue<T>(column: Column<T>, data: T | null | undefined): any {
+    if (!data) {
+      return "-";
+    }
+    if (column.field.toString().includes(".")) {
       return this.getNestedValue(data, column.field.toString());
     }
-    if (!!column.valueFn) {
-      return column.valueFn(data);
-    } else {
-      return data[column.field as keyof T];
+    if (column.valueFn) {
+      return column.valueFn(data) ?? "-";
     }
+    return (data as any)[column.field as keyof T] ?? "-";
   }
 
   private getNestedValue(obj: any, path: string) {
@@ -79,5 +82,9 @@ export class Table<T extends BaseResponseDto> {
 
   handleCreate() {
     this.create.emit();
+  }
+
+  handleEdit(id: number) {
+    this.edit.emit(id);
   }
 }

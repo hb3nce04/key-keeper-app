@@ -4,41 +4,41 @@ import {environment} from '../../../environments/environment';
 import {inject} from '@angular/core';
 import {BaseResponseDto} from '../dtos/base-response.dto';
 
-export abstract class AbstractCrudService<T extends BaseResponseDto> {
-  private httpClient = inject(HttpClient)
-  public data$ = new BehaviorSubject<T[]>([]);
+export abstract class AbstractCrudService<REQ, RES extends BaseResponseDto> {
+  protected httpClient = inject(HttpClient)
+  public data$ = new BehaviorSubject<RES[]>([]);
 
   protected constructor(
     protected baseUrl: string
   ) {
   }
 
-  findAll(): Observable<T[]> {
+  findAll(): Observable<RES[]> {
     if (!this.data$.getValue().length) {
-      this.httpClient.get<T[]>(environment.apiUrl + this.baseUrl).subscribe(data => this.data$.next(data));
+      this.httpClient.get<RES[]>(environment.apiUrl + this.baseUrl).subscribe(data => this.data$.next(data));
     }
     return this.data$.asObservable();
   }
 
-  findById(id: number): Observable<T> {
+  findById(id: number): Observable<RES> {
     const found = this.data$.getValue().find(data => data.id === id);
     if (found) {
       return of(found);
     } else {
-      return this.httpClient.get<T>(`${environment.apiUrl + this.baseUrl}/${id}`);
+      return this.httpClient.get<RES>(`${environment.apiUrl + this.baseUrl}/${id}`);
     }
   }
 
-  create(entity: any): Observable<T> {
-    return this.httpClient.post<T>(environment.apiUrl + this.baseUrl, entity).pipe(
+  create(entity: REQ): Observable<RES> {
+    return this.httpClient.post<RES>(environment.apiUrl + this.baseUrl, entity).pipe(
       tap({
         next: (data) => this.data$.next([...this.data$.getValue(), data])
       }),
     );
   }
 
-  update(id: number, entity: T): Observable<T> {
-    return this.httpClient.put<T>(`${environment.apiUrl + this.baseUrl}/${id}`, entity).pipe(
+  update(id: number, entity: REQ): Observable<RES> {
+    return this.httpClient.put<RES>(`${environment.apiUrl + this.baseUrl}/${id}`, entity).pipe(
       tap({
         next: (updatedData) => {
           const currentData = this.data$.getValue();

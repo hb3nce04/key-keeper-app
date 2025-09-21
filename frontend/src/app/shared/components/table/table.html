@@ -39,6 +39,15 @@
               nz-button
               nz-tooltip
               nzType="text"
+              nzTooltipTitle="Módosítás"
+              (click)="handleEdit(data.id)"
+            >
+              <nz-icon nzType="edit"/>
+            </button>
+            <button
+              nz-button
+              nz-tooltip
+              nzType="text"
               nzTooltipTitle="Törlés"
               nz-popconfirm
               nzPopconfirmTitle="Biztosan törölni szeretnéd ezt az elemet?"

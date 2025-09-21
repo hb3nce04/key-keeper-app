@@ -7,6 +7,8 @@ import {FormGroup, Validators} from '@angular/forms';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
 import {RequesterType} from '../../enums/requester.enum';
 import {NzDrawerRef} from 'ng-zorro-antd/drawer';
+import {RequesterService} from '../../requester.service';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-create-requester',
@@ -26,6 +28,8 @@ import {NzDrawerRef} from 'ng-zorro-antd/drawer';
 export class CreateRequester {
   private drawerRef = inject(NzDrawerRef<CreateRequester>);
   protected loadingService: LoadingService = inject(LoadingService);
+  private requesterService: RequesterService = inject(RequesterService);
+  private messageService: NzMessageService = inject(NzMessageService);
 
   fields: FieldConfig[] = [
     {
@@ -53,7 +57,7 @@ export class CreateRequester {
     {
       name: 'phoneNumber',
       label: 'Telefonszám',
-      type: 'text'
+      type: 'number'
     },
     {
       name: 'type',
@@ -68,6 +72,15 @@ export class CreateRequester {
   ]
 
   handleSubmit(form: FormGroup) {
-    this.drawerRef.close();
+    const {lastName, firstName, personalIdNumber, emailAddress, phoneNumber, type} = form.value;
+    this.requesterService.create({lastName, firstName, personalIdNumber, emailAddress, phoneNumber, type}).subscribe({
+      next: () => {
+        this.messageService.success("Igénylő sikeresen létrehozva!")
+        this.drawerRef.close();
+      },
+      error: () => {
+        this.messageService.error("Hiba történt az igénylő létrehozása során!");
+      }
+    })
   }
 }

@@ -1,7 +1,6 @@
-import {BaseResponseDto} from '../../../../core/dtos/base-response.dto';
 import {RoomType} from '../enums/room.enum';
 
-export interface RoomResponseDto extends BaseResponseDto {
+export interface RoomRequestDto {
   code: string;
   name: string;
   floor: number;

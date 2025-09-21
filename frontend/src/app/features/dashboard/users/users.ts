@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, Signal} from '@angular/core';
 import {Table} from '../../../shared/components/table/table';
 import {UserService} from './user.service';
 import {Column} from '../../../shared/components/table/table.type';
@@ -38,7 +38,7 @@ export class Users implements OnInit {
       valueFn: (dto: UserResponseDto) => Role[dto.role as unknown as keyof typeof Role]
     }
   ]
-  data = toSignal(this.userService.data$, {initialValue: [] as UserResponseDto[]});
+  data: Signal<UserResponseDto[]> = toSignal(this.userService.data$, {initialValue: [] as UserResponseDto[]});
 
   ngOnInit(): void {
     this.userService.findAll()

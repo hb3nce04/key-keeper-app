@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal, TemplateRef, ViewChild, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit, Signal, signal, TemplateRef, ViewChild, WritableSignal} from '@angular/core';
 import {Table} from '../../../shared/components/table/table';
 import {KeyService} from './key.service';
 import {Button, Column} from '../../../shared/components/table/table.type';
@@ -12,6 +12,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzDrawerService} from 'ng-zorro-antd/drawer';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {KeyResponseDto} from './dtos/key-response.dto';
+import {EditKey} from './components/edit/edit';
 
 @Component({
   selector: 'app-keys',
@@ -24,6 +25,7 @@ import {KeyResponseDto} from './dtos/key-response.dto';
   ],
   template: `
     <app-table [buttons]="buttons" [columns]="columns" [data]="data()" (delete)="handleDelete($event)"
+               (edit)="handleEdit($event)"
                (create)="handleCreate()">
       <button nz-button (click)="handlePrint()">
         QR-kódok nyomtatása
@@ -71,7 +73,7 @@ export class Keys implements OnInit {
       header: 'Terem',
     },
   ]
-  data = toSignal(this.keyService.data$, { initialValue: [] as KeyResponseDto[] });
+  data: Signal<KeyResponseDto[]> = toSignal(this.keyService.data$, { initialValue: [] as KeyResponseDto[] });
 
   ngOnInit(): void {
     this.keyService.findAll()
@@ -153,7 +155,6 @@ export class Keys implements OnInit {
     this.drawerService.create({
       nzTitle: 'Új kulcs hozzáadása',
       nzContent: CreateKey,
-
     })
   }
 
@@ -161,6 +162,16 @@ export class Keys implements OnInit {
     this.keyService.delete(id).subscribe({
       next: () => {
         this.message.success("Kulcs sikeresen törölve!")
+      }
+    })
+  }
+
+  handleEdit(id: number) {
+    this.drawerService.create({
+      nzTitle: 'Kulcs módosítása',
+      nzContent: EditKey,
+      nzData: {
+        id
       }
     })
   }

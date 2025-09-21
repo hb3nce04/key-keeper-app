@@ -1,14 +1,15 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, Signal} from '@angular/core';
 import {BorrowingService} from './borrowing.service';
 import {Table} from '../../../shared/components/table/table';
 import {BorrowingResponseDto} from './dtos/borrowing-response.dto';
 import {Column} from '../../../shared/components/table/table.type';
 import {BorrowingStatus} from './enums/borrowing.enum';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
-import {Scanner} from '../../../shared/components/scanner/scanner';
+import {NzModalModule} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {toSignal} from '@angular/core/rxjs-interop';
+import {NzDrawerService} from 'ng-zorro-antd/drawer';
+import {CreateBorrowing} from './components/create/create';
 
 @Component({
   selector: 'app-records',
@@ -18,19 +19,16 @@ import {toSignal} from '@angular/core/rxjs-interop';
     NzModalModule,
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)">
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()">
       <button nz-button (click)="handleRequest()">
-        Kulcsigénylés
-      </button>
-      <button nz-button (click)="handleRequest()">
-        Kulcsigénylés QR-kód alapján
+        Adatmódosítás QR-kód alapján
       </button>
     </app-table>
   `
 })
 export class Borrowings implements OnInit {
   private borrowingService: BorrowingService = inject(BorrowingService);
-  private modalService: NzModalService = inject(NzModalService);
+  private drawerService: NzDrawerService = inject(NzDrawerService);
   private message: NzMessageService = inject(NzMessageService);
 
   columns: Column<BorrowingResponseDto>[] = [
@@ -61,13 +59,14 @@ export class Borrowings implements OnInit {
       valueFn: (dto: BorrowingResponseDto) => BorrowingStatus[dto.status as unknown as keyof typeof BorrowingStatus]
     }
   ]
-  data = toSignal(this.borrowingService.data$, {initialValue: [] as BorrowingResponseDto[]});
+  data: Signal<BorrowingResponseDto[]> = toSignal(this.borrowingService.data$, {initialValue: [] as BorrowingResponseDto[]});
 
   ngOnInit(): void {
     this.borrowingService.findAll()
   }
 
   handleRequest() {
+    /*
     const modalRef = this.modalService.info({
       nzTitle: "QR-kód beolvasása",
       nzContent: Scanner,
@@ -78,6 +77,22 @@ export class Borrowings implements OnInit {
         this.message.success(`Sikeres beolvasás! Érték: ${value}`)
         modalRef.close();
       })
+    })
+     */
+    this.borrowingService.findByKeyCode("AB10000").subscribe({
+      next: (data) => {
+        console.log(data);
+      },
+      error: (error) => {
+        this.message.error(error.error);
+      }
+    })
+  }
+
+  handleCreate() {
+    this.drawerService.create({
+      nzTitle: 'Új igénylés felvétele',
+      nzContent: CreateBorrowing,
     })
   }
 

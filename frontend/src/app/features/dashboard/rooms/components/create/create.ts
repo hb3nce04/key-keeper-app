@@ -7,6 +7,8 @@ import {FormGroup, Validators} from '@angular/forms';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
 import {RoomType} from '../../enums/room.enum';
 import {NzDrawerRef} from 'ng-zorro-antd/drawer';
+import {RoomService} from '../../room.service';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-create-room',
@@ -27,6 +29,8 @@ import {NzDrawerRef} from 'ng-zorro-antd/drawer';
 export class CreateRoom {
   private drawerRef = inject(NzDrawerRef<CreateRoom>);
   protected loadingService: LoadingService = inject(LoadingService);
+  protected roomService: RoomService = inject(RoomService);
+  protected messageService: NzMessageService = inject(NzMessageService);
 
   fields: FieldConfig[] = [
     {
@@ -74,6 +78,15 @@ export class CreateRoom {
   ]
 
   handleSubmit(form: FormGroup) {
-    this.drawerRef.close();
+    const {code, name, floor, building, capacity, area, type} = form.value;
+    this.roomService.create({code, name, floor, building, capacity, area, type}).subscribe({
+      next: () => {
+        this.messageService.success("Helyiség sikeresen létrehozva!")
+        this.drawerRef.close();
+      },
+      error: () => {
+        this.messageService.error("Hiba történt a helyiség létrehozása során!");
+      }
+    })
   }
 }

@@ -1,7 +1,7 @@
 export interface FieldConfig {
   name: string;
   type: 'text' | 'password' | 'select' | 'email' | 'number';
-  value?: string;
+  value?: string | number;
   label?: string;
   placeholder?: string;
   icon?: string;

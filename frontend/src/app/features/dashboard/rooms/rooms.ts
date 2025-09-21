@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, Signal} from '@angular/core';
 import {Table} from '../../../shared/components/table/table';
 import {RoomResponseDto} from './dtos/room-response.dto';
 import {Column} from '../../../shared/components/table/table.type';
@@ -62,7 +62,7 @@ export class Rooms implements OnInit {
       valueFn: (dto: RoomResponseDto) => RoomType[dto.type as unknown as keyof typeof RoomType]
     }
   ]
-  data = toSignal(this.roomService.data$, {initialValue: [] as RoomResponseDto[]});
+  data: Signal<RoomResponseDto[]> = toSignal(this.roomService.data$, {initialValue: [] as RoomResponseDto[]});
 
   ngOnInit(): void {
     this.roomService.findAll()
