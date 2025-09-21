@@ -7,3 +7,4 @@ export const NAV_LINKS = [
 ]
 
 export const MAIN_PAGE = '/dashboard/borrowings'
+export const LOGIN_PAGE = '/auth/login'

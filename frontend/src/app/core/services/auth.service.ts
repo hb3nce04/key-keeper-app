@@ -6,23 +6,27 @@ import {environment} from '../../../environments/environment';
 import {AuthResponseDto} from '../dtos/auth-response.dto';
 import {LocalStorageService} from './local-storage.service';
 import {jwtDecode, JwtPayload} from 'jwt-decode';
+import {Router} from '@angular/router';
+import {LOGIN_PAGE} from '../constants/nav-link.const';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
+  private TOKEN_STORAGE_KEY = "token";
+  private url = environment.apiUrl + '/auth';
   private httpClient: HttpClient = inject(HttpClient)
   private localStorageService: LocalStorageService = inject(LocalStorageService);
-  private url = environment.apiUrl + '/auth';
+  private router: Router = inject(Router);
 
   login(username: string, password: string): Observable<AuthResponseDto> {
     return this.httpClient.post<AuthResponseDto>(this.url+'/login', {username, password}).pipe(
       tap(res => {
-        this.localStorageService.setItem<string>("token", res.token)
+        this.localStorageService.setItem<string>(this.TOKEN_STORAGE_KEY, res.token)
       }),
     )
   }
 
   getToken(): string | null {
-    return this.localStorageService.getItem('token');
+    return this.localStorageService.getItem(this.TOKEN_STORAGE_KEY);
   }
 
   getDecodedToken(): JwtPayload & {role: string} | null {
@@ -45,14 +49,15 @@ export class AuthService {
   }
 
   getUser() {
-    return `${this.getUsername()} (${Role[this.getDecodedToken()!.role as keyof typeof Role]})`;
-  }
-
-  logout() {
-    this.localStorageService.removeItem("token");
+    return `${this.getUsername()} (${Role[this.getRole()]})`;
   }
 
   getRole() {
-    return Role.ADMIN
+    return this.getDecodedToken()!.role as keyof typeof Role;
+  }
+
+  logout() {
+    this.localStorageService.removeItem(this.TOKEN_STORAGE_KEY);
+    this.router.navigate([LOGIN_PAGE]);
   }
 }
