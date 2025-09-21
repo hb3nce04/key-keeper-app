@@ -8,7 +8,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzTooltipDirective} from 'ng-zorro-antd/tooltip';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
-import {BaseDto} from '../../../core/dtos/base.dto';
+import {BaseResponseDto} from '../../../core/dtos/base-response.dto';
 import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
 import {NzSkeletonComponent} from 'ng-zorro-antd/skeleton';
 
@@ -29,12 +29,16 @@ import {NzSkeletonComponent} from 'ng-zorro-antd/skeleton';
   styles: `
     .buttons {
       display: flex;
-      gap: 10px;
       margin-bottom: 10px;
+      justify-content: space-between;
+      .start {
+        display: flex;
+        gap: 10px;
+      }
     }
   `
 })
-export class Table<T extends BaseDto> {
+export class Table<T extends BaseResponseDto> {
   protected loadingService: LoadingService = inject(LoadingService);
   private modalService: NzModalService = inject(NzModalService);
 
@@ -42,6 +46,7 @@ export class Table<T extends BaseDto> {
   buttons: InputSignal<Button[] | undefined> = input();
   data: InputSignal<T[]> = input.required();
 
+  create = output<void>();
   delete = output<number>();
 
   getRenderedValue(column: Column<T>, data: T) {
@@ -74,5 +79,9 @@ export class Table<T extends BaseDto> {
 
   handleDelete(id: number) {
     this.delete.emit(id);
+  }
+
+  handleCreate() {
+    this.create.emit();
   }
 }

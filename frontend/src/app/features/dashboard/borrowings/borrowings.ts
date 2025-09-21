@@ -1,13 +1,14 @@
-import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {BorrowingService} from './borrowing.service';
 import {Table} from '../../../shared/components/table/table';
-import {BorrowingDto} from './borrowing.dto';
+import {BorrowingResponseDto} from './dtos/borrowing-response.dto';
 import {Column} from '../../../shared/components/table/table.type';
-import {BorrowingStatus} from './borrowing.enum';
+import {BorrowingStatus} from './enums/borrowing.enum';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import {Scanner} from '../../../shared/components/scanner/scanner';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-records',
@@ -18,25 +19,25 @@ import {NzMessageService} from 'ng-zorro-antd/message';
   ],
   template: `
     <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)">
-      <button nz-button nzType="primary" (click)="handleRequest()">
+      <button nz-button (click)="handleRequest()">
         Kulcsigénylés
       </button>
-      <button nz-button nzType="primary" (click)="handleRequest()">
+      <button nz-button (click)="handleRequest()">
         Kulcsigénylés QR-kód alapján
       </button>
     </app-table>
   `
 })
 export class Borrowings implements OnInit {
-  private service: BorrowingService = inject(BorrowingService);
+  private borrowingService: BorrowingService = inject(BorrowingService);
   private modalService: NzModalService = inject(NzModalService);
   private message: NzMessageService = inject(NzMessageService);
 
-  columns: Column<BorrowingDto>[] = [
+  columns: Column<BorrowingResponseDto>[] = [
     {
       field: 'name',
       header: 'Név',
-      valueFn: (dto: BorrowingDto) => dto.requester.firstName + ' ' + dto.requester.lastName,
+      valueFn: (dto: BorrowingResponseDto) => dto.requester.firstName + ' ' + dto.requester.lastName,
     },
     {
       field: 'date',
@@ -57,17 +58,13 @@ export class Borrowings implements OnInit {
     {
       field: 'status',
       header: 'Állapot',
-      valueFn: (dto: BorrowingDto) => BorrowingStatus[dto.status as unknown as keyof typeof BorrowingStatus]
+      valueFn: (dto: BorrowingResponseDto) => BorrowingStatus[dto.status as unknown as keyof typeof BorrowingStatus]
     }
   ]
-  data: WritableSignal<BorrowingDto[]> = signal([])
+  data = toSignal(this.borrowingService.data$, {initialValue: [] as BorrowingResponseDto[]});
 
   ngOnInit(): void {
-    this.service.findAll().subscribe({
-      next: (data: BorrowingDto[]) => {
-        this.data.set(data);
-      }
-    })
+    this.borrowingService.findAll()
   }
 
   handleRequest() {
@@ -85,10 +82,9 @@ export class Borrowings implements OnInit {
   }
 
   handleDelete(id: number) {
-    this.service.delete(id).subscribe({
+    this.borrowingService.delete(id).subscribe({
       next: () => {
         this.message.success("Foglalás sikeresen törölve!")
-        this.data.set(this.data().filter(d => d.id !== id))
       }
     })
   }

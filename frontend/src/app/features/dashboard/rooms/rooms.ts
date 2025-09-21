@@ -1,9 +1,13 @@
-import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {Table} from '../../../shared/components/table/table';
-import {RoomDto, RoomType} from './room.dto';
+import {RoomResponseDto} from './dtos/room-response.dto';
 import {Column} from '../../../shared/components/table/table.type';
 import {RoomService} from './room.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {CreateRoom} from './components/create/create';
+import {NzDrawerService} from 'ng-zorro-antd/drawer';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {RoomType} from './enums/room.enum';
 
 @Component({
   selector: 'app-rooms',
@@ -11,14 +15,15 @@ import {NzMessageService} from 'ng-zorro-antd/message';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()"/>
   `
 })
 export class Rooms implements OnInit {
-  private service: RoomService = inject(RoomService);
+  private roomService: RoomService = inject(RoomService);
   private message: NzMessageService = inject(NzMessageService);
+  private drawerService: NzDrawerService = inject(NzDrawerService);
 
-  columns: Column<RoomDto>[] = [
+  columns: Column<RoomResponseDto>[] = [
     {
       field: 'code',
       header: 'Terem',
@@ -30,7 +35,7 @@ export class Rooms implements OnInit {
     {
       field: 'floor',
       header: 'Szint',
-      valueFn: (dto: RoomDto) => {
+      valueFn: (dto: RoomResponseDto) => {
         if (dto.floor == 0) {
           return 'Földszint'
         }
@@ -44,35 +49,37 @@ export class Rooms implements OnInit {
     {
       field: 'capacity',
       header: 'Kapacitás',
-      valueFn: (dto: RoomDto) => `${dto.capacity} fő`
+      valueFn: (dto: RoomResponseDto) => `${dto.capacity} fő`
     },
     {
       field: 'area',
       header: 'Terület',
-      valueFn: (dto: RoomDto) => `${dto.area} nm`
+      valueFn: (dto: RoomResponseDto) => `${dto.area} nm`
     },
     {
       field: 'type',
       header: 'Típus',
-      valueFn: (dto: RoomDto) => RoomType[dto.type as unknown as keyof typeof RoomType]
+      valueFn: (dto: RoomResponseDto) => RoomType[dto.type as unknown as keyof typeof RoomType]
     }
   ]
-  data: WritableSignal<RoomDto[]> = signal([])
+  data = toSignal(this.roomService.data$, {initialValue: [] as RoomResponseDto[]});
 
   ngOnInit(): void {
-    this.service.findAll().subscribe({
-      next: (data: RoomDto[]) => {
-        this.data.set(data)
-      },
-    })
+    this.roomService.findAll()
   }
 
   handleDelete(id: number) {
-    this.service.delete(id).subscribe({
+    this.roomService.delete(id).subscribe({
       next: () => {
         this.message.success("Helyiség sikeresen törölve!")
-        this.data.set(this.data().filter(d => d.id !== id))
       }
+    })
+  }
+
+  handleCreate() {
+    this.drawerService.create({
+      nzTitle: "Új helyiség hozzáadása",
+      nzContent: CreateRoom
     })
   }
 }

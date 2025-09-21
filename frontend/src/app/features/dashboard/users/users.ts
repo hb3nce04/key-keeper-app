@@ -1,10 +1,13 @@
-import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {Table} from '../../../shared/components/table/table';
 import {UserService} from './user.service';
 import {Column} from '../../../shared/components/table/table.type';
-import {UserDto} from './user.dto';
+import {UserResponseDto} from './dtos/user-response.dto';
 import {Role} from '../../../core/enums/role.enum';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzDrawerService} from 'ng-zorro-antd/drawer';
+import {CreateUser} from './components/create/create';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-users',
@@ -12,14 +15,15 @@ import {NzMessageService} from 'ng-zorro-antd/message';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()"/>
   `
 })
 export class Users implements OnInit {
-  private service: UserService = inject(UserService);
-  private message: NzMessageService = inject(NzMessageService);
+  private userService: UserService = inject(UserService);
+  private messageService: NzMessageService = inject(NzMessageService);
+  private drawerService: NzDrawerService = inject(NzDrawerService);
 
-  columns: Column<UserDto>[] = [
+  columns: Column<UserResponseDto>[] = [
     {
       field: 'username',
       header: 'Felhasználónév',
@@ -31,25 +35,27 @@ export class Users implements OnInit {
     {
       field: 'role',
       header: 'Jogosultság',
-      valueFn: (dto: UserDto) => Role[dto.role as unknown as keyof typeof Role]
+      valueFn: (dto: UserResponseDto) => Role[dto.role as unknown as keyof typeof Role]
     }
   ]
-  data: WritableSignal<UserDto[]> = signal([])
+  data = toSignal(this.userService.data$, {initialValue: [] as UserResponseDto[]});
 
   ngOnInit(): void {
-    this.service.findAll().subscribe({
-      next: (data: UserDto[]) => {
-        this.data.set(data)
-      },
-    })
+    this.userService.findAll()
   }
 
   handleDelete(id: number) {
-    this.service.delete(id).subscribe({
+    this.userService.delete(id).subscribe({
       next: () => {
-        this.message.success("Felhasználó sikeresen törölve!")
-        this.data.set(this.data().filter(d => d.id !== id))
+        this.messageService.success("Felhasználó sikeresen törölve!")
       }
+    })
+  }
+
+  handleCreate() {
+    this.drawerService.create({
+      nzTitle: "Új felhasználó hozzáadása",
+      nzContent: CreateUser
     })
   }
 }

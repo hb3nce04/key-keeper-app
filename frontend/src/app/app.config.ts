@@ -10,6 +10,7 @@ import {provideAnimationsAsync} from '@angular/platform-browser/animations/async
 import {TokenInterceptor} from './core/interceptors/token.interceptor';
 import {LoadingInterceptor} from './core/interceptors/loading.interceptor';
 import {hu_HU, provideNzI18n} from 'ng-zorro-antd/i18n';
+import {NzDrawerService} from 'ng-zorro-antd/drawer';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
@@ -18,6 +19,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    NzDrawerService,
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),

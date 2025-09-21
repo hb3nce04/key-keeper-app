@@ -48,7 +48,6 @@ export class Form implements OnInit {
       group[field.name] = [field.value, field.validators || []];
     });
     this.formGroup = this.formBuilder.group(group)
-    console.log(this.fields()[0].validators)
   }
 
   handleSubmit() {

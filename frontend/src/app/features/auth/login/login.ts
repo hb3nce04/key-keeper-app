@@ -14,7 +14,7 @@ import {AsyncPipe} from '@angular/common';
     <div class="login-container">
       <h2>Kérem jelentkezzen be!</h2>
       <app-form [fields]="fields" (validSubmit)="handleLogin($event)" class="login-form">
-        <button submit-button nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
+        <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
                 [disabled]="this.loadingService.$loading | async">Bejelentkezés
         </button>
       </app-form>

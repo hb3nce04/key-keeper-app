@@ -1,10 +1,14 @@
-import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {RequesterService} from './requester.service';
 import {Table} from '../../../shared/components/table/table';
 import {Column} from '../../../shared/components/table/table.type';
-import {RequesterDto} from './requester.dto';
-import {RequesterType} from './requester.enum';
+import {RequesterRequestDto} from './dtos/requester-request.dto';
+import {RequesterType} from './enums/requester.enum';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzDrawerService} from 'ng-zorro-antd/drawer';
+import {CreateRequester} from './components/create/create';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {RequesterResponseDto} from './dtos/requester.response.dto';
 
 @Component({
   selector: 'app-requesters',
@@ -12,18 +16,19 @@ import {NzMessageService} from 'ng-zorro-antd/message';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()"/>
   `
 })
 export class Requesters implements OnInit {
-  private service: RequesterService = inject(RequesterService);
+  private requesterService: RequesterService = inject(RequesterService);
   private message: NzMessageService = inject(NzMessageService);
+  private drawerService: NzDrawerService = inject(NzDrawerService);
 
-  columns: Column<RequesterDto>[] = [
+  columns: Column<RequesterResponseDto>[] = [
     {
       field: 'name',
       header: 'Név',
-      valueFn: (value: RequesterDto) => `${value.firstName} ${value.lastName}`
+      valueFn: (value: RequesterRequestDto) => `${value.firstName} ${value.lastName}`
     },
     {
       field: 'personalIdNumber',
@@ -40,25 +45,27 @@ export class Requesters implements OnInit {
     {
       field: 'type',
       header: 'Típus',
-      valueFn: (dto: RequesterDto) => RequesterType[dto.type as unknown as keyof typeof RequesterType]
+      valueFn: (dto: RequesterRequestDto) => RequesterType[dto.type as unknown as keyof typeof RequesterType]
     }
   ]
-  data: WritableSignal<RequesterDto[]> = signal([])
+  data = toSignal(this.requesterService.data$, {initialValue: [] as RequesterResponseDto[]});
 
   ngOnInit(): void {
-    this.service.findAll().subscribe({
-      next: (data: RequesterDto[]) => {
-        this.data.set(data)
-      },
-    })
+    this.requesterService.findAll()
   }
 
   handleDelete(id: number) {
-    this.service.delete(id).subscribe({
+    this.requesterService.delete(id).subscribe({
       next: () => {
         this.message.success("Igénylő sikeresen törölve!")
-        this.data.set(this.data().filter(d => d.id !== id))
       }
+    })
+  }
+
+  handleCreate() {
+    this.drawerService.create({
+      nzTitle: 'Új igénylő hozzáadása',
+      nzContent: CreateRequester
     })
   }
 }

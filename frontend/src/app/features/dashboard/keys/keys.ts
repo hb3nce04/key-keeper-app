@@ -1,15 +1,17 @@
 import {Component, inject, OnInit, signal, TemplateRef, ViewChild, WritableSignal} from '@angular/core';
 import {Table} from '../../../shared/components/table/table';
 import {KeyService} from './key.service';
-import {KeyDto} from './key.dto';
 import {Button, Column} from '../../../shared/components/table/table.type';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import {kjua, NgxKjuaComponent} from 'ngx-kjua';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import jspdf from 'jspdf';
 import {AuthService} from '../../../core/services/auth.service';
-import {CreateKey} from './create/create';
+import {CreateKey} from './components/create/create';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {NzDrawerService} from 'ng-zorro-antd/drawer';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {KeyResponseDto} from './dtos/key-response.dto';
 
 @Component({
   selector: 'app-keys',
@@ -21,11 +23,9 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 
   ],
   template: `
-    <app-table [buttons]="buttons" [columns]="columns" [data]="data()" (delete)="handleDelete($event)">
-      <button nz-button nzType="primary" (click)="handleCreate()">
-        Új kulcs rögzítése
-      </button>
-      <button nz-button nzType="primary" (click)="handlePrint()">
+    <app-table [buttons]="buttons" [columns]="columns" [data]="data()" (delete)="handleDelete($event)"
+               (create)="handleCreate()">
+      <button nz-button (click)="handlePrint()">
         QR-kódok nyomtatása
       </button>
     </app-table>
@@ -41,6 +41,7 @@ export class Keys implements OnInit {
   private keyService: KeyService = inject(KeyService);
   private modalService: NzModalService = inject(NzModalService);
   private message: NzMessageService = inject(NzMessageService);
+  private drawerService: NzDrawerService = inject(NzDrawerService);
 
   @ViewChild('codeTemplate') codeTemplate!: TemplateRef<any>;
 
@@ -57,10 +58,10 @@ export class Keys implements OnInit {
     {
       label: "QR-kód",
       type: "dashed",
-      click: (data: KeyDto) => this.showCode(data.code)
+      click: (data: KeyResponseDto) => this.showCode(data.code)
     }
   ]
-  columns: Column<KeyDto>[] = [
+  columns: Column<KeyResponseDto>[] = [
     {
       field: 'code',
       header: 'Kód',
@@ -70,14 +71,10 @@ export class Keys implements OnInit {
       header: 'Terem',
     },
   ]
-  data: WritableSignal<KeyDto[]> = signal([])
+  data = toSignal(this.keyService.data$, { initialValue: [] as KeyResponseDto[] });
 
   ngOnInit(): void {
-    this.keyService.findAll().subscribe({
-      next: (data: KeyDto[]) => {
-        this.data.set(data);
-      }
-    })
+    this.keyService.findAll()
   }
 
   private showCode(code: string) {
@@ -130,7 +127,7 @@ export class Keys implements OnInit {
     document.save(`qr.pdf`);
   }
 
-  static getBarcodeData(data: KeyDto) {
+  static getBarcodeData(data: KeyResponseDto) {
     return kjua({
       render: "canvas",
       crisp: true,
@@ -146,16 +143,17 @@ export class Keys implements OnInit {
       mSize: 5,
       mPosX: 50,
       mPosY: 100,
-      label: `${data.code}: ${data.room.code} - ${data.room.name} (${data.room.building})`,
+      //label: `${data.code}: ${data.room.code} - ${data.room.name} (${data.room.building})`,
       fontname: "sans-serif",
       fontcolor: "#3F51B5",
     });
   }
 
   handleCreate() {
-    this.modalService.create({
-      nzTitle: 'Új kulcs rögzítése',
-      nzContent: CreateKey
+    this.drawerService.create({
+      nzTitle: 'Új kulcs hozzáadása',
+      nzContent: CreateKey,
+
     })
   }
 
@@ -163,7 +161,6 @@ export class Keys implements OnInit {
     this.keyService.delete(id).subscribe({
       next: () => {
         this.message.success("Kulcs sikeresen törölve!")
-        this.data.set(this.data().filter(d => d.id !== id))
       }
     })
   }

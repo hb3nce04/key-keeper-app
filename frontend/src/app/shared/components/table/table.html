@@ -1,6 +1,14 @@
 @if (!(this.loadingService.$loading | async)) {
   <div class="buttons">
-    <ng-content/>
+    <div class="start">
+      <ng-content/>
+    </div>
+    <div>
+      <button nz-button nzType="primary" (click)="handleCreate()">
+        <nz-icon nzType="plus" nzTheme="outline"/>
+        Hozzáadás
+      </button>
+    </div>
   </div>
 } @else {
   <nz-skeleton nzActive="true" [nzParagraph]="false"/>
@@ -29,7 +37,7 @@
           @if (!(this.loadingService.$loading | async)) {
             <nz-divider nzType="vertical"/>
             <button nz-button nz-tooltip nzType="text" nzTooltipTitle="Megtekintés" (click)="handleView(data)">
-              <nz-icon nzType="eye" />
+              <nz-icon nzType="eye"/>
             </button>
             <button
               nz-button
@@ -43,7 +51,7 @@
               [nzIcon]="iconTpl"
               (nzOnConfirm)="handleDelete(data.id)"
             >
-              <nz-icon nzType="delete"  />
+              <nz-icon nzType="delete"/>
             </button>
           }
         </td>
