@@ -8,6 +8,7 @@ import {Form} from '../../../shared/components/form/form';
 import {FieldConfig} from '../../../shared/components/form/form.type';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {AsyncPipe} from '@angular/common';
+import {MAIN_PAGE} from '../../../core/constants/links.const';
 
 @Component({
   template: `
@@ -55,7 +56,7 @@ export class Login {
     const {username, password} = form.value;
     this.authService.login(username!, password!).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard/borrowings']);
+        this.router.navigate([MAIN_PAGE]);
         this.message.success("Sikeres bejelentkezés!")
       },
       error: (error) => {

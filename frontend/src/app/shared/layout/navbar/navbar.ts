@@ -2,7 +2,6 @@ import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
 import {NzHeaderComponent} from 'ng-zorro-antd/layout';
 import {NzMenuDirective, NzMenuItemComponent} from 'ng-zorro-antd/menu';
 import {RouterLink, RouterLinkActive} from '@angular/router';
-import {NAV_LINKS} from '../../../core/constants/nav-link.const';
 import {AuthService} from '../../../core/services/auth.service';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzMessageService} from 'ng-zorro-antd/message';
@@ -11,6 +10,7 @@ import {NzDrawerComponent, NzDrawerContentDirective} from 'ng-zorro-antd/drawer'
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
 import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
+import {MAIN_PAGE, NAV_LINKS} from '../../../core/constants/links.const';
 
 @Component({
   selector: 'app-layout-navbar',
@@ -60,4 +60,6 @@ export class Navbar implements OnInit {
     this.authService.logout();
     this.message.success("Sikeres kijelentkezés!")
   }
+
+  protected readonly MAIN_PAGE = MAIN_PAGE;
 }

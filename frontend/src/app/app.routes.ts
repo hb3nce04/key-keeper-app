@@ -2,7 +2,7 @@ import {Routes} from '@angular/router';
 import {Layout} from './shared/layout/layout';
 import {NotFound} from './features/not-found/not-found';
 import {AuthGuard} from './core/guards/auth.guard';
-import {MAIN_PAGE} from './core/constants/nav-link.const';
+import {MAIN_PAGE} from './core/constants/links.const';
 
 export const routes: Routes = [
   {

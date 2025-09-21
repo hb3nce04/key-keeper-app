@@ -7,7 +7,7 @@ import {AuthResponseDto} from '../dtos/auth-response.dto';
 import {LocalStorageService} from './local-storage.service';
 import {jwtDecode, JwtPayload} from 'jwt-decode';
 import {Router} from '@angular/router';
-import {LOGIN_PAGE} from '../constants/nav-link.const';
+import {LOGIN_PAGE} from '../constants/links.const';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -46,10 +46,6 @@ export class AuthService {
 
   getUsername() {
     return this.getDecodedToken()!.sub;
-  }
-
-  getUser() {
-    return `${this.getUsername()} (${Role[this.getRole()]})`;
   }
 
   getRole() {

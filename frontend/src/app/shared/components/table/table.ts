@@ -29,12 +29,8 @@ import {NzSkeletonComponent} from 'ng-zorro-antd/skeleton';
   styles: `
     .buttons {
       display: flex;
+      gap: 10px;
       margin-bottom: 10px;
-      justify-content: space-between;
-      .start {
-        display: flex;
-        gap: 10px;
-      }
     }
   `
 })

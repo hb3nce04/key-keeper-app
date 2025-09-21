@@ -4,8 +4,10 @@ import {Rooms} from './rooms/rooms';
 import {Keys} from './keys/keys';
 import {Requesters} from './requesters/requesters';
 import {Users} from './users/users';
+import {Welcome} from './welcome/welcome';
 
 export default [
+  {path: 'home', component: Welcome},
   {path: 'borrowings', component: Borrowings, data: {breadcrumb: 'Nyilvántartás'}},
   {path: 'keys', component: Keys, data: {breadcrumb: 'Kulcsok'}},
   {path: 'rooms', component: Rooms, data: {breadcrumb: 'Helyiségek'}},

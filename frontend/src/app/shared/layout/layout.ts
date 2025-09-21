@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
-import {NzContentComponent, NzFooterComponent, NzLayoutComponent} from 'ng-zorro-antd/layout';
+import {NzContentComponent, NzLayoutComponent} from 'ng-zorro-antd/layout';
 import {RouterOutlet} from '@angular/router';
-import {Navbar} from './header/navbar';
+import {Navbar} from './navbar/navbar';
 import {Breadcrumb} from './breadcrumb/breadcrumb';
 
 @Component({
@@ -11,12 +11,10 @@ import {Breadcrumb} from './breadcrumb/breadcrumb';
     NzLayoutComponent,
     RouterOutlet,
     Navbar,
-    Breadcrumb,
-    NzFooterComponent,
+    Breadcrumb
   ],
   templateUrl: 'layout.html',
   styleUrl: 'layout.scss',
 })
 export class Layout {
-  protected readonly date = new Date();
 }

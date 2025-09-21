@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, UrlTree} from '@angular/router';
 import {AuthService} from '../services/auth.service';
-import {LOGIN_PAGE, MAIN_PAGE} from '../constants/nav-link.const';
+import {LOGIN_PAGE, MAIN_PAGE} from '../constants/links.const';
 
 @Injectable({
   providedIn: 'root',

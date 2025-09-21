@@ -6,5 +6,5 @@ export const NAV_LINKS = [
   {label: 'Felhasználók', path: '/dashboard/users'}, // authz: admin
 ]
 
-export const MAIN_PAGE = '/dashboard/borrowings'
+export const MAIN_PAGE = '/dashboard/home'
 export const LOGIN_PAGE = '/auth/login'

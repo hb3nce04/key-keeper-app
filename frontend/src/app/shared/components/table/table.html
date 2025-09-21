@@ -1,14 +1,10 @@
 @if (!(this.loadingService.$loading | async)) {
   <div class="buttons">
-    <div class="start">
-      <ng-content/>
-    </div>
-    <div>
-      <button nz-button nzType="primary" (click)="handleCreate()">
-        <nz-icon nzType="plus" nzTheme="outline"/>
-        Hozzáadás
-      </button>
-    </div>
+    <button nz-button nzType="primary" (click)="handleCreate()">
+      <nz-icon nzType="plus" nzTheme="outline"/>
+      Hozzáadás
+    </button>
+    <ng-content/>
   </div>
 } @else {
   <nz-skeleton nzActive="true" [nzParagraph]="false"/>

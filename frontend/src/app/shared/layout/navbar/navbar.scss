@@ -1,0 +1,36 @@
+nz-header {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+
+  .logo a {
+    color: white;
+    font-weight: lighter;
+  }
+
+  .control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    .user {
+      color: white;
+    }
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+}
+
+@media (max-width: 992px) {
+  nz-header {
+    .menu, .control, .logo {
+      display: none;
+    }
+
+    .nav-toggle {
+      display: block;
+    }
+  }
+}
