@@ -1,6 +1,7 @@
 package io.hb3nce04.keykeeperapp.model.dto.request;
 
 import io.hb3nce04.keykeeperapp.model.enums.RequesterType;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class RequesterRequestDto {
 
     private String personalIdNumber;
 
+    @Email(message = "Formátum nem megfelelő")
     private String emailAddress;
 
     private String phoneNumber;

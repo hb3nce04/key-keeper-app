@@ -24,9 +24,9 @@ public class BorrowingController extends AbstractCrudController<BorrowingService
         super(service);
     }
 
-    @GetMapping("/by-code/{code}")
-    public ResponseEntity<BorrowingResponseDto> findByCode(@PathVariable String code) {
-        Optional<BorrowingResponseDto> key = service.findByCode(code);
+    @GetMapping("/by-key/{code}")
+    public ResponseEntity<BorrowingResponseDto> findByKeyCode(@PathVariable String code) {
+        Optional<BorrowingResponseDto> key = service.findByKeyCode(code);
         return key.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

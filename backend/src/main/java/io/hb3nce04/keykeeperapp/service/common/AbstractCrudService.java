@@ -46,7 +46,7 @@ public abstract class AbstractCrudService<E extends BaseEntity, REQ, RES extends
         return mapper.toDto(repository.save(entity));
     }
 
-    private E findEntityByIdOrThrow(Long id) {
+    public E findEntityByIdOrThrow(Long id) {
         return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Az adott erőforrás nem található! (ID: %d)", id)));
     }
 }
