@@ -5,11 +5,13 @@ import {BorrowingResponseDto} from './dtos/borrowing-response.dto';
 import {Column} from '../../../shared/components/table/table.type';
 import {BorrowingStatus} from './enums/borrowing.enum';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {NzModalModule} from 'ng-zorro-antd/modal';
+import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {NzDrawerService} from 'ng-zorro-antd/drawer';
 import {CreateBorrowing} from './components/create/create';
+import {EditBorrowing} from './components/edit/edit';
+import {Scanner} from '../../../shared/components/scanner/scanner';
 
 @Component({
   selector: 'app-records',
@@ -19,7 +21,7 @@ import {CreateBorrowing} from './components/create/create';
     NzModalModule,
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()">
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)">
       <button nz-button (click)="handleRequest()">
         Adatmódosítás QR-kód alapján
       </button>
@@ -29,6 +31,7 @@ import {CreateBorrowing} from './components/create/create';
 export class Borrowings implements OnInit {
   private borrowingService: BorrowingService = inject(BorrowingService);
   private drawerService: NzDrawerService = inject(NzDrawerService);
+  private modalService: NzModalService = inject(NzModalService);
   private message: NzMessageService = inject(NzMessageService);
 
   columns: Column<BorrowingResponseDto>[] = [
@@ -66,26 +69,24 @@ export class Borrowings implements OnInit {
   }
 
   handleRequest() {
-    /*
     const modalRef = this.modalService.info({
       nzTitle: "QR-kód beolvasása",
       nzContent: Scanner,
       nzOkText: "Bezárás",
     });
     modalRef.afterOpen.subscribe(() => {
-      modalRef.getContentComponent().readValue.subscribe(value => {
-        this.message.success(`Sikeres beolvasás! Érték: ${value}`)
+      modalRef.getContentComponent().readValue.subscribe((value: string) => {
+        this.message.success(`Sikeres beolvasás!`)
+        this.borrowingService.findByKeyCode(value).subscribe({
+          next: (data) => {
+            this.handleEdit(data.id)
+          },
+          error: (error) => {
+            this.message.error(error.error);
+          }
+        })
         modalRef.close();
       })
-    })
-     */
-    this.borrowingService.findByKeyCode("AB10000").subscribe({
-      next: (data) => {
-        console.log(data);
-      },
-      error: (error) => {
-        this.message.error(error.error);
-      }
     })
   }
 
@@ -100,6 +101,16 @@ export class Borrowings implements OnInit {
     this.borrowingService.delete(id).subscribe({
       next: () => {
         this.message.success("Foglalás sikeresen törölve!")
+      }
+    })
+  }
+
+  handleEdit(id: number) {
+    this.drawerService.create({
+      nzTitle: 'Igénylés módosítása',
+      nzContent: EditBorrowing,
+      nzData: {
+        id
       }
     })
   }

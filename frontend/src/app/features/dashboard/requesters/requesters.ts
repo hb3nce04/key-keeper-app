@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, Signal} from '@angular/core';
 import {RequesterService} from './requester.service';
 import {Table} from '../../../shared/components/table/table';
 import {Column} from '../../../shared/components/table/table.type';
@@ -9,6 +9,7 @@ import {NzDrawerService} from 'ng-zorro-antd/drawer';
 import {CreateRequester} from './components/create/create';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {RequesterResponseDto} from './dtos/requester.response.dto';
+import {EditRequester} from './components/edit/edit';
 
 @Component({
   selector: 'app-requesters',
@@ -16,7 +17,7 @@ import {RequesterResponseDto} from './dtos/requester.response.dto';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)"/>
   `
 })
 export class Requesters implements OnInit {
@@ -48,7 +49,7 @@ export class Requesters implements OnInit {
       valueFn: (dto: RequesterRequestDto) => RequesterType[dto.type as unknown as keyof typeof RequesterType]
     }
   ]
-  data = toSignal(this.requesterService.data$, {initialValue: [] as RequesterResponseDto[]});
+  data: Signal<RequesterResponseDto[]> = toSignal(this.requesterService.data$, {initialValue: [] as RequesterResponseDto[]});
 
   ngOnInit(): void {
     this.requesterService.findAll()
@@ -66,6 +67,16 @@ export class Requesters implements OnInit {
     this.drawerService.create({
       nzTitle: 'Új igénylő hozzáadása',
       nzContent: CreateRequester
+    })
+  }
+
+  handleEdit(id: number) {
+    this.drawerService.create({
+      nzTitle: 'Igénylő módosítása',
+      nzContent: EditRequester,
+      nzData: {
+        id
+      }
     })
   }
 }

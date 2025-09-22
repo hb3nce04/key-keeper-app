@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, Inject, inject, OnInit} from '@angular/core';
 import {Form} from '../../../../../shared/components/form/form';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
 import {FormGroup, Validators} from '@angular/forms';
@@ -8,10 +8,10 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {LoadingService} from '../../../../../core/services/loading.service';
 import {UserService} from '../../user.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzDrawerRef} from 'ng-zorro-antd/drawer';
+import {NZ_DRAWER_DATA, NzDrawerRef} from 'ng-zorro-antd/drawer';
 
 @Component({
-  selector: 'app-create-user',
+  selector: 'app-edit-user',
   imports: [
     Form,
     AsyncPipe,
@@ -26,11 +26,13 @@ import {NzDrawerRef} from 'ng-zorro-antd/drawer';
     </app-form>
   `
 })
-export class CreateUser {
-  private drawerRef = inject(NzDrawerRef<CreateUser>);
+export class EditUser implements OnInit {
+  private drawerRef = inject(NzDrawerRef<EditUser>);
   protected loadingService: LoadingService = inject(LoadingService);
   protected userService: UserService = inject(UserService);
   protected messageService: NzMessageService = inject(NzMessageService);
+
+  constructor(@Inject(NZ_DRAWER_DATA) public readonly drawerData: { id: number }) {}
 
   fields: FieldConfig[] = [
     {
@@ -61,15 +63,33 @@ export class CreateUser {
     }
   ]
 
+  ngOnInit(): void {
+    this.userService.findById(this.drawerData.id).subscribe(
+      data => {
+        this.fields.map((field: FieldConfig) => {
+          if (field.name === 'username') {
+            field.value = data.username
+          }
+          if (field.name === 'email_address') {
+            field.value = data.email_address
+          }
+          if (field.name === 'role') {
+            field.value = data.role
+          }
+        })
+      }
+    )
+  }
+
   handleSubmit(form: FormGroup) {
     const {username, email_address, role} = form.value;
-    this.userService.create({username, email_address, role}).subscribe({
+    this.userService.update(this.drawerData.id, {username, email_address, role}).subscribe({
       next: () => {
-        this.messageService.success("Felhasználó sikeresen létrehozva! Az ideiglenes jelszó hamarosan kiküldésre kerül.")
+        this.messageService.success("Felhasználó sikeresen módosítva!")
         this.drawerRef.close();
       },
       error: () => {
-        this.messageService.error("Hiba történt a felhasználó létrehozása során!");
+        this.messageService.error("Hiba történt a felhasználó módosítása során!");
       }
     })
   }

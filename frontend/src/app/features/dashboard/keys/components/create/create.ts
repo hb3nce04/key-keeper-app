@@ -19,7 +19,7 @@ import {NzDrawerRef} from 'ng-zorro-antd/drawer';
   ],
   template: `
     <app-form [fields]="fields" (validSubmit)="handleSubmit($event)">
-      <button nz-button [nzType]="'primary'"
+      <button nz-button nzType="primary"
               [disabled]="this.loadingService.$loading | async">
         Mentés
       </button>

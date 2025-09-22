@@ -8,6 +8,7 @@ import {CreateRoom} from './components/create/create';
 import {NzDrawerService} from 'ng-zorro-antd/drawer';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {RoomType} from './enums/room.enum';
+import {EditRoom} from './components/edit/edit';
 
 @Component({
   selector: 'app-rooms',
@@ -15,7 +16,7 @@ import {RoomType} from './enums/room.enum';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)"/>
   `
 })
 export class Rooms implements OnInit {
@@ -80,6 +81,16 @@ export class Rooms implements OnInit {
     this.drawerService.create({
       nzTitle: "Új helyiség hozzáadása",
       nzContent: CreateRoom
+    })
+  }
+
+  handleEdit(id: number) {
+    this.drawerService.create({
+      nzTitle: "Helyiség módosítása",
+      nzContent: EditRoom,
+      nzData: {
+        id
+      }
     })
   }
 }

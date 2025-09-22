@@ -8,6 +8,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzDrawerService} from 'ng-zorro-antd/drawer';
 import {CreateUser} from './components/create/create';
 import {toSignal} from '@angular/core/rxjs-interop';
+import {EditUser} from './components/edit/edit';
 
 @Component({
   selector: 'app-users',
@@ -15,7 +16,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)"/>
   `
 })
 export class Users implements OnInit {
@@ -56,6 +57,16 @@ export class Users implements OnInit {
     this.drawerService.create({
       nzTitle: "Új felhasználó hozzáadása",
       nzContent: CreateUser
+    })
+  }
+
+  handleEdit(id: number) {
+    this.drawerService.create({
+      nzTitle: "Felhasználó módosítása",
+      nzContent: EditUser,
+      nzData: {
+        id
+      }
     })
   }
 }

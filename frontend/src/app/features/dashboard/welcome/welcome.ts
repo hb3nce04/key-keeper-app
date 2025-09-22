@@ -8,7 +8,7 @@ import {NzCardComponent} from 'ng-zorro-antd/card';
   template: `
     <h1>Szép napot, {{ this.authService.getUsername() }}!</h1>
     <nz-card>
-      Jelenlegi jogosultságod: <b>{{ Role[this.authService.getRole()] }}</b>
+      Jogosultságod: <b>{{ Role[this.authService.getRole()] }}</b>
     </nz-card>
   `,
   imports: [

@@ -1,17 +1,18 @@
-import {Component, inject} from '@angular/core';
+import {Component, Inject, inject, OnInit} from '@angular/core';
 import {AsyncPipe} from '@angular/common';
 import {Form} from '../../../../../shared/components/form/form';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {NzDrawerRef} from 'ng-zorro-antd/drawer';
+import {NZ_DRAWER_DATA, NzDrawerRef} from 'ng-zorro-antd/drawer';
 import {LoadingService} from '../../../../../core/services/loading.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {FormGroup, Validators} from '@angular/forms';
 import {BorrowingService} from '../../borrowing.service';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
 import {BorrowingStatus} from '../../enums/borrowing.enum';
+import {RoomService} from '../../../rooms/room.service';
 
 @Component({
-  selector: 'app-create-borrowing',
+  selector: 'app-edit-borrowing',
   imports: [
     AsyncPipe,
     Form,
@@ -26,11 +27,14 @@ import {BorrowingStatus} from '../../enums/borrowing.enum';
     </app-form>
   `
 })
-export class CreateBorrowing{
-  private drawerRef = inject(NzDrawerRef<CreateBorrowing>);
+export class EditBorrowing implements OnInit {
+  private drawerRef = inject(NzDrawerRef<EditBorrowing>);
   protected loadingService: LoadingService = inject(LoadingService);
   protected messageService: NzMessageService = inject(NzMessageService);
+  protected roomService: RoomService = inject(RoomService);
   protected borrowingService: BorrowingService = inject(BorrowingService);
+
+  constructor(@Inject(NZ_DRAWER_DATA) public readonly drawerData: { id: number }) {}
 
   fields: FieldConfig[] = [
     {
@@ -46,6 +50,13 @@ export class CreateBorrowing{
       validators: [Validators.required],
     },
     {
+      name: 'roomId',
+      label: 'Helyiség kiválasztása',
+      type: 'select',
+      showSearch: true,
+      validators: [Validators.required],
+    },
+    {
       name: 'status',
       label: 'Állapot',
       type: 'select',
@@ -56,6 +67,35 @@ export class CreateBorrowing{
       validators: [Validators.required]
     }
   ]
+
+  ngOnInit(): void {
+    this.roomService.findAll().subscribe(
+      data => {
+        this.fields[2].options = data.map(room => ({
+          value: room.id,
+          label: room.name
+        }) as Option)
+      }
+    )
+    this.borrowingService.findById(this.drawerData.id).subscribe(
+      data => {
+        this.fields.map((field: FieldConfig) => {
+          if (field.name === 'firstName') {
+            field.value = data.requester.firstName;
+          }
+          if (field.name === 'lastName') {
+            field.value = data.requester.lastName;
+          }
+          if (field.name === 'roomId') {
+            field.value = data.key.room.id;
+          }
+          if (field.name === 'status') {
+            field.value = data.status;
+          }
+        })
+      }
+    )
+  }
 
   handleSubmit(form: FormGroup) {
     this.drawerRef.close();

@@ -11,7 +11,7 @@ import {KeyService} from '../../key.service';
 import {NZ_DRAWER_DATA, NzDrawerRef} from 'ng-zorro-antd/drawer';
 
 @Component({
-  selector: 'app-create-key',
+  selector: 'app-edit-key',
   imports: [
     Form,
     AsyncPipe,
@@ -19,7 +19,7 @@ import {NZ_DRAWER_DATA, NzDrawerRef} from 'ng-zorro-antd/drawer';
   ],
   template: `
     <app-form [fields]="fields" (validSubmit)="handleSubmit($event)">
-      <button nz-button [nzType]="'primary'"
+      <button nz-button nzType="primary"
               [disabled]="this.loadingService.$loading | async">
         Mentés
       </button>
@@ -32,6 +32,8 @@ export class EditKey implements OnInit {
   private roomService: RoomService = inject(RoomService);
   protected loadingService: LoadingService = inject(LoadingService);
   protected messageService: NzMessageService = inject(NzMessageService);
+
+  constructor(@Inject(NZ_DRAWER_DATA) public readonly drawerData: { id: number }) {}
 
   fields: FieldConfig[] = [
     {
@@ -49,8 +51,6 @@ export class EditKey implements OnInit {
       validators: [Validators.required],
     }
   ]
-
-  constructor(@Inject(NZ_DRAWER_DATA) public readonly drawerData: { id: number }) {}
 
   ngOnInit(): void {
     this.roomService.findAll().subscribe(
