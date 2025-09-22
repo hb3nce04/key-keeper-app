@@ -13,6 +13,7 @@ import {NzDrawerService} from 'ng-zorro-antd/drawer';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {KeyResponseDto} from './dtos/key-response.dto';
 import {EditKey} from './components/edit/edit';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-keys',
@@ -21,6 +22,7 @@ import {EditKey} from './components/edit/edit';
     NzModalModule,
     NgxKjuaComponent,
     NzButtonComponent,
+    NzIconDirective,
 
   ],
   template: `
@@ -28,6 +30,7 @@ import {EditKey} from './components/edit/edit';
                (edit)="handleEdit($event)"
                (create)="handleCreate()">
       <button nz-button (click)="handlePrint()">
+        <nz-icon nzType="printer" nzTheme="outline" />
         QR-kódok nyomtatása
       </button>
     </app-table>
@@ -60,6 +63,7 @@ export class Keys implements OnInit {
     {
       label: "QR-kód",
       type: "dashed",
+      icon: "qrcode",
       click: (data: KeyResponseDto) => this.showCode(data.code)
     }
   ]
@@ -70,8 +74,16 @@ export class Keys implements OnInit {
     },
     {
       field: 'room.code',
-      header: 'Terem',
+      header: 'Helyiség kódja',
     },
+    {
+      field: 'room.name',
+      header: 'Helyiség neve'
+    },
+    {
+      field: 'room.building',
+      header: 'Épület'
+    }
   ]
   data: Signal<KeyResponseDto[]> = toSignal(this.keyService.data$, { initialValue: [] as KeyResponseDto[] });
 

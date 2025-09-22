@@ -16,10 +16,6 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     canActivate: [AuthGuard],
-    data: {
-      breadcrumb: 'Főoldal',
-      link: MAIN_PAGE
-    },
     component: Layout,
     loadChildren: () => import('./features/dashboard/dashboard.routes')
   },

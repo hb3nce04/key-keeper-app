@@ -9,5 +9,6 @@ export interface Column<T> {
 export interface Button {
   label: string;
   type?: NzButtonType;
+  icon: string;
   click: (data: any) => void;
 }

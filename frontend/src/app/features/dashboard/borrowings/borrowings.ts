@@ -12,6 +12,7 @@ import {NzDrawerService} from 'ng-zorro-antd/drawer';
 import {CreateBorrowing} from './components/create/create';
 import {EditBorrowing} from './components/edit/edit';
 import {Scanner} from '../../../shared/components/scanner/scanner';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-records',
@@ -19,11 +20,13 @@ import {Scanner} from '../../../shared/components/scanner/scanner';
     Table,
     NzButtonComponent,
     NzModalModule,
+    NzIconDirective,
   ],
   template: `
     <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)">
       <button nz-button (click)="handleRequest()">
-        Adatmódosítás QR-kód alapján
+        <nz-icon nzType="qrcode" nzTheme="outline" />
+        QR-kód beolvasása
       </button>
     </app-table>
   `

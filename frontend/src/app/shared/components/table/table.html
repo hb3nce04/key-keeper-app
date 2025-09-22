@@ -27,7 +27,15 @@
         <td>
           @if (this.buttons()?.length) {
             @for (button of this.buttons(); track $index) {
-              <button nz-button [nzType]="button.type!" (click)="button.click(data)">{{ button.label }}</button>
+              <button
+                nz-button
+                nz-tooltip
+                nzType="text"
+                [nzTooltipTitle]="button.label"
+                (click)="button.click(data)"
+              >
+                <nz-icon [nzType]="button.icon"/>
+              </button>
             }
           }
           @if (!(this.loadingService.$loading | async)) {

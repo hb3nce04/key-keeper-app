@@ -1,4 +1,5 @@
 export const NAV_LINKS = [
+  {label: 'Főoldal', path: '/dashboard/home'},
   {label: 'Nyilvántartás', path: '/dashboard/borrowings'}, // authz: user
   {label: 'Kulcsok', path: '/dashboard/keys'}, // authz: admin
   {label: 'Helyiségek', path: '/dashboard/rooms'}, // authz: admin

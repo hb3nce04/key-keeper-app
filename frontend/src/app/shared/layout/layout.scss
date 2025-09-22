@@ -3,5 +3,10 @@
     padding: 24px;
     background: #fff;
     overflow: auto;
+    .current-page {
+      margin-bottom: 15px;
+      font-weight: lighter;
+      font-size: 2em;
+    }
   }
 }

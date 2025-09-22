@@ -37,7 +37,6 @@
 >
   <ng-container *nzDrawerContent>
     <ul nz-menu>
-      <li nz-menu-item routerLinkActive="ant-menu-item-selected" [routerLink]="MAIN_PAGE">Főoldal</li>
       @for (link of NAV_LINKS; track $index) {
         <li nz-menu-item routerLinkActive="ant-menu-item-selected" [routerLink]="link.path">{{ link.label }}</li>
       }

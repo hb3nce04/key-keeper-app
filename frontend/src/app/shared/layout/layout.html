@@ -1,7 +1,7 @@
 <nz-layout class="app-layout">
   <app-layout-navbar/>
   <nz-content>
-    <app-layout-breadcrumb/>
+    <div class="current-page">{{this.title$ | async}}</div>
     <router-outlet></router-outlet>
   </nz-content>
 </nz-layout>
