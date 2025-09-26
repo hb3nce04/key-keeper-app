@@ -10,6 +10,8 @@ import {CreateRequester} from './components/create/create';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {RequesterResponseDto} from './dtos/requester.response.dto';
 import {EditRequester} from './components/edit/edit';
+import {RoleService} from '../../../core/services/role.service';
+import {TableCan} from '../../../core/types/role.type';
 
 @Component({
   selector: 'app-requesters',
@@ -17,11 +19,12 @@ import {EditRequester} from './components/edit/edit';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)" [can]="can"/>
   `
 })
 export class Requesters implements OnInit {
   private requesterService: RequesterService = inject(RequesterService);
+  private roleService: RoleService = inject(RoleService);
   private message: NzMessageService = inject(NzMessageService);
   private drawerService: NzDrawerService = inject(NzDrawerService);
 
@@ -50,6 +53,7 @@ export class Requesters implements OnInit {
     }
   ]
   data: Signal<RequesterResponseDto[]> = toSignal(this.requesterService.data$, {initialValue: [] as RequesterResponseDto[]});
+  can: TableCan = this.roleService.privileges().requesters
 
   ngOnInit(): void {
     this.requesterService.findAll()

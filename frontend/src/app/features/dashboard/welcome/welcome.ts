@@ -1,26 +1,27 @@
 import {Component, inject} from '@angular/core';
 import {AuthService} from '../../../core/services/auth.service';
-import {Role} from '../../../core/enums/role.enum';
-import {NzCardComponent} from 'ng-zorro-antd/card';
+import {RoleService} from '../../../core/services/role.service';
 
 @Component({
   selector: 'app-home',
   template: `
-    <h1>Szép napot, {{ this.authService.getUsername() }}!</h1>
-    <nz-card>
-      Jogosultságod: <b>{{ Role[this.authService.getRole()] }}</b>
-    </nz-card>
+    <h1>Üdvözöllek, {{ this.authService.getUsername() }}!</h1>
+    <div>
+      Jogosultságod: <b>{{ this.roleService.getRoleName(this.authService.isAdmin()) }}</b>
+    </div>
   `,
-  imports: [
-    NzCardComponent
-  ],
+  imports: [],
   styles: `
     h1 {
+      text-align: center;
+    }
+
+    div {
       text-align: center;
     }
   `
 })
 export class Welcome {
   protected authService = inject(AuthService);
-  protected readonly Role = Role;
+  protected roleService = inject(RoleService);
 }

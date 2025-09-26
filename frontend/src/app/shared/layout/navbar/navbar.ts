@@ -11,6 +11,7 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
 import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
 import {MAIN_PAGE, NAV_LINKS} from '../../../core/constants/links.const';
+import {RoleService} from '../../../core/services/role.service';
 
 @Component({
   selector: 'app-layout-navbar',
@@ -34,6 +35,7 @@ export class Navbar implements OnInit {
   protected readonly NAV_LINKS = NAV_LINKS;
 
   protected authService: AuthService = inject(AuthService);
+  protected roleService: RoleService = inject(RoleService);
   private message: NzMessageService = inject(NzMessageService);
   private breakpointObserver: BreakpointObserver = inject(BreakpointObserver);
 

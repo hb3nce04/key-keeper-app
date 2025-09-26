@@ -13,6 +13,8 @@ import {CreateBorrowing} from './components/create/create';
 import {EditBorrowing} from './components/edit/edit';
 import {Scanner} from '../../../shared/components/scanner/scanner';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {RoleService} from '../../../core/services/role.service';
+import {TableCan} from '../../../core/types/role.type';
 
 @Component({
   selector: 'app-records',
@@ -23,7 +25,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
     NzIconDirective,
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)">
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)" [can]="can">
       <button nz-button (click)="handleRequest()">
         <nz-icon nzType="qrcode" nzTheme="outline" />
         QR-kód beolvasása
@@ -33,6 +35,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 })
 export class Borrowings implements OnInit {
   private borrowingService: BorrowingService = inject(BorrowingService);
+  private roleService: RoleService = inject(RoleService);
   private drawerService: NzDrawerService = inject(NzDrawerService);
   private modalService: NzModalService = inject(NzModalService);
   private message: NzMessageService = inject(NzMessageService);
@@ -66,6 +69,7 @@ export class Borrowings implements OnInit {
     }
   ]
   data: Signal<BorrowingResponseDto[]> = toSignal(this.borrowingService.data$, {initialValue: [] as BorrowingResponseDto[]});
+  can: TableCan = this.roleService.privileges().borrowings
 
   ngOnInit(): void {
     this.borrowingService.findAll()

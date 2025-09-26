@@ -9,6 +9,8 @@ import {NzDrawerService} from 'ng-zorro-antd/drawer';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {RoomType} from './enums/room.enum';
 import {EditRoom} from './components/edit/edit';
+import {RoleService} from '../../../core/services/role.service';
+import {TableCan} from '../../../core/types/role.type';
 
 @Component({
   selector: 'app-rooms',
@@ -16,11 +18,12 @@ import {EditRoom} from './components/edit/edit';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)" [can]="can"/>
   `
 })
 export class Rooms implements OnInit {
   private roomService: RoomService = inject(RoomService);
+  private roleService: RoleService = inject(RoleService);
   private message: NzMessageService = inject(NzMessageService);
   private drawerService: NzDrawerService = inject(NzDrawerService);
 
@@ -64,6 +67,7 @@ export class Rooms implements OnInit {
     }
   ]
   data: Signal<RoomResponseDto[]> = toSignal(this.roomService.data$, {initialValue: [] as RoomResponseDto[]});
+  can: TableCan = this.roleService.privileges().rooms
 
   ngOnInit(): void {
     this.roomService.findAll()

@@ -15,6 +15,6 @@ import io.hb3nce04.keykeeperapp.service.RoomService;
 @RequestMapping("/rooms")
 public class RoomController extends AbstractCrudController<RoomService, Room, RoomRequestDto, RoomResponseDto, RoomRepository, RoomMapper> {
     public RoomController(RoomService service) {
-        super(service);
+        super(service, true, true, true, true);
     }
 }

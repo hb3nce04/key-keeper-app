@@ -1,10 +1,16 @@
-export const NAV_LINKS = [
-  {label: 'Főoldal', path: '/dashboard/home'},
-  {label: 'Nyilvántartás', path: '/dashboard/borrowings'}, // authz: user
-  {label: 'Kulcsok', path: '/dashboard/keys'}, // authz: admin
-  {label: 'Helyiségek', path: '/dashboard/rooms'}, // authz: admin
-  {label: 'Igénylők', path: '/dashboard/requesters'}, // authz: user
-  {label: 'Felhasználók', path: '/dashboard/users'}, // authz: admin
+import {Page} from '../types/page.type';
+
+export const NAV_LINKS: {
+  label: string;
+  path: string;
+  name: Page
+}[] = [
+  {label: 'Főoldal', path: '/dashboard/home', name: 'home'},
+  {label: 'Nyilvántartás', path: '/dashboard/borrowings', name: 'borrowings'},
+  {label: 'Kulcsok', path: '/dashboard/keys', name: 'keys'},
+  {label: 'Helyiségek', path: '/dashboard/rooms', name: 'rooms'},
+  {label: 'Igénylők', path: '/dashboard/requesters', name: 'requesters'},
+  {label: 'Felhasználók', path: '/dashboard/users', name: 'users'},
 ]
 
 export const MAIN_PAGE = '/dashboard/home'

@@ -1,9 +1,11 @@
 @if (!(this.loadingService.$loading | async)) {
   <div class="buttons">
-    <button nz-button nzType="primary" (click)="handleCreate()">
-      <nz-icon nzType="plus" nzTheme="outline"/>
-      Hozzáadás
-    </button>
+    @if (this.can().create) {
+      <button nz-button nzType="primary" (click)="handleCreate()">
+        <nz-icon nzType="plus" nzTheme="outline"/>
+        Hozzáadás
+      </button>
+    }
     <ng-content/>
   </div>
 } @else {
@@ -39,33 +41,36 @@
             }
           }
           @if (!(this.loadingService.$loading | async)) {
-            <nz-divider nzType="vertical"/>
             <button nz-button nz-tooltip nzType="text" nzTooltipTitle="Megtekintés" (click)="handleView(data)">
               <nz-icon nzType="eye"/>
             </button>
-            <button
-              nz-button
-              nz-tooltip
-              nzType="text"
-              nzTooltipTitle="Módosítás"
-              (click)="handleEdit(data.id)"
-            >
-              <nz-icon nzType="edit"/>
-            </button>
-            <button
-              nz-button
-              nz-tooltip
-              nzType="text"
-              nzTooltipTitle="Törlés"
-              nz-popconfirm
-              nzPopconfirmTitle="Biztosan törölni szeretnéd ezt az elemet?"
-              nzOkText="Igen"
-              nzCancelText="Nem"
-              [nzIcon]="iconTpl"
-              (nzOnConfirm)="handleDelete(data.id)"
-            >
-              <nz-icon nzType="delete"/>
-            </button>
+            @if (this.can().update) {
+              <button
+                nz-button
+                nz-tooltip
+                nzType="text"
+                nzTooltipTitle="Módosítás"
+                (click)="handleEdit(data.id)"
+              >
+                <nz-icon nzType="edit"/>
+              </button>
+            }
+            @if (this.can().delete) {
+              <button
+                nz-button
+                nz-tooltip
+                nzType="text"
+                nzTooltipTitle="Törlés"
+                nz-popconfirm
+                nzPopconfirmTitle="Biztosan törölni szeretnéd ezt az elemet?"
+                nzOkText="Igen"
+                nzCancelText="Nem"
+                [nzIcon]="iconTpl"
+                (nzOnConfirm)="handleDelete(data.id)"
+              >
+                <nz-icon nzType="delete"/>
+              </button>
+            }
           }
         </td>
       </tr>

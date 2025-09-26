@@ -2,7 +2,9 @@
   <h2 class="logo"><a [routerLink]="MAIN_PAGE">Kulcsnyilvántartó rendszer</a></h2>
   <ul nz-menu class="menu" nzTheme="dark" nzMode="horizontal">
     @for (link of NAV_LINKS; track $index) {
-      <li nz-menu-item routerLinkActive="ant-menu-item-selected" [routerLink]="link.path">{{ link.label }}</li>
+      @if (this.roleService.privileges()[link.name].view) {
+        <li nz-menu-item routerLinkActive="ant-menu-item-selected" [routerLink]="link.path">{{ link.label }}</li>
+      }
     }
   </ul>
   <div class="control">

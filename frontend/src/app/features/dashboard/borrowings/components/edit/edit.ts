@@ -73,7 +73,7 @@ export class EditBorrowing implements OnInit {
       data => {
         this.fields[2].options = data.map(room => ({
           value: room.id,
-          label: room.name
+          label: `${room.code} (${room.name})`,
         }) as Option)
       }
     )

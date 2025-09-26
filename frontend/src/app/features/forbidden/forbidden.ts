@@ -2,14 +2,13 @@ import {Component} from '@angular/core';
 import {Error} from '../../shared/components/error/error';
 
 @Component({
-  selector: 'app-not-found',
+  selector: 'app-forbidden',
   imports: [
     Error
   ],
   template: `
-    <app-error [code]="404" message="Az oldal nem található!"/>
+    <app-error [code]="403" message="Hozzáférés megtagadva."/>
   `
 })
-export class NotFound {
-
+export class Forbidden {
 }

@@ -57,7 +57,7 @@ export class EditKey implements OnInit {
       data => {
         this.fields[1].options = data.map(room => ({
           value: room.id,
-          label: room.name
+          label: `${room.code} (${room.name})`,
         }) as Option)
       }
     )

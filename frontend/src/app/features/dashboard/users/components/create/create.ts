@@ -2,7 +2,6 @@ import {Component, inject} from '@angular/core';
 import {Form} from '../../../../../shared/components/form/form';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
 import {FormGroup, Validators} from '@angular/forms';
-import {Role} from '../../../../../core/enums/role.enum';
 import {AsyncPipe} from '@angular/common';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {LoadingService} from '../../../../../core/services/loading.service';
@@ -49,21 +48,15 @@ export class CreateUser {
       validators: [Validators.required, Validators.email],
     },
     {
-      name: 'role',
-      label: 'Jogosultság',
-      type: 'select',
-      icon: 'user',
-      options: Object.keys(Role).map(role => ({
-        value: role,
-        label: Role[role as keyof typeof Role],
-      }) as Option),
-      validators: [Validators.required]
+      name: 'isAdmin',
+      label: 'Adminisztrátor',
+      type: 'checkbox'
     }
   ]
 
   handleSubmit(form: FormGroup) {
-    const {username, email_address, role} = form.value;
-    this.userService.create({username, email_address, role}).subscribe({
+    const {username, email_address, isAdmin} = form.value;
+    this.userService.create({username, email_address, isAdmin}).subscribe({
       next: () => {
         this.messageService.success("Felhasználó sikeresen létrehozva! Az ideiglenes jelszó hamarosan kiküldésre kerül.")
         this.drawerRef.close();

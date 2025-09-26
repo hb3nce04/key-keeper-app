@@ -1,7 +1,6 @@
-import {inject, Injectable} from '@angular/core';
+import {computed, inject, Injectable, signal, WritableSignal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
-import {Role} from '../enums/role.enum';
 import {environment} from '../../../environments/environment';
 import {AuthResponseDto} from '../dtos/auth-response.dto';
 import {LocalStorageService} from './local-storage.service';
@@ -17,43 +16,35 @@ export class AuthService {
   private localStorageService: LocalStorageService = inject(LocalStorageService);
   private router: Router = inject(Router);
 
+  readonly token: WritableSignal<string | null> = signal(this.localStorageService.getItem(this.TOKEN_STORAGE_KEY))
+
+  readonly isLoggedIn = computed(() => !!this.token())
+  readonly isAdmin = computed(() => this.getDecodedToken()?.role === "ROLE_ADMIN");
+  readonly getUsername = computed(() => this.getDecodedToken()?.sub)
+
   login(username: string, password: string): Observable<AuthResponseDto> {
-    return this.httpClient.post<AuthResponseDto>(this.url+'/login', {username, password}).pipe(
+    return this.httpClient.post<AuthResponseDto>(this.url + '/login', {username, password}).pipe(
       tap(res => {
         this.localStorageService.setItem<string>(this.TOKEN_STORAGE_KEY, res.token)
+        this.token.set(res.token)
       }),
     )
   }
 
-  getToken(): string | null {
-    return this.localStorageService.getItem(this.TOKEN_STORAGE_KEY);
-  }
-
-  getDecodedToken(): JwtPayload & {role: string} | null {
-    const token = this.getToken();
+  getDecodedToken(): JwtPayload & { role: string } | null {
+    const token = this.token();
     if (!token) return null;
     try {
-      return jwtDecode<JwtPayload & {role: string}>(token);
+      return jwtDecode<JwtPayload & { role: string }>(token);
     } catch (error) {
       console.error('Hibás token', error);
       return null;
     }
   }
 
-  isLoggedIn(): boolean {
-    return !!this.getToken();
-  }
-
-  getUsername() {
-    return this.getDecodedToken()!.sub;
-  }
-
-  getRole() {
-    return this.getDecodedToken()!.role as keyof typeof Role;
-  }
-
   logout() {
     this.localStorageService.removeItem(this.TOKEN_STORAGE_KEY);
+    this.token.set(null);
     this.router.navigate([LOGIN_PAGE]);
   }
 }

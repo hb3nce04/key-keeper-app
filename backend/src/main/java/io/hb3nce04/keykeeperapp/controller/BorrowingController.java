@@ -21,7 +21,7 @@ import io.hb3nce04.keykeeperapp.service.BorrowingService;
 public class BorrowingController extends AbstractCrudController<BorrowingService, Borrowing, BorrowingRequestDto, BorrowingResponseDto, BorrowingRepository, BorrowingMapper> {
     public BorrowingController(
             BorrowingService service) {
-        super(service);
+        super(service, false, false, false, false);
     }
 
     @GetMapping("/by-key/{code}")

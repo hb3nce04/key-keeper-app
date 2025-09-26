@@ -15,6 +15,6 @@ import io.hb3nce04.keykeeperapp.service.KeyService;
 @RequestMapping("/keys")
 public class KeyController extends AbstractCrudController<KeyService, Key, KeyRequestDto, KeyResponseDto, KeyRepository, KeyMapper> {
     public KeyController(KeyService service) {
-        super(service);
+        super(service, true, false, true, true);
     }
 }

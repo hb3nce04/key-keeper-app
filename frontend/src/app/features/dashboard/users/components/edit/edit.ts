@@ -1,8 +1,7 @@
 import {Component, Inject, inject, OnInit} from '@angular/core';
 import {Form} from '../../../../../shared/components/form/form';
-import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
+import {FieldConfig} from '../../../../../shared/components/form/form.type';
 import {FormGroup, Validators} from '@angular/forms';
-import {Role} from '../../../../../core/enums/role.enum';
 import {AsyncPipe} from '@angular/common';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {LoadingService} from '../../../../../core/services/loading.service';
@@ -51,15 +50,9 @@ export class EditUser implements OnInit {
       validators: [Validators.required, Validators.email],
     },
     {
-      name: 'role',
-      label: 'Jogosultság',
-      type: 'select',
-      icon: 'user',
-      options: Object.keys(Role).map(role => ({
-        value: role,
-        label: Role[role as keyof typeof Role],
-      }) as Option),
-      validators: [Validators.required]
+      name: 'isAdmin',
+      label: 'Adminisztrátor',
+      type: 'checkbox'
     }
   ]
 
@@ -73,8 +66,8 @@ export class EditUser implements OnInit {
           if (field.name === 'email_address') {
             field.value = data.email_address
           }
-          if (field.name === 'role') {
-            field.value = data.role
+          if (field.name === 'isAdmin') {
+            field.value = data.isAdmin
           }
         })
       }
@@ -82,8 +75,8 @@ export class EditUser implements OnInit {
   }
 
   handleSubmit(form: FormGroup) {
-    const {username, email_address, role} = form.value;
-    this.userService.update(this.drawerData.id, {username, email_address, role}).subscribe({
+    const {username, email_address, isAdmin} = form.value;
+    this.userService.update(this.drawerData.id, {username, email_address, isAdmin}).subscribe({
       next: () => {
         this.messageService.success("Felhasználó sikeresen módosítva!")
         this.drawerRef.close();

@@ -3,12 +3,13 @@ import {Table} from '../../../shared/components/table/table';
 import {UserService} from './user.service';
 import {Column} from '../../../shared/components/table/table.type';
 import {UserResponseDto} from './dtos/user-response.dto';
-import {Role} from '../../../core/enums/role.enum';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzDrawerService} from 'ng-zorro-antd/drawer';
 import {CreateUser} from './components/create/create';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {EditUser} from './components/edit/edit';
+import {RoleService} from '../../../core/services/role.service';
+import {TableCan} from '../../../core/types/role.type';
 
 @Component({
   selector: 'app-users',
@@ -16,11 +17,12 @@ import {EditUser} from './components/edit/edit';
     Table
   ],
   template: `
-    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)"/>
+    <app-table [columns]="columns" [data]="data()" (delete)="handleDelete($event)" (create)="handleCreate()" (edit)="handleEdit($event)" [can]="can"/>
   `
 })
 export class Users implements OnInit {
   private userService: UserService = inject(UserService);
+  private roleService: RoleService = inject(RoleService);
   private messageService: NzMessageService = inject(NzMessageService);
   private drawerService: NzDrawerService = inject(NzDrawerService);
 
@@ -36,10 +38,11 @@ export class Users implements OnInit {
     {
       field: 'role',
       header: 'Jogosultság',
-      valueFn: (dto: UserResponseDto) => Role[dto.role as unknown as keyof typeof Role]
+      valueFn: (dto: UserResponseDto) => this.roleService.getRoleName(dto.isAdmin)
     }
   ]
   data: Signal<UserResponseDto[]> = toSignal(this.userService.data$, {initialValue: [] as UserResponseDto[]});
+  can: TableCan = this.roleService.privileges().users
 
   ngOnInit(): void {
     this.userService.findAll()

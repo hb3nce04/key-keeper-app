@@ -13,8 +13,10 @@ import io.hb3nce04.keykeeperapp.service.RequesterService;
 
 @RestController
 @RequestMapping("/requesters")
-public class RequesterController extends AbstractCrudController<RequesterService, Requester, RequesterRequestDto, RequesterResponseDto, RequesterRepository, RequesterMapper> {
+public class RequesterController
+        extends AbstractCrudController<RequesterService, Requester, RequesterRequestDto, RequesterResponseDto, RequesterRepository, RequesterMapper>
+{
     public RequesterController(RequesterService service) {
-        super(service);
+        super(service, true, false, true, true);
     }
 }

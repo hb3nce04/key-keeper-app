@@ -15,6 +15,6 @@ import io.hb3nce04.keykeeperapp.service.UserService;
 @RequestMapping("/users")
 public class UserController extends AbstractCrudController<UserService, User, UserRequestDto, UserResponseDto, UserRepository, UserMapper> {
     public UserController(UserService service) {
-        super(service);
+        super(service, true, true, true, true);
     }
 }

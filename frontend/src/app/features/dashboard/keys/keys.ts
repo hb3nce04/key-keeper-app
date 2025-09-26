@@ -1,7 +1,6 @@
 import {Component, inject, OnInit, Signal, signal, TemplateRef, ViewChild, WritableSignal} from '@angular/core';
 import {Table} from '../../../shared/components/table/table';
 import {KeyService} from './key.service';
-import {Button, Column} from '../../../shared/components/table/table.type';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import {kjua, NgxKjuaComponent} from 'ngx-kjua';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -14,6 +13,9 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {KeyResponseDto} from './dtos/key-response.dto';
 import {EditKey} from './components/edit/edit';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {RoleService} from '../../../core/services/role.service';
+import {Button, Column} from '../../../shared/components/table/table.type';
+import {TableCan} from '../../../core/types/role.type';
 
 @Component({
   selector: 'app-keys',
@@ -28,7 +30,8 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
   template: `
     <app-table [buttons]="buttons" [columns]="columns" [data]="data()" (delete)="handleDelete($event)"
                (edit)="handleEdit($event)"
-               (create)="handleCreate()">
+               (create)="handleCreate()"
+                [can]="can">
       <button nz-button (click)="handlePrint()">
         <nz-icon nzType="printer" nzTheme="outline" />
         QR-kódok nyomtatása
@@ -44,6 +47,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 export class Keys implements OnInit {
   private authService: AuthService = inject(AuthService);
   private keyService: KeyService = inject(KeyService);
+  private roleService: RoleService = inject(RoleService);
   private modalService: NzModalService = inject(NzModalService);
   private message: NzMessageService = inject(NzMessageService);
   private drawerService: NzDrawerService = inject(NzDrawerService);
@@ -86,6 +90,7 @@ export class Keys implements OnInit {
     }
   ]
   data: Signal<KeyResponseDto[]> = toSignal(this.keyService.data$, { initialValue: [] as KeyResponseDto[] });
+  can: TableCan = this.roleService.privileges().keys
 
   ngOnInit(): void {
     this.keyService.findAll()
@@ -138,7 +143,18 @@ export class Keys implements OnInit {
       );
     }
 
-    document.save(`qr.pdf`);
+    this.printDocument(document)
+  }
+
+  printDocument(document: jspdf) {
+    const blob = document.output('blob');
+    const url = URL.createObjectURL(blob);
+    const pdfWindow = window.open(url, '_blank');
+    if (pdfWindow) {
+      pdfWindow.onload = () => {
+        pdfWindow?.print();
+      };
+    }
   }
 
   static getBarcodeData(data: KeyResponseDto) {
@@ -157,7 +173,7 @@ export class Keys implements OnInit {
       mSize: 5,
       mPosX: 50,
       mPosY: 100,
-      //label: `${data.code}: ${data.room.code} - ${data.room.name} (${data.room.building})`,
+      label: `${data.code}: ${data.room.code} - ${data.room.name} (${data.room.building})`,
       fontname: "sans-serif",
       fontcolor: "#3F51B5",
     });

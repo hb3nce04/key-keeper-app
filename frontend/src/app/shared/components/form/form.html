@@ -1,7 +1,7 @@
 <form nz-form [formGroup]="formGroup" (ngSubmit)="handleSubmit()" [class]="class()" nzLayout="vertical">
   @for (field of fields(); track $index) {
     <nz-form-item>
-      @if (field.label) {
+      @if (field.label && field.type !== "checkbox") {
         <nz-form-label [nzRequired]="formGroup.get(field.name)?.hasValidator(Validators.required)">
           {{field.label}}
         </nz-form-label>
@@ -13,6 +13,8 @@
               <nz-option [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
             }
           </nz-select>
+        } @else if (field.type === "checkbox") {
+          <label nz-checkbox [formControlName]="field.name">{{ field.label }}</label>
         } @else {
           <nz-input-group [nzPrefixIcon]="field.icon">
             <input [type]="field.type" nz-input [formControlName]="field.name" [placeholder]="field.placeholder ?? ''"/>

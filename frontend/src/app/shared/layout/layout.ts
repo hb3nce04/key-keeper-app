@@ -24,19 +24,20 @@ export class Layout implements OnInit {
   protected readonly title$ = new BehaviorSubject<string>("");
 
   ngOnInit(): void {
+    this.title$.next(this.getTitleFromRoute());
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
-        map(() => {
-          let r = this.route.firstChild;
-          while (r?.firstChild) {
-            r = r.firstChild;
-          }
-          return r?.snapshot.data?.['title'] || '';
-        })
+        map(() => this.getTitleFromRoute())
       )
-      .subscribe(title => {
-        this.title$.next(title);
-      });
+      .subscribe(title => this.title$.next(title));
+  }
+
+  private getTitleFromRoute(): string {
+    let r = this.route;
+    while (r.firstChild) {
+      r = r.firstChild;
+    }
+    return r.snapshot.data?.['title'] || '';
   }
 }

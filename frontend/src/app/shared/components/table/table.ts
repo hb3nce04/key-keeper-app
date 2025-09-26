@@ -11,6 +11,7 @@ import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 import {BaseResponseDto} from '../../../core/dtos/base-response.dto';
 import {NzPopconfirmDirective} from 'ng-zorro-antd/popconfirm';
 import {NzSkeletonComponent} from 'ng-zorro-antd/skeleton';
+import {TableCan} from '../../../core/types/role.type';
 
 @Component({
   selector: 'app-table',
@@ -41,6 +42,7 @@ export class Table<T extends BaseResponseDto> {
   columns: InputSignal<Column<T>[]> = input.required();
   buttons: InputSignal<Button[] | undefined> = input();
   data: InputSignal<T[]> = input.required();
+  can: InputSignal<TableCan> = input.required();
 
   create = output<void>();
   edit = output<number>();

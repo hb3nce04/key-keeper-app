@@ -13,7 +13,7 @@ import {MAIN_PAGE} from '../../../core/constants/links.const';
 @Component({
   template: `
     <div class="login-container">
-      <h2>Kérem jelentkezzen be!</h2>
+      <h2>Bejelentkezés</h2>
       <app-form [fields]="fields" (validSubmit)="handleLogin($event)" class="login-form">
         <button nz-button class="login-form-button login-form-margin" nzType="primary"
                 [disabled]="this.loadingService.$loading | async">Bejelentkezés

@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {AsyncPipe} from '@angular/common';
 import {Form} from '../../../../../shared/components/form/form';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -9,6 +9,7 @@ import {FormGroup, Validators} from '@angular/forms';
 import {BorrowingService} from '../../borrowing.service';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
 import {BorrowingStatus} from '../../enums/borrowing.enum';
+import {RoomService} from '../../../rooms/room.service';
 
 @Component({
   selector: 'app-create-borrowing',
@@ -26,10 +27,11 @@ import {BorrowingStatus} from '../../enums/borrowing.enum';
     </app-form>
   `
 })
-export class CreateBorrowing{
+export class CreateBorrowing implements OnInit {
   private drawerRef = inject(NzDrawerRef<CreateBorrowing>);
   protected loadingService: LoadingService = inject(LoadingService);
   protected messageService: NzMessageService = inject(NzMessageService);
+  protected roomService: RoomService = inject(RoomService);
   protected borrowingService: BorrowingService = inject(BorrowingService);
 
   fields: FieldConfig[] = [
@@ -46,6 +48,13 @@ export class CreateBorrowing{
       validators: [Validators.required],
     },
     {
+      name: 'roomId',
+      label: 'Helyiség kiválasztása',
+      type: 'select',
+      showSearch: true,
+      validators: [Validators.required],
+    },
+    {
       name: 'status',
       label: 'Állapot',
       type: 'select',
@@ -56,6 +65,17 @@ export class CreateBorrowing{
       validators: [Validators.required]
     }
   ]
+
+  ngOnInit(): void {
+    this.roomService.findAll().subscribe(
+      data => {
+        this.fields[2].options = data.map(room => ({
+          value: room.id,
+          label: `${room.code} (${room.name})`,
+        }) as Option)
+      }
+    )
+  }
 
   handleSubmit(form: FormGroup) {
     this.drawerRef.close();

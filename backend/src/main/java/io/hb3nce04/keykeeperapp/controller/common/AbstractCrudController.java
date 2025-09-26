@@ -3,6 +3,7 @@ package io.hb3nce04.keykeeperapp.controller.common;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,23 +33,32 @@ import lombok.RequiredArgsConstructor;
 public abstract class AbstractCrudController<S extends AbstractCrudService<E, REQ, RES, R, M>, E extends BaseEntity, REQ, RES extends BaseDto, R extends BaseRepository<E>, M extends BaseMapper<REQ, RES, E>> {
     protected final S service;
 
+    public final boolean requireAdminToCreate;
+    public final boolean requireAdminToRead;
+    public final boolean requireAdminToUpdate;
+    public final boolean requireAdminToDelete;
+
     @PostMapping
+    @PreAuthorize("@controllerSecurity.can(authentication, this.requireAdminToCreate)")
     public ResponseEntity<RES> create(@RequestBody @Validated REQ dto) throws Exception {
         RES createdDto = service.create(dto);
         return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(1).toUri()).body(createdDto);
     }
 
     @GetMapping
+    @PreAuthorize("@controllerSecurity.can(authentication, this.requireAdminToRead)")
     public ResponseEntity<List<RES>> findAll() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize("@controllerSecurity.can(authentication, this.requireAdminToRead)")
     public ResponseEntity<RES> findById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PutMapping(value = "/{id}")
+    @PreAuthorize("@controllerSecurity.can(authentication, this.requireAdminToUpdate)")
     public ResponseEntity<RES> update(
             @PathVariable Long id,
             @RequestBody @Validated REQ dto) {
@@ -56,6 +66,7 @@ public abstract class AbstractCrudController<S extends AbstractCrudService<E, RE
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@controllerSecurity.can(authentication, this.requireAdminToDelete)")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

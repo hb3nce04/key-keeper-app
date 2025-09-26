@@ -27,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 foundUser.getPassword(),
                 Collections.of(
                         new SimpleGrantedAuthority(
-                                foundUser.getRole().name()
+                                foundUser.getIsAdmin() ? "ROLE_ADMIN" : "ROLE_USER"
                         )
                 )
         );

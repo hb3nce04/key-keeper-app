@@ -39,11 +39,11 @@ public class UserService extends AbstractCrudService<User, UserRequestDto, UserR
         String rawPassword = PasswordUtil.generate();
         User newUser = new User();
         newUser.setUsername(dto.getUsername());
-        newUser.setRole(dto.getRole());
+        newUser.setIsAdmin(dto.getIsAdmin());
         newUser.setEmail_address(dto.getEmail_address());
         newUser.setPassword(this.passwordEncoder.encode(rawPassword));
         this.repository.save(newUser);
-        sendRegistrationMail(dto.getEmail_address(), dto.getUsername(), rawPassword);
+        sendRegistrationMail(dto.getEmail_address(), dto.getUsername(), rawPassword, dto.getIsAdmin());
         return this.mapper.toDto(newUser);
     }
 
@@ -59,10 +59,12 @@ public class UserService extends AbstractCrudService<User, UserRequestDto, UserR
     private void sendRegistrationMail(
             String email,
             String username,
-            String password) throws MessagingException {
+            String password,
+            boolean isAdmin) throws MessagingException {
         Map<String, Object> variables = new HashMap<>();
         variables.put("username", username);
         variables.put("password", password);
+        variables.put("isAdmin", isAdmin ? "Igen" : "Nem");
         this.mailService.send(email, "Regisztráció", "new-user-email.html", variables);
     }
 

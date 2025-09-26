@@ -1,6 +1,5 @@
 package io.hb3nce04.keykeeperapp.model.dto.request;
 
-import io.hb3nce04.keykeeperapp.model.enums.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -17,5 +16,5 @@ public class UserRequestDto {
     private String email_address;
 
     @NotNull(message = "Kitöltése kötelező")
-    private UserRole role;
+    private Boolean isAdmin;
 }
