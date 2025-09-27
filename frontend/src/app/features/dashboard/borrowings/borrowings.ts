@@ -44,7 +44,7 @@ export class Borrowings implements OnInit {
     {
       field: 'name',
       header: 'Név',
-      valueFn: (dto: BorrowingResponseDto) => dto.requester.firstName + ' ' + dto.requester.lastName,
+      valueFn: (dto: BorrowingResponseDto) => dto.requester.lastName + ' ' + dto.requester.firstName,
     },
     {
       field: 'date',

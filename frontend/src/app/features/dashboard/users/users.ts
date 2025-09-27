@@ -10,6 +10,8 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {EditUser} from './components/edit/edit';
 import {RoleService} from '../../../core/services/role.service';
 import {TableCan} from '../../../core/types/role.type';
+import {ApiErrorResponseDto} from '../../../core/dtos/api-error-response.dto';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-users',
@@ -52,6 +54,10 @@ export class Users implements OnInit {
     this.userService.delete(id).subscribe({
       next: () => {
         this.messageService.success("Felhasználó sikeresen törölve!")
+      },
+      error: (err: HttpErrorResponse) => {
+        const responseDto: ApiErrorResponseDto = err.error;
+        this.messageService.error(responseDto.message);
       }
     })
   }

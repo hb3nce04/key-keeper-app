@@ -8,6 +8,8 @@ import {LoadingService} from '../../../../../core/services/loading.service';
 import {UserService} from '../../user.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NZ_DRAWER_DATA, NzDrawerRef} from 'ng-zorro-antd/drawer';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ApiErrorResponseDto} from '../../../../../core/dtos/api-error-response.dto';
 
 @Component({
   selector: 'app-edit-user',
@@ -81,8 +83,9 @@ export class EditUser implements OnInit {
         this.messageService.success("Felhasználó sikeresen módosítva!")
         this.drawerRef.close();
       },
-      error: () => {
-        this.messageService.error("Hiba történt a felhasználó módosítása során!");
+      error: (err: HttpErrorResponse) => {
+        const responseDto: ApiErrorResponseDto = err.error;
+        this.messageService.error(responseDto.message);
       }
     })
   }

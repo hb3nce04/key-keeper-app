@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.hb3nce04.keykeeperapp.exception.BusinessLogicException;
 import io.hb3nce04.keykeeperapp.exception.EntityNotFoundException;
+import io.hb3nce04.keykeeperapp.model.dto.response.ApiErrorResponseDto;
 
 @RestControllerAdvice
 public class GlobalControllerAdvice {
@@ -30,12 +31,12 @@ public class GlobalControllerAdvice {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    public ResponseEntity<ApiErrorResponseDto> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiErrorResponseDto.builder().message(ex.getMessage()).build());
     }
 
     @ExceptionHandler(BusinessLogicException.class)
-    public ResponseEntity<String> handleBusinessLogicException(BusinessLogicException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    public ResponseEntity<ApiErrorResponseDto> handleBusinessLogicException(BusinessLogicException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiErrorResponseDto.builder().message(ex.getMessage()).build());
     }
 }

@@ -12,9 +12,9 @@ VALUES
 
 INSERT INTO requester (first_name, last_name, personal_id_number, email_address, phone_number, type)
 VALUES
-    ('Nagy', 'István', '123456AB', 'nagy.istvan@email.hu', '+36301231234', 'STUDENT'),
-    ('Takarító', 'Ilona', '654321AB', 'takarito.ilona@email.hu', '+36203214321', 'STAFF'),
-    ('Külsős', 'Béla', '123321AB', 'kulcsos.bela@email.hu', '+36703211234', 'STAFF');
+    ('István', 'Nagy', '123456AB', 'nagy.istvan@email.hu', '+36301231234', 'STUDENT'),
+    ('Ilona', 'Takarító', '654321AB', 'takarito.ilona@email.hu', '+36203214321', 'STAFF'),
+    ('Béla', 'Külsős', '123321AB', 'kulcsos.bela@email.hu', '+36703211234', 'STAFF');
 
 INSERT INTO "user" (username, password, email_address, is_admin)
 VALUES

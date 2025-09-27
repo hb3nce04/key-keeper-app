@@ -32,7 +32,7 @@ export class Requesters implements OnInit {
     {
       field: 'name',
       header: 'Név',
-      valueFn: (value: RequesterRequestDto) => `${value.firstName} ${value.lastName}`
+      valueFn: (value: RequesterRequestDto) => `${value.lastName} ${value.firstName}`
     },
     {
       field: 'personalIdNumber',

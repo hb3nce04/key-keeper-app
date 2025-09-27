@@ -48,6 +48,14 @@ public class UserService extends AbstractCrudService<User, UserRequestDto, UserR
     }
 
     @Override
+    public UserResponseDto update(Long id, UserRequestDto dto) {
+        if (getCurrentUserId().equals(id) && dto.getIsAdmin() == false) {
+            throw new BusinessLogicException("A jelenlegi felhasználót nem lehet lefokozni!");
+        }
+        return super.update(id, dto);
+    }
+
+    @Override
     public void delete(Long id) {
         Long currentUserId = this.getCurrentUserId();
         if (currentUserId.equals(id)) {
@@ -75,5 +83,14 @@ public class UserService extends AbstractCrudService<User, UserRequestDto, UserR
         }
         User foundUser = this.repository.findByUsername(authentication.getName());
         return foundUser.getId();
+    }
+
+    public Boolean isCurrentUserAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new BusinessLogicException("Nem sikerült a felhasználó azonosítása!");
+        }
+        User foundUser = this.repository.findByUsername(authentication.getName());
+        return foundUser.getIsAdmin();
     }
 }

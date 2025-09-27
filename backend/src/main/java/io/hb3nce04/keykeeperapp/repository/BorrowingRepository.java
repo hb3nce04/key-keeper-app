@@ -1,5 +1,7 @@
 package io.hb3nce04.keykeeperapp.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +18,6 @@ public interface BorrowingRepository extends BaseRepository<Borrowing> {
                ORDER BY b.date DESC, b.startTime DESC
             """)
     Borrowing findLatestByKeyCode(String code);
+
+    List<Borrowing> findAllByUser_Id(Long userId);
 }

@@ -16,6 +16,8 @@ import {NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
+import {NzDatePickerModule} from 'ng-zorro-antd/date-picker';
+import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
 
 @Component({
   selector: 'app-form',
@@ -30,7 +32,9 @@ import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
     NzFormControlComponent,
     NzSelectComponent,
     NzOptionComponent,
-    NzCheckboxComponent
+    NzCheckboxComponent,
+    NzDatePickerModule,
+    NzTimePickerComponent
   ],
   templateUrl: 'form.html'
 })

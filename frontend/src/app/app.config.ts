@@ -11,17 +11,20 @@ import {TokenInterceptor} from './core/interceptors/token.interceptor';
 import {LoadingInterceptor} from './core/interceptors/loading.interceptor';
 import {hu_HU, provideNzI18n} from 'ng-zorro-antd/i18n';
 import {NzDrawerService} from 'ng-zorro-antd/drawer';
+import {registerLocaleData} from '@angular/common';
+import hu from '@angular/common/locales/hu';
 
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
 };
 const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
 
+registerLocaleData(hu)
 export const appConfig: ApplicationConfig = {
   providers: [
     NzDrawerService,
     provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZoneChangeDetection({eventCoalescing: true}),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
     provideNzIcons(icons),

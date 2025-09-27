@@ -15,6 +15,10 @@
           </nz-select>
         } @else if (field.type === "checkbox") {
           <label nz-checkbox [formControlName]="field.name">{{ field.label }}</label>
+        } @else if (field.type === 'date') {
+          <nz-date-picker [formControlName]="field.name"/>
+        } @else if (field.type === 'time') {
+          <nz-time-picker [formControlName]="field.name" [nzFormat]="'HH:mm'" />
         } @else {
           <nz-input-group [nzPrefixIcon]="field.icon">
             <input [type]="field.type" nz-input [formControlName]="field.name" [placeholder]="field.placeholder ?? ''"/>

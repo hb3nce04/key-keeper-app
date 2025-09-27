@@ -46,7 +46,7 @@ export class CreateRequester {
     },
     {
       name: 'personalIdNumber',
-      label: 'Személyi igazlvány szám',
+      label: 'Személyi igazolvány szám',
       type: 'text'
     },
     {
