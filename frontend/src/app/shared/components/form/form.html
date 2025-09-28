@@ -28,7 +28,7 @@
             <nz-time-picker [formControlName]="field.name" [nzFormat]="'HH:mm'" />
           } @else {
             <nz-input-group [nzPrefixIcon]="field.icon">
-              <input [type]="field.type" nz-input [formControlName]="field.name" [placeholder]="field.placeholder ?? ''"/>
+              <input [type]="field.type" nz-input [formControlName]="field.name" [placeholder]="field.placeholder ?? ''" [maxlength]="field.maxlength ?? null"/>
             </nz-input-group>
           }
           <ng-template let-control #errorTpl>
@@ -36,6 +36,8 @@
               {{ field.label || field.placeholder }} kitöltése kötelező!
             } @else if (control.errors?.['email']) {
               Hibás e-mail cím.
+            } @else if (control.errors?.['pattern']) {
+              Hibás formátum.
             }
           </ng-template>
         </nz-form-control>

@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {Form} from '../../../../../shared/components/form/form';
-import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
+import {FieldConfig} from '../../../../../shared/components/form/form.type';
 import {FormGroup, Validators} from '@angular/forms';
 import {AsyncPipe} from '@angular/common';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -37,7 +37,7 @@ export class CreateUser {
       label: 'Felhasználónév',
       type: 'text',
       icon: 'user',
-      // TODO: maxhossz beállít
+      maxlength: 15,
       validators: [Validators.required],
     },
     {

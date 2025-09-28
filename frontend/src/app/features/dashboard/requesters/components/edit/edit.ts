@@ -49,6 +49,8 @@ export class EditRequester implements OnInit {
     {
       name: 'personalIdNumber',
       label: 'Személyi igazlvány szám',
+      validators: [Validators.pattern("\\d{6}[A-Z]{2}$")],
+      extra: 'pl: 123456AB',
       type: 'text'
     },
     {
@@ -59,7 +61,8 @@ export class EditRequester implements OnInit {
     {
       name: 'phoneNumber',
       label: 'Telefonszám',
-      type: 'text'
+      type: 'text',
+      validators: [Validators.pattern("^(?:\\+36|06)?\\s?(20|30|31|70)\\s?\\d{3}\\s?\\d{4}$")],
     },
     {
       name: 'type',

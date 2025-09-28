@@ -10,6 +10,7 @@ export interface FieldConfig {
   extra?: string,
   showSearch?: boolean;
   visible?: boolean;
+  maxlength?: number;
 }
 
 export interface Option {

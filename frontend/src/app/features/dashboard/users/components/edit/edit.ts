@@ -41,7 +41,7 @@ export class EditUser implements OnInit {
       label: 'Felhasználónév',
       type: 'text',
       icon: 'user',
-      // TODO: maxhossz beállít
+      maxlength: 15,
       validators: [Validators.required],
     },
     {

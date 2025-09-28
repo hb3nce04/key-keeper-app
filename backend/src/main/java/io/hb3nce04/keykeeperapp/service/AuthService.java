@@ -14,7 +14,6 @@ import io.hb3nce04.keykeeperapp.model.dto.response.AuthResponseDto;
 import io.hb3nce04.keykeeperapp.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 
-// TODO: protect routes: AUTHZ
 @Service
 @RequiredArgsConstructor
 public class AuthService {
