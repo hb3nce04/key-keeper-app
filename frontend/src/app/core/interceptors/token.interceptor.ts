@@ -19,12 +19,12 @@ export class TokenInterceptor implements HttpInterceptor {
         }
       });
       return next.handle(request).pipe(
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === 401 || error.status === 403) {
+        catchError((err: HttpErrorResponse) => {
+          if (err.status === 401 || err.status === 403) {
             this.messageService.info("A munkamenet lejárt, kérjük jelentkezz be újra!")
             this.authService.logout();
           }
-          return throwError(() => error);
+          return throwError(() => err);
         })
       );
     }

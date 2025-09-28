@@ -8,7 +8,6 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {FormGroup, Validators} from '@angular/forms';
 import {BorrowingService} from '../../borrowing.service';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
-import {BorrowingStatus} from '../../enums/borrowing.enum';
 import {RequesterService} from '../../../requesters/requester.service';
 import {KeyService} from '../../../keys/key.service';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -67,20 +66,10 @@ export class EditBorrowing implements OnInit {
     },
     {
       name: 'keyId',
-      label: 'Kulcs kiválasztása',
+      label: 'Elérhető kulcsok',
       type: 'select',
       showSearch: true,
       validators: [Validators.required],
-    },
-    {
-      name: 'status',
-      label: 'Állapot',
-      type: 'select',
-      options: Object.keys(BorrowingStatus).map(status => ({
-        value: status,
-        label: BorrowingStatus[status as keyof typeof BorrowingStatus],
-      }) as Option),
-      validators: [Validators.required]
     }
   ]
 
@@ -121,9 +110,6 @@ export class EditBorrowing implements OnInit {
           if (field.name === 'keyId') {
             field.value = data.key.id;
           }
-          if (field.name === 'status') {
-            field.value = data.status;
-          }
         })
       }
     )
@@ -143,11 +129,11 @@ export class EditBorrowing implements OnInit {
   }
 
   handleSubmit(form: FormGroup) {
-    const {requesterId, keyId, date, status} = form.value;
+    const {requesterId, keyId, date} = form.value;
     const startTime = this.convertDateToTime(form.value.startTime);
     const endTime = form.value.endTime ? this.convertDateToTime(form.value.endTime) : '';
 
-    this.borrowingService.update(this.drawerData.id, {requesterId, keyId, date, startTime, endTime, status}).subscribe({
+    this.borrowingService.put(this.drawerData.id, {requesterId, keyId, date, startTime, endTime}).subscribe({
       next: () => {
         this.messageService.success("Igénylés sikeresen módosítva!")
         this.drawerRef.close();

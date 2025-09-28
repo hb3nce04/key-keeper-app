@@ -37,7 +37,7 @@ export abstract class AbstractCrudService<REQ, RES extends BaseResponseDto> {
     );
   }
 
-  update(id: number, entity: REQ): Observable<RES> {
+  put(id: number, entity: REQ): Observable<RES> {
     return this.httpClient.put<RES>(`${environment.apiUrl + this.baseUrl}/${id}`, entity).pipe(
       tap({
         next: (updatedData) => {

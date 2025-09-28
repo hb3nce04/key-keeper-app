@@ -17,7 +17,6 @@ import io.hb3nce04.keykeeperapp.repository.UserRepository;
 import io.hb3nce04.keykeeperapp.service.common.AbstractCrudService;
 import io.hb3nce04.keykeeperapp.service.common.MailService;
 import io.hb3nce04.keykeeperapp.util.PasswordUtil;
-import jakarta.mail.MessagingException;
 
 @Service
 public class UserService extends AbstractCrudService<User, UserRequestDto, UserResponseDto, UserRepository, UserMapper> {
@@ -35,7 +34,7 @@ public class UserService extends AbstractCrudService<User, UserRequestDto, UserR
     }
 
     @Override
-    public UserResponseDto create(UserRequestDto dto) throws MessagingException {
+    public UserResponseDto create(UserRequestDto dto) {
         String rawPassword = PasswordUtil.generate();
         User newUser = new User();
         newUser.setUsername(dto.getUsername());
@@ -68,7 +67,7 @@ public class UserService extends AbstractCrudService<User, UserRequestDto, UserR
             String email,
             String username,
             String password,
-            boolean isAdmin) throws MessagingException {
+            boolean isAdmin) {
         Map<String, Object> variables = new HashMap<>();
         variables.put("username", username);
         variables.put("password", password);

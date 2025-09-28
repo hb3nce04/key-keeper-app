@@ -102,7 +102,7 @@ export class EditRequester implements OnInit {
 
   handleSubmit(form: FormGroup) {
     const {lastName, firstName, personalIdNumber, emailAddress, phoneNumber, type} = form.value;
-    this.requesterService.update(this.drawerData.id, {lastName, firstName, personalIdNumber, emailAddress, phoneNumber, type}).subscribe({
+    this.requesterService.put(this.drawerData.id, {lastName, firstName, personalIdNumber, emailAddress, phoneNumber, type}).subscribe({
       next: () => {
         this.messageService.success("Igénylő sikeresen módosítva!")
         this.drawerRef.close();

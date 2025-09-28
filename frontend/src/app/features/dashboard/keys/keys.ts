@@ -16,6 +16,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {RoleService} from '../../../core/services/role.service';
 import {Button, Column} from '../../../shared/components/table/table.type';
 import {TableCan} from '../../../core/types/role.type';
+import {KeyStatus} from './enums/key.enum';
 
 @Component({
   selector: 'app-keys',
@@ -75,6 +76,11 @@ export class Keys implements OnInit {
     {
       field: 'code',
       header: 'Kód',
+    },
+    {
+      field: 'status',
+      header: 'Jelenlegi állapot',
+      valueFn: (dto: KeyResponseDto) => KeyStatus[dto.status as unknown as keyof typeof KeyStatus]
     },
     {
       field: 'room.code',

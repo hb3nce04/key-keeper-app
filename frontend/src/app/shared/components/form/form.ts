@@ -18,6 +18,7 @@ import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {NzCheckboxComponent} from 'ng-zorro-antd/checkbox';
 import {NzDatePickerModule} from 'ng-zorro-antd/date-picker';
 import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
+import {NzRadioComponent, NzRadioGroupComponent} from 'ng-zorro-antd/radio';
 
 @Component({
   selector: 'app-form',
@@ -34,7 +35,9 @@ import {NzTimePickerComponent} from 'ng-zorro-antd/time-picker';
     NzOptionComponent,
     NzCheckboxComponent,
     NzDatePickerModule,
-    NzTimePickerComponent
+    NzTimePickerComponent,
+    NzRadioGroupComponent,
+    NzRadioComponent
   ],
   templateUrl: 'form.html'
 })
@@ -57,6 +60,7 @@ export class Form implements OnInit {
   }
 
   handleSubmit() {
+    if (!this.formGroup.dirty) return;
     if (this.formGroup.valid) {
       this.validSubmit.emit(this.formGroup);
     } else {

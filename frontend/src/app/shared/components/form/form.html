@@ -1,38 +1,46 @@
 <form nz-form [formGroup]="formGroup" (ngSubmit)="handleSubmit()" [class]="class()" nzLayout="vertical">
   @for (field of fields(); track $index) {
-    <nz-form-item>
-      @if (field.label && field.type !== "checkbox") {
-        <nz-form-label [nzRequired]="formGroup.get(field.name)?.hasValidator(Validators.required)">
-          {{field.label}}
-        </nz-form-label>
-      }
-      <nz-form-control [nzErrorTip]="errorTpl" [nzExtra]="field.extra">
-        @if (field.type === "select") {
-          <nz-select [nzShowSearch]="field.showSearch" nzAllowClear [nzPlaceHolder]="field.placeholder!" [formControlName]="field.name">
-            @for (option of field.options; track $index) {
-              <nz-option [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
-            }
-          </nz-select>
-        } @else if (field.type === "checkbox") {
-          <label nz-checkbox [formControlName]="field.name">{{ field.label }}</label>
-        } @else if (field.type === 'date') {
-          <nz-date-picker [formControlName]="field.name"/>
-        } @else if (field.type === 'time') {
-          <nz-time-picker [formControlName]="field.name" [nzFormat]="'HH:mm'" />
-        } @else {
-          <nz-input-group [nzPrefixIcon]="field.icon">
-            <input [type]="field.type" nz-input [formControlName]="field.name" [placeholder]="field.placeholder ?? ''"/>
-          </nz-input-group>
+    @if (field.visible === undefined || field.visible) {
+      <nz-form-item>
+        @if (field.label && field.type !== "checkbox") {
+          <nz-form-label [nzRequired]="formGroup.get(field.name)?.hasValidator(Validators.required)">
+            {{field.label}}
+          </nz-form-label>
         }
-        <ng-template let-control #errorTpl>
-          @if (control.errors?.['required']) {
-            {{ field.label || field.placeholder }} kitöltése kötelező!
-          } @else if (control.errors?.['email']) {
-            Hibás e-mail cím.
+        <nz-form-control [nzErrorTip]="errorTpl" [nzExtra]="field.extra">
+          @if (field.type === "select") {
+            <nz-select [nzShowSearch]="field.showSearch" nzAllowClear [nzPlaceHolder]="field.placeholder!" [formControlName]="field.name">
+              @for (option of field.options; track $index) {
+                <nz-option [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+              }
+            </nz-select>
+          } @else if (field.type === "checkbox") {
+            <label nz-checkbox [formControlName]="field.name">{{ field.label }}</label>
+          } @else if (field.type === "radio") {
+            <nz-radio-group [formControlName]="field.name">
+              @for (option of field.options; track $index) {
+                <label nz-radio [nzValue]="option.value">{{ option.label }}</label>
+              }
+            </nz-radio-group>
+          } @else if (field.type === 'date') {
+            <nz-date-picker [formControlName]="field.name"/>
+          } @else if (field.type === 'time') {
+            <nz-time-picker [formControlName]="field.name" [nzFormat]="'HH:mm'" />
+          } @else {
+            <nz-input-group [nzPrefixIcon]="field.icon">
+              <input [type]="field.type" nz-input [formControlName]="field.name" [placeholder]="field.placeholder ?? ''"/>
+            </nz-input-group>
           }
-        </ng-template>
-      </nz-form-control>
-    </nz-form-item>
+          <ng-template let-control #errorTpl>
+            @if (control.errors?.['required']) {
+              {{ field.label || field.placeholder }} kitöltése kötelező!
+            } @else if (control.errors?.['email']) {
+              Hibás e-mail cím.
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    }
   }
   <ng-content/>
 </form>

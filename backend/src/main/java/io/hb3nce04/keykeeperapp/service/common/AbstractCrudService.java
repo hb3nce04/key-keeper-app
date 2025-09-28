@@ -7,7 +7,6 @@ import io.hb3nce04.keykeeperapp.mapper.common.BaseMapper;
 import io.hb3nce04.keykeeperapp.model.dto.common.BaseDto;
 import io.hb3nce04.keykeeperapp.model.entity.common.BaseEntity;
 import io.hb3nce04.keykeeperapp.repository.common.BaseRepository;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -23,7 +22,7 @@ public abstract class AbstractCrudService<E extends BaseEntity, REQ, RES extends
     protected final R repository;
     protected final M mapper;
 
-    public RES create(REQ dto) throws MessagingException {
+    public RES create(REQ dto) {
         return mapper.toDto(repository.save(mapper.toEntity(dto)));
     }
 

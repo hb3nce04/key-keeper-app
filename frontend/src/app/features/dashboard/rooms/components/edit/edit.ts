@@ -111,7 +111,7 @@ export class EditRoom implements OnInit {
 
   handleSubmit(form: FormGroup) {
     const {code, name, floor, building, capacity, area, type} = form.value;
-    this.roomService.update(this.drawerData.id, {code, name, floor, building, capacity, area, type}).subscribe({
+    this.roomService.put(this.drawerData.id, {code, name, floor, building, capacity, area, type}).subscribe({
       next: () => {
         this.messageService.success("Helyiség sikeresen módosítva!")
         this.drawerRef.close();

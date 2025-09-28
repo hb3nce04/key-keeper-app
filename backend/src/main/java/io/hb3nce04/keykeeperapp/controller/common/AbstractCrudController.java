@@ -40,7 +40,7 @@ public abstract class AbstractCrudController<S extends AbstractCrudService<E, RE
 
     @PostMapping
     @PreAuthorize("@controllerSecurity.can(authentication, this.requireAdminToCreate)")
-    public ResponseEntity<RES> create(@RequestBody @Validated REQ dto) throws Exception {
+    public ResponseEntity<RES> create(@RequestBody @Validated REQ dto) {
         RES createdDto = service.create(dto);
         return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(1).toUri()).body(createdDto);
     }

@@ -15,6 +15,7 @@ public interface KeyMapper extends BaseMapper<KeyRequestDto, KeyResponseDto, Key
     Key toEntity(KeyRequestDto dto);
 
     @Mapping(target = "room", ignore = true)
+    @Mapping(target = "status", ignore = true)
     void updateEntity(
             KeyRequestDto dto,
             @MappingTarget Key entity);

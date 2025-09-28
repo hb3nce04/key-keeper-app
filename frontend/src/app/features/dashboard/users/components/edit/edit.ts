@@ -78,7 +78,7 @@ export class EditUser implements OnInit {
 
   handleSubmit(form: FormGroup) {
     const {username, email_address, isAdmin} = form.value;
-    this.userService.update(this.drawerData.id, {username, email_address, isAdmin}).subscribe({
+    this.userService.put(this.drawerData.id, {username, email_address, isAdmin}).subscribe({
       next: () => {
         this.messageService.success("Felhasználó sikeresen módosítva!")
         this.drawerRef.close();

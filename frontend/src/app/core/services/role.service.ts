@@ -14,8 +14,8 @@ export class RoleService {
         view: true
       },
       borrowings: {
-        create: true,
-        update: true,
+        create: isAdmin,
+        update: isAdmin,
         delete: true,
         view: true,
       },

@@ -8,7 +8,6 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {FormGroup, Validators} from '@angular/forms';
 import {BorrowingService} from '../../borrowing.service';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
-import {BorrowingStatus} from '../../enums/borrowing.enum';
 import {KeyService} from '../../../keys/key.service';
 import {RequesterService} from '../../../requesters/requester.service';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -69,16 +68,6 @@ export class CreateBorrowing implements OnInit {
       type: 'select',
       showSearch: true,
       validators: [Validators.required],
-    },
-    {
-      name: 'status',
-      label: 'Állapot',
-      type: 'select',
-      options: Object.keys(BorrowingStatus).map(status => ({
-        value: status,
-        label: BorrowingStatus[status as keyof typeof BorrowingStatus],
-      }) as Option),
-      validators: [Validators.required]
     }
   ]
 
@@ -91,7 +80,7 @@ export class CreateBorrowing implements OnInit {
         }) as Option)
       }
     )
-    this.keyService.findAll().subscribe(
+    this.keyService.findReturned().subscribe(
       data => {
         this.fields[4].options = data.map(key => ({
           value: key.id,
@@ -105,9 +94,6 @@ export class CreateBorrowing implements OnInit {
       }
       if (field.name === 'startTime') {
         field.value = this.convertTimeToDate(this.convertDateToTime(new Date()));
-      }
-      if (field.name === 'status') {
-        field.value = Object.keys(BorrowingStatus)[0];
       }
     })
   }
@@ -126,13 +112,13 @@ export class CreateBorrowing implements OnInit {
   }
 
   handleSubmit(form: FormGroup) {
-    const {requesterId, keyId, date, status} = form.value;
+    const {requesterId, keyId, date} = form.value;
     const startTime = this.convertDateToTime(form.value.startTime);
     const endTime = form.value.endTime ? this.convertDateToTime(form.value.endTime) : '';
 
-    this.borrowingService.create({requesterId, keyId, date, startTime, endTime, status}).subscribe({
+    this.borrowingService.create({requesterId, keyId, date, startTime, endTime}).subscribe({
       next: () => {
-        this.messageService.success("Igénylés sikeresen módosítva!")
+        this.messageService.success("Igénylés sikeresen létrehozva!")
         this.drawerRef.close();
       },
       error: (err: HttpErrorResponse) => {

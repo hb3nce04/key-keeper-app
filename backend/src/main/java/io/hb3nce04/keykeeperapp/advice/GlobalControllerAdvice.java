@@ -1,5 +1,6 @@
 package io.hb3nce04.keykeeperapp.advice;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +29,11 @@ public class GlobalControllerAdvice {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<ApiErrorResponseDto> handleSQLException(SQLException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiErrorResponseDto.builder().message(ex.getMessage()).build());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

@@ -1,7 +1,7 @@
 import {Component, Inject, inject, OnInit} from '@angular/core';
 import {Form} from '../../../../../shared/components/form/form';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
-import {FormGroup, Validators} from '@angular/forms';
+import {FormGroup, FormsModule, Validators} from '@angular/forms';
 import {RoomService} from '../../../rooms/room.service';
 import {AsyncPipe} from '@angular/common';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -9,6 +9,9 @@ import {LoadingService} from '../../../../../core/services/loading.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {KeyService} from '../../key.service';
 import {NZ_DRAWER_DATA, NzDrawerRef} from 'ng-zorro-antd/drawer';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ApiErrorResponseDto} from '../../../../../core/dtos/api-error-response.dto';
+import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-edit-key',
@@ -16,6 +19,8 @@ import {NZ_DRAWER_DATA, NzDrawerRef} from 'ng-zorro-antd/drawer';
     Form,
     AsyncPipe,
     NzButtonComponent,
+    FormsModule,
+    NzModalModule
   ],
   template: `
     <app-form [fields]="fields" (validSubmit)="handleSubmit($event)">
@@ -32,8 +37,10 @@ export class EditKey implements OnInit {
   private roomService: RoomService = inject(RoomService);
   protected loadingService: LoadingService = inject(LoadingService);
   protected messageService: NzMessageService = inject(NzMessageService);
+  protected modalService: NzModalService = inject(NzModalService);
 
-  constructor(@Inject(NZ_DRAWER_DATA) public readonly drawerData: { id: number }) {}
+  constructor(@Inject(NZ_DRAWER_DATA) public readonly drawerData: { id: number }) {
+  }
 
   fields: FieldConfig[] = [
     {
@@ -49,8 +56,24 @@ export class EditKey implements OnInit {
       type: 'select',
       showSearch: true,
       validators: [Validators.required],
+    },
+    {
+      name: 'status',
+      label: 'Állapot',
+      type: 'radio',
+      options: [
+        {
+          value: "LOST",
+          label: "Elveszett"
+        },
+        {
+          value: "BROKEN",
+          label: "Sérült"
+        }
+      ]
     }
   ]
+  statusChangable: boolean = true;
 
   ngOnInit(): void {
     this.roomService.findAll().subscribe(
@@ -71,20 +94,45 @@ export class EditKey implements OnInit {
             field.value = data.room.id
           }
         })
+        if (data.status.toString() === "LOST" || data.status.toString() === "BROKEN") {
+          this.fields[2].visible = false
+        }
       }
     )
   }
 
   handleSubmit(form: FormGroup) {
-    const {code, roomId} = form.value;
-    this.keyService.update(this.drawerData.id, {code, roomId}).subscribe({
+    const {code, roomId, status} = form.value;
+    this.keyService.put(this.drawerData.id, {code, roomId}).subscribe({
       next: () => {
         this.messageService.success("Kulcs sikeresen módosítva!")
         this.drawerRef.close();
       },
-      error: () => {
-        this.messageService.error("Hiba történt a kulcs módosítása során!");
+      error: (err: HttpErrorResponse) => {
+        const responseDto: ApiErrorResponseDto = err.error;
+        this.messageService.error(responseDto.message);
       }
     })
+    if (status === 'LOST' || status === 'BROKEN') {
+      this.modalService.confirm({
+        nzTitle: "Kulcs-állapot módosítás",
+        nzContent: "Biztosan módosítani szeretnéd a kulcs állapotát? Figyelem! A művelet később nem vonható vissza.",
+        nzOkText: "Igen",
+        nzCancelText: "Nem",
+        nzOnOk: () => {
+          this.keyService.updateStatus({id: this.drawerData.id, status}
+          ).subscribe({
+            next: () => {
+              this.messageService.success("A kulcs állapota sikeresen módosítva!")
+              this.drawerRef.close();
+            },
+            error: (err: HttpErrorResponse) => {
+              const responseDto: ApiErrorResponseDto = err.error;
+              this.messageService.error(responseDto.message);
+            }
+          })
+        }
+      })
+    }
   }
 }

@@ -9,6 +9,8 @@ import {LoadingService} from '../../../../../core/services/loading.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {KeyService} from '../../key.service';
 import {NzDrawerRef} from 'ng-zorro-antd/drawer';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ApiErrorResponseDto} from '../../../../../core/dtos/api-error-response.dto';
 
 @Component({
   selector: 'app-create-key',
@@ -68,8 +70,9 @@ export class CreateKey implements OnInit {
         this.messageService.success("Kulcs sikeresen létrehozva!")
         this.drawerRef.close();
       },
-      error: () => {
-        this.messageService.error("Hiba történt a kulcs létrehozása során!");
+      error: (err: HttpErrorResponse) => {
+        const responseDto: ApiErrorResponseDto = err.error;
+        this.messageService.error(responseDto.message);
       }
     })
   }

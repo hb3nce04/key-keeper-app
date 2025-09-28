@@ -21,20 +21,23 @@ public class MailService {
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
 
-    // TODO: handle: MessagingException
-    public void send(String to, String subject, String template, Map<String, Object> variables) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+    public void send(String to, String subject, String template, Map<String, Object> variables) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        Context context = new Context();
-        context.setVariables(variables);
-        String html = templateEngine.process(template, context);
+            Context context = new Context();
+            context.setVariables(variables);
+            String html = templateEngine.process(template, context);
 
-        helper.setTo(to);
-        helper.setSubject(String.format("Kulcsnyilvántartó rendszer - %s", subject));
-        helper.setText(html, true);
-        helper.setFrom("app@keykeeper.io");
+            helper.setTo(to);
+            helper.setSubject(String.format("Kulcsnyilvántartó rendszer - %s", subject));
+            helper.setText(html, true);
+            helper.setFrom("app@keykeeper.io");
 
-        mailSender.send(message);
+            mailSender.send(message);
+        } catch (MessagingException ex) {
+            System.out.println("Hiba történt az e-mail küldése során: " + ex.getMessage());
+        }
     }
 }

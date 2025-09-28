@@ -1,6 +1,6 @@
 export interface FieldConfig {
   name: string;
-  type: 'text' | 'password' | 'select' | 'email' | 'number' | 'checkbox' | 'date' | 'time';
+  type: 'text' | 'password' | 'select' | 'email' | 'number' | 'checkbox' | 'date' | 'time' | 'radio';
   value?: string | number | boolean | Date;
   label?: string;
   placeholder?: string;
@@ -9,6 +9,7 @@ export interface FieldConfig {
   options?: Option[];
   extra?: string,
   showSearch?: boolean;
+  visible?: boolean;
 }
 
 export interface Option {
