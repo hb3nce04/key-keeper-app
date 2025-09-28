@@ -56,7 +56,7 @@ export class CreateUser {
 
   handleSubmit(form: FormGroup) {
     const {username, email_address, isAdmin} = form.value;
-    this.userService.create({username, email_address, isAdmin}).subscribe({
+    this.userService.create({username, email_address, isAdmin: !!isAdmin}).subscribe({
       next: () => {
         this.messageService.success("Felhasználó sikeresen létrehozva! Az ideiglenes jelszó hamarosan kiküldésre kerül.")
         this.drawerRef.close();
