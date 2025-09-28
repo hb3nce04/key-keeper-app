@@ -9,7 +9,7 @@
     import org.springframework.stereotype.Component;
     import org.springframework.web.filter.OncePerRequestFilter;
 
-    import io.hb3nce04.keykeeperapp.security.services.UserDetailsServiceImpl;
+    import io.hb3nce04.keykeeperapp.security.service.UserDetailsServiceImpl;
     import jakarta.servlet.FilterChain;
     import jakarta.servlet.ServletException;
     import jakarta.servlet.http.HttpServletRequest;
@@ -29,8 +29,8 @@
                 FilterChain filterChain) throws ServletException, IOException {
             String token = parseToken(request);
             if (token != null && jwtUtils.validateToken(token)) {
-                String username = jwtUtils.getUsernameFromToken(token);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                String id = jwtUtils.getUsernameFromToken(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(id);
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,

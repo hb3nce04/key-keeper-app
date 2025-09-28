@@ -3,8 +3,6 @@ package io.hb3nce04.keykeeperapp.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +54,7 @@ public class UserService extends AbstractCrudService<User, UserRequestDto, UserR
 
     @Override
     public void delete(Long id) {
-        Long currentUserId = this.getCurrentUserId();
+        Long currentUserId = super.getCurrentUserId();
         if (currentUserId.equals(id)) {
             throw new BusinessLogicException("A jelenlegi felhasználót nem lehet törölni!");
         }
@@ -73,23 +71,5 @@ public class UserService extends AbstractCrudService<User, UserRequestDto, UserR
         variables.put("password", password);
         variables.put("isAdmin", isAdmin ? "Igen" : "Nem");
         this.mailService.send(email, "Regisztráció", "new-user-email.html", variables);
-    }
-
-    public Long getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new BusinessLogicException("Nem sikerült a felhasználó azonosítása!");
-        }
-        User foundUser = this.repository.findByUsername(authentication.getName());
-        return foundUser.getId();
-    }
-
-    public Boolean isCurrentUserAdmin() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new BusinessLogicException("Nem sikerült a felhasználó azonosítása!");
-        }
-        User foundUser = this.repository.findByUsername(authentication.getName());
-        return foundUser.getIsAdmin();
     }
 }

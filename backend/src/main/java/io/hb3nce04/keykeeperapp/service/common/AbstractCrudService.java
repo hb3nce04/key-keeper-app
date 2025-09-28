@@ -2,11 +2,16 @@ package io.hb3nce04.keykeeperapp.service.common;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import io.hb3nce04.keykeeperapp.exception.BusinessLogicException;
 import io.hb3nce04.keykeeperapp.exception.EntityNotFoundException;
 import io.hb3nce04.keykeeperapp.mapper.common.BaseMapper;
 import io.hb3nce04.keykeeperapp.model.dto.common.BaseDto;
 import io.hb3nce04.keykeeperapp.model.entity.common.BaseEntity;
 import io.hb3nce04.keykeeperapp.repository.common.BaseRepository;
+import io.hb3nce04.keykeeperapp.security.model.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -47,5 +52,34 @@ public abstract class AbstractCrudService<E extends BaseEntity, REQ, RES extends
 
     public E findEntityByIdOrThrow(Long id) {
         return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Az adott erőforrás nem található! (ID: %d)", id)));
+    }
+
+    protected Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new BusinessLogicException("Nem sikerült a felhasználó azonosítása!");
+        }
+
+        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+
+        return principal.getId();
+    }
+
+    protected Boolean isCurrentUserAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new BusinessLogicException("Nem sikerült a felhasználó azonosítása!");
+        }
+
+        Object principalObj = authentication.getPrincipal();
+        if (!(principalObj instanceof UserDetailsImpl principal)) {
+            throw new BusinessLogicException("Nem sikerült a felhasználó azonosítása!");
+        }
+
+        return principal.getAuthorities()
+                .stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
     }
 }

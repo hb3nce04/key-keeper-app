@@ -1,9 +1,7 @@
 package io.hb3nce04.keykeeperapp.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,10 +45,10 @@ public class BorrowingService extends AbstractCrudService<Borrowing, BorrowingRe
     @Override
     public List<BorrowingResponseDto> findAll() {
         List<Borrowing> result;
-        if (userService.isCurrentUserAdmin()) {
+        if (super.isCurrentUserAdmin()) {
             result = repository.findAll();
         } else {
-            result = repository.findAllByUser_Id(userService.getCurrentUserId());
+            result = repository.findAllByUser_Id(super.getCurrentUserId());
         }
         return mapper.toDtoList(result);
     }
@@ -62,7 +60,7 @@ public class BorrowingService extends AbstractCrudService<Borrowing, BorrowingRe
 
         Borrowing entity = mapper.toEntity(dto);
 
-        entity.setUser(userService.findEntityByIdOrThrow(userService.getCurrentUserId()));
+        entity.setUser(userService.findEntityByIdOrThrow(super.getCurrentUserId()));
 
         Key key = keyService.findEntityByIdOrThrow(dto.getKeyId());
         validateBorrowingKeyStatus(key.getStatus());
@@ -113,7 +111,7 @@ public class BorrowingService extends AbstractCrudService<Borrowing, BorrowingRe
         entity.setRequester(requesterService.findEntityByIdOrThrow(dto.getRequesterId()));
         entity.setDate(LocalDate.now());
         entity.setStartTime(LocalTime.now());
-        entity.setUser(userService.findEntityByIdOrThrow(userService.getCurrentUserId()));
+        entity.setUser(userService.findEntityByIdOrThrow(super.getCurrentUserId()));
 
         keyRepository.save(key);
 

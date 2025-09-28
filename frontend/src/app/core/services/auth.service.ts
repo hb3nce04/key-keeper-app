@@ -20,7 +20,7 @@ export class AuthService {
 
   readonly isLoggedIn = computed(() => !!this.token())
   readonly isAdmin = computed(() => this.getDecodedToken()?.role === "ROLE_ADMIN");
-  readonly getUsername = computed(() => this.getDecodedToken()?.sub)
+  readonly getUsername = computed(() => this.getDecodedToken()?.username)
 
   login(username: string, password: string): Observable<AuthResponseDto> {
     return this.httpClient.post<AuthResponseDto>(this.url + '/login', {username, password}).pipe(
@@ -31,11 +31,11 @@ export class AuthService {
     )
   }
 
-  getDecodedToken(): JwtPayload & { role: string } | null {
+  getDecodedToken(): JwtPayload & { username: string, role: string } | null {
     const token = this.token();
     if (!token) return null;
     try {
-      return jwtDecode<JwtPayload & { role: string }>(token);
+      return jwtDecode<JwtPayload & { username: string, role: string }>(token);
     } catch (error) {
       console.error('Hibás token', error);
       return null;

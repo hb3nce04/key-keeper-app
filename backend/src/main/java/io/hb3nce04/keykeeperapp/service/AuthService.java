@@ -6,12 +6,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import io.hb3nce04.keykeeperapp.model.dto.request.AuthRequestDto;
 import io.hb3nce04.keykeeperapp.model.dto.response.AuthResponseDto;
 import io.hb3nce04.keykeeperapp.security.jwt.JwtUtils;
+import io.hb3nce04.keykeeperapp.security.model.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,11 +23,11 @@ public class AuthService {
     public AuthResponseDto login(AuthRequestDto dto) {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
-        return new AuthResponseDto(jwtUtils.generateToken(userDetails.getUsername(), roles.getFirst()));
+        return new AuthResponseDto(jwtUtils.generateToken(userDetails.getId(), userDetails.getUsername(), roles.getFirst()));
     }
 }

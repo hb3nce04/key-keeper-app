@@ -1,4 +1,4 @@
-package io.hb3nce04.keykeeperapp.security.components;
+package io.hb3nce04.keykeeperapp.security.component;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
