@@ -1,0 +1,33 @@
+package io.hb3nce04.keykeeperapp.feature.auth;
+
+import java.util.List;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Service;
+
+import io.hb3nce04.keykeeperapp.common.component.JwtUtils;
+import io.hb3nce04.keykeeperapp.common.model.UserDetailsImpl;
+import io.hb3nce04.keykeeperapp.feature.auth.dto.AuthRequestDto;
+import io.hb3nce04.keykeeperapp.feature.auth.dto.AuthResponseDto;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class AuthService {
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
+
+    public AuthResponseDto login(AuthRequestDto dto) {
+        Authentication authentication =
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        List<String> roles = userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+        return new AuthResponseDto(jwtUtils.generateToken(userDetails.getId(), userDetails.getUsername(), roles.getFirst()));
+    }
+}
