@@ -9,7 +9,9 @@ import lombok.Setter;
 public class UserResponseDto extends BaseDto {
     private String username;
 
-    private String email_address;
+    private String emailAddress;
 
     private Boolean isAdmin;
+
+    private Boolean isDisabled;
 }

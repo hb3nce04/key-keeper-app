@@ -16,10 +16,10 @@ VALUES
     ('Ilona', 'Takarító', '654321AB', 'takarito.ilona@email.hu', '+36203214321', 'STAFF'),
     ('Béla', 'Külsős', '123321AB', 'kulcsos.bela@email.hu', '+36703211234', 'STAFF');
 
-INSERT INTO users (username, password, email_address, is_admin)
+INSERT INTO users (username, password, email_address, is_admin, is_disabled)
 VALUES
-    ('admin', '$2a$10$YibFlVtQxcgZyHxCkB3VI.RDgDdgEnrt0WEOf3aIfznVe7fGK2rRq', 'admin@email.hu', true),
-    ('user', '$2a$10$xg13urHcaGWSUAMgo8MRSeuFIAncKZYkshaJCt4Il2evk63oIform', 'user@email.hu', false);
+    ('admin', '$2a$10$YibFlVtQxcgZyHxCkB3VI.RDgDdgEnrt0WEOf3aIfznVe7fGK2rRq', 'admin@email.hu', true, false),
+    ('user', '$2a$10$xg13urHcaGWSUAMgo8MRSeuFIAncKZYkshaJCt4Il2evk63oIform', 'user@email.hu', false, false);
 
 INSERT INTO borrowing (key_id, user_id, requester_id, start_time, end_time, date)
 VALUES

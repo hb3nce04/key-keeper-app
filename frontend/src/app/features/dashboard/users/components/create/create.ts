@@ -51,12 +51,17 @@ export class CreateUser {
       name: 'isAdmin',
       label: 'Adminisztrátor',
       type: 'checkbox'
+    },
+    {
+      name: 'isDisabled',
+      label: 'Letiltott',
+      type: 'checkbox'
     }
   ]
 
   handleSubmit(form: FormGroup) {
-    const {username, email_address, isAdmin} = form.value;
-    this.userService.create({username, email_address, isAdmin: !!isAdmin}).subscribe({
+    const {username, emailAddress, isAdmin, isDisabled} = form.value;
+    this.userService.create({username, emailAddress, isAdmin: !!isAdmin, isDisabled}).subscribe({
       next: () => {
         this.messageService.success("Felhasználó sikeresen létrehozva! Az ideiglenes jelszó hamarosan kiküldésre kerül.")
         this.drawerRef.close();

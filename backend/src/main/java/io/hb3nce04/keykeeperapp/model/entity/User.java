@@ -24,10 +24,13 @@ public class User extends BaseEntity {
     private String password;
 
     @Column(unique = true)
-    private String email_address;
+    private String emailAddress;
 
     @Column(nullable = false)
     private Boolean isAdmin = false;
+
+    @Column(nullable = false)
+    private Boolean isDisabled = false;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Borrowing> borrowings;

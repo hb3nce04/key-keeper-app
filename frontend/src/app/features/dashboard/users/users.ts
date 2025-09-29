@@ -34,13 +34,18 @@ export class Users implements OnInit {
       header: 'Felhasználónév',
     },
     {
-      field: 'email_address',
+      field: 'emailAddress',
       header: 'E-mail cím',
     },
     {
       field: 'role',
       header: 'Jogosultság',
       valueFn: (dto: UserResponseDto) => this.roleService.getRoleName(dto.isAdmin)
+    },
+    {
+      field: 'is_disabled',
+      header: 'Letiltott',
+      valueFn: (dto: UserResponseDto) => dto.isDisabled ? "Igen" : "Nem"
     }
   ]
   data: Signal<UserResponseDto[]> = toSignal(this.userService.data$, {initialValue: [] as UserResponseDto[]});

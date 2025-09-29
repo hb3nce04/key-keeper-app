@@ -1,5 +1,6 @@
 export interface UserRequestDto {
   username: string;
-  email_address: string;
+  emailAddress: string;
   isAdmin: boolean;
+  isDisabled: boolean;
 }

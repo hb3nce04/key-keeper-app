@@ -55,6 +55,11 @@ export class EditUser implements OnInit {
       name: 'isAdmin',
       label: 'Adminisztrátor',
       type: 'checkbox'
+    },
+    {
+      name: 'isDisabled',
+      label: 'Letiltott',
+      type: 'checkbox'
     }
   ]
 
@@ -66,10 +71,13 @@ export class EditUser implements OnInit {
             field.value = data.username
           }
           if (field.name === 'email_address') {
-            field.value = data.email_address
+            field.value = data.emailAddress
           }
           if (field.name === 'isAdmin') {
             field.value = data.isAdmin
+          }
+          if (field.name === 'isDisabled') {
+            field.value = data.isDisabled
           }
         })
       }
@@ -77,8 +85,8 @@ export class EditUser implements OnInit {
   }
 
   handleSubmit(form: FormGroup) {
-    const {username, email_address, isAdmin} = form.value;
-    this.userService.put(this.drawerData.id, {username, email_address, isAdmin}).subscribe({
+    const {username, email_address, isAdmin, isDisabled} = form.value;
+    this.userService.put(this.drawerData.id, {username, emailAddress: email_address, isAdmin: !!isAdmin, isDisabled}).subscribe({
       next: () => {
         this.messageService.success("Felhasználó sikeresen módosítva!")
         this.drawerRef.close();

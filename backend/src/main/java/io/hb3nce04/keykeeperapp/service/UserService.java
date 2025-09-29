@@ -37,17 +37,21 @@ public class UserService extends AbstractCrudService<User, UserRequestDto, UserR
         User newUser = new User();
         newUser.setUsername(dto.getUsername());
         newUser.setIsAdmin(dto.getIsAdmin());
-        newUser.setEmail_address(dto.getEmail_address());
+        newUser.setEmailAddress(dto.getEmailAddress());
         newUser.setPassword(this.passwordEncoder.encode(rawPassword));
         this.repository.save(newUser);
-        sendRegistrationMail(dto.getEmail_address(), dto.getUsername(), rawPassword, dto.getIsAdmin());
+        sendRegistrationMail(dto.getEmailAddress(), dto.getUsername(), rawPassword, dto.getIsAdmin());
         return this.mapper.toDto(newUser);
     }
 
     @Override
     public UserResponseDto update(Long id, UserRequestDto dto) {
-        if (getCurrentUserId().equals(id) && dto.getIsAdmin() == false) {
-            throw new BusinessLogicException("A jelenlegi felhasználót nem lehet lefokozni!");
+        if (getCurrentUserId().equals(id)) {
+            if (dto.getIsAdmin() == false) {
+                throw new BusinessLogicException("A jelenlegi felhasználót nem lehet lefokozni!");
+            } else if (dto.getIsDisabled() == true) {
+                throw new BusinessLogicException("A jelenlegi felhasználót nem lehet tiltani!");
+            }
         }
         return super.update(id, dto);
     }

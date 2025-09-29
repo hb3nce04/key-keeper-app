@@ -15,8 +15,11 @@ public class UserRequestDto {
     private String username;
 
     @Email(message = "Formátum nem megfelelő")
-    private String email_address;
+    private String emailAddress;
 
     @NotNull(message = "Kitöltése kötelező")
     private Boolean isAdmin;
+
+    @NotNull(message = "Kitöltése kötelező")
+    private Boolean isDisabled;
 }
