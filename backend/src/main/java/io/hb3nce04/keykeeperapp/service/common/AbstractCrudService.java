@@ -54,6 +54,10 @@ public abstract class AbstractCrudService<E extends BaseEntity, REQ, RES extends
         return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Az adott erőforrás nem található! (ID: %d)", id)));
     }
 
+    public Long count() {
+        return repository.count();
+    }
+
     protected Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

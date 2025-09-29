@@ -15,7 +15,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@Entity(name = "`user`")
+@Entity(name = "users")
 public class User extends BaseEntity {
     @Column(unique = true, length = 15, nullable = false)
     private String username;

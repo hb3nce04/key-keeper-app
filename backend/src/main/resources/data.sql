@@ -16,7 +16,7 @@ VALUES
     ('Ilona', 'Takarító', '654321AB', 'takarito.ilona@email.hu', '+36203214321', 'STAFF'),
     ('Béla', 'Külsős', '123321AB', 'kulcsos.bela@email.hu', '+36703211234', 'STAFF');
 
-INSERT INTO "user" (username, password, email_address, is_admin)
+INSERT INTO users (username, password, email_address, is_admin)
 VALUES
     ('admin', '$2a$10$YibFlVtQxcgZyHxCkB3VI.RDgDdgEnrt0WEOf3aIfznVe7fGK2rRq', 'admin@email.hu', true),
     ('user', '$2a$10$xg13urHcaGWSUAMgo8MRSeuFIAncKZYkshaJCt4Il2evk63oIform', 'user@email.hu', false);
