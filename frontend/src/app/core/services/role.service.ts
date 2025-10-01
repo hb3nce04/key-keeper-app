@@ -13,7 +13,7 @@ export class RoleService {
       home: {
         view: true
       },
-      borrowings: {
+      assignments: {
         create: isAdmin,
         update: isAdmin,
         delete: true,
@@ -31,7 +31,7 @@ export class RoleService {
         delete: isAdmin,
         view: isAdmin,
       },
-      requesters: {
+      applicants: {
         create: isAdmin,
         update: isAdmin,
         delete: isAdmin,

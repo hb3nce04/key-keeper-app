@@ -37,7 +37,7 @@ public class KeyController extends AbstractCrudController<KeyService, Key, KeyRe
 
     @PatchMapping("/{code}/return")
     public ResponseEntity<KeyStatus> setStatusReturnedByCode(@PathVariable String code) {
-        return ResponseEntity.ok(keyService.setStatusReturnedByCode(code));
+        return ResponseEntity.ok(keyService.setStatusAvailableByCode(code));
     }
 
     @PatchMapping("/status")

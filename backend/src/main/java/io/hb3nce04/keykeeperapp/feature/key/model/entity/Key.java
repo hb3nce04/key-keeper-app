@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.hb3nce04.keykeeperapp.feature.key.model.enums.KeyStatus;
 import io.hb3nce04.keykeeperapp.feature.room.model.entity.Room;
-import io.hb3nce04.keykeeperapp.feature.borrowing.model.entity.Borrowing;
+import io.hb3nce04.keykeeperapp.feature.assignment.model.entity.Assignment;
 import io.hb3nce04.keykeeperapp.common.model.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,9 +30,9 @@ public class Key extends BaseEntity {
     private Room room;
 
     @OneToMany(mappedBy = "key", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Borrowing> borrowings;
+    private List<Assignment> assignments;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private KeyStatus status = KeyStatus.BORROWED;
+    private KeyStatus status = KeyStatus.CHECKED_OUT;
 }

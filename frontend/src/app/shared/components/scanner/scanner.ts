@@ -20,7 +20,7 @@ export class Scanner {
 
   onPermission(hasPermission: boolean) {
     if (!hasPermission) {
-      this.message.error("QR-kód olvasó kamera engedélye megtagadva!")
+      this.message.info("A kamera használatához engedély szükséges.")
     }
   }
 

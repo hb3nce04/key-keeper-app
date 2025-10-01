@@ -1,7 +1,7 @@
 export enum KeyStatus {
-  BORROWED = 'Kiadva',
-  RETURNED = 'Elérhető',
+  CHECKED_OUT = 'Kiadva',
+  AVAILABLE = 'Elérhető',
   LOST = 'Elveszett',
-  BROKEN = 'Sérült'
+  DAMAGED = 'Sérült'
 }
 

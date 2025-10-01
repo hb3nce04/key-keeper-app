@@ -2,7 +2,7 @@ package io.hb3nce04.keykeeperapp.feature.user.model.entity;
 
 import java.util.List;
 
-import io.hb3nce04.keykeeperapp.feature.borrowing.model.entity.Borrowing;
+import io.hb3nce04.keykeeperapp.feature.assignment.model.entity.Assignment;
 import io.hb3nce04.keykeeperapp.common.model.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,5 +34,5 @@ public class User extends BaseEntity {
     private Boolean isDisabled = false;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Borrowing> borrowings;
+    private List<Assignment> assignments;
 }

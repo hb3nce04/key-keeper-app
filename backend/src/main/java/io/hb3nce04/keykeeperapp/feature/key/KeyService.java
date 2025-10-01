@@ -27,17 +27,17 @@ public class KeyService extends AbstractCrudService<Key, KeyRequestDto, KeyRespo
         this.roomService = roomService;
     }
 
-    public KeyStatus setStatusReturnedByCode(String code) {
+    public KeyStatus setStatusAvailableByCode(String code) {
         Key entity = repository.findByCode(code).orElseThrow(() -> new EntityNotFoundException("Ilyen kodú kulcs nem található!"));
-        return this.changeStatusToReturned(entity);
+        return this.changeStatusToAvailable(entity);
     }
 
     public List<KeyResponseDto> findAvailable() {
-        return mapper.toDtoList(repository.findByStatusIn(List.of(KeyStatus.BORROWED, KeyStatus.RETURNED)));
+        return mapper.toDtoList(repository.findByStatusIn(List.of(KeyStatus.CHECKED_OUT, KeyStatus.AVAILABLE)));
     }
 
     public List<KeyResponseDto> findReturned() {
-        return mapper.toDtoList(repository.findByStatusIn(List.of(KeyStatus.RETURNED)));
+        return mapper.toDtoList(repository.findByStatusIn(List.of(KeyStatus.AVAILABLE)));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class KeyService extends AbstractCrudService<Key, KeyRequestDto, KeyRespo
         validateCode(dto.getCode());
         Key entity = mapper.toEntity(dto);
 
-        entity.setStatus(KeyStatus.RETURNED);
+        entity.setStatus(KeyStatus.AVAILABLE);
 
         return mapper.toDto(repository.save(entity));
     }
@@ -66,14 +66,14 @@ public class KeyService extends AbstractCrudService<Key, KeyRequestDto, KeyRespo
         Long keyId = dto.getId();
         KeyStatus newStatus = dto.getStatus();
 
-        if (newStatus.equals(KeyStatus.RETURNED) || newStatus.equals(KeyStatus.BORROWED)) {
+        if (newStatus.equals(KeyStatus.AVAILABLE) || newStatus.equals(KeyStatus.CHECKED_OUT)) {
             throw new BusinessLogicException("A kulcs állapota ily módon közvetlenül nem módosítható!");
         }
 
         Key entity = findEntityByIdOrThrow(keyId);
         KeyStatus oldStatus = entity.getStatus();
 
-        if (oldStatus.equals(KeyStatus.LOST) || oldStatus.equals(KeyStatus.BROKEN)) {
+        if (oldStatus.equals(KeyStatus.LOST) || oldStatus.equals(KeyStatus.DAMAGED)) {
             throw new BusinessLogicException("Elveszett vagy sérült kulcs állapotát nem lehet közvetlenül módosítani!");
         }
 
@@ -90,12 +90,12 @@ public class KeyService extends AbstractCrudService<Key, KeyRequestDto, KeyRespo
         }
     }
 
-    public KeyStatus changeStatusToReturned(Key key) {
-        if (key.getStatus() != KeyStatus.BORROWED) {
+    public KeyStatus changeStatusToAvailable(Key key) {
+        if (key.getStatus() != KeyStatus.CHECKED_OUT) {
             throw new BusinessLogicException("A kulcs jelenleg nincs kikérve!");
         }
 
-        key.setStatus(KeyStatus.RETURNED);
+        key.setStatus(KeyStatus.AVAILABLE);
         repository.save(key);
 
         return key.getStatus();

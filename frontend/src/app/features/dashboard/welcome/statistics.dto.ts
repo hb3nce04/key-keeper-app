@@ -1,7 +1,7 @@
 export interface StatisticsDto {
-  borrowingCount: number;
+  assignmentCount: number;
   keyCount: number;
   roomCount: number;
-  requesterCount: number;
+  applicantCount: number;
   userCount: number;
 }

@@ -1,1 +1,1 @@
-export type Page = 'home' | 'borrowings' | 'keys' | 'rooms' | 'requesters' | 'users';
+export type Page = 'home' | 'assignments' | 'keys' | 'rooms' | 'applicants' | 'users';

@@ -1,17 +1,17 @@
 import {Routes} from '@angular/router';
-import {Borrowings} from './borrowings/borrowings';
+import {Assignments} from './assignments/assignments';
 import {Rooms} from './rooms/rooms';
 import {Keys} from './keys/keys';
-import {Requesters} from './requesters/requesters';
 import {Users} from './users/users';
 import {Welcome} from './welcome/welcome';
+import {Applicants} from './applicants/applicants';
 
 export default [
   {path: 'home', component: Welcome, data: {name: 'home', title: 'Főoldal'}},
-  {path: 'borrowings', component: Borrowings, data: {name: 'borrowings', title: 'Nyilvántartás'}},
+  {path: 'assignments', component: Assignments, data: {name: 'assignments', title: 'Nyilvántartás'}},
   {path: 'keys', component: Keys, data: {name: 'keys', title: 'Kulcsok'}},
   {path: 'rooms', component: Rooms, data: {name: 'rooms', title: 'Helyiségek'}},
-  {path: 'requesters', component: Requesters, data: {name: 'requesters', title: 'Igénylők'}},
+  {path: 'applicants', component: Applicants, data: {name: 'applicants', title: 'Igénylők'}},
   {path: 'users', component: Users, data: {name: 'users', title: 'Felhasználók'}},
-  { path: '', redirectTo: '/dashboard/borrowings', pathMatch: 'full'},
+  { path: '', redirectTo: '/dashboard/assignments', pathMatch: 'full'},
 ] as Routes;

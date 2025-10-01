@@ -5,6 +5,9 @@ import {StatisticsService} from './statistics.service';
 import {StatisticsDto} from './statistics.dto';
 import {Cards} from './cards/cards';
 import {CardType} from './cards/card/card.type';
+import {LoadingService} from '../../../core/services/loading.service';
+import {AsyncPipe} from '@angular/common';
+import {NzSkeletonComponent} from 'ng-zorro-antd/skeleton';
 
 @Component({
   selector: 'app-home',
@@ -15,10 +18,16 @@ import {CardType} from './cards/card/card.type';
         Jogosultságod: <b>{{ this.roleService.getRoleName(this.authService.isAdmin()) }}</b>
       </div>
     </div>
-    <app-cards class="cards" [cards]="cards"/>
+    @if (!(this.loadingService.$loading | async)) {
+      <app-cards class="cards" [cards]="cards"/>
+    } @else {
+      <nz-skeleton [nzActive]="true"/>
+    }
   `,
   imports: [
-    Cards
+    Cards,
+    AsyncPipe,
+    NzSkeletonComponent
   ],
   styles: `
     h1 {
@@ -35,6 +44,7 @@ export class Welcome implements OnInit {
   protected authService = inject(AuthService);
   protected roleService = inject(RoleService);
   protected statisticsService = inject(StatisticsService);
+  protected loadingService: LoadingService = inject(LoadingService);
 
   cards!: CardType[];
 
@@ -44,7 +54,7 @@ export class Welcome implements OnInit {
         this.cards = [
           {
             title: "Igénylések száma",
-            content: `${data.borrowingCount} darab`
+            content: `${data.assignmentCount} darab`
           },
           {
             title: "Kulcsok száma",
@@ -56,7 +66,7 @@ export class Welcome implements OnInit {
           },
           {
             title: "Igénylők száma",
-            content: `${data.requesterCount} darab`
+            content: `${data.applicantCount} darab`
           },
           {
             title: "Felhasználók száma",

@@ -8,9 +8,9 @@ import lombok.Setter;
 @Setter
 @Builder
 public class StatisticsDto {
-    private Long borrowingCount;
+    private Long assignmentCount;
     private Long keyCount;
     private Long roomCount;
-    private Long requesterCount;
+    private Long applicantCount;
     private Long userCount;
 }

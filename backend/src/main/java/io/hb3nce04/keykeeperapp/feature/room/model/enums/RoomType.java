@@ -12,7 +12,7 @@ public enum RoomType {
     /**
      * Laboratórium.
      */
-    LAB,
+    LABORATORY,
 
     /**
      * Iroda.
@@ -22,7 +22,7 @@ public enum RoomType {
     /**
      * Raktár.
      */
-    STORAGE,
+    STORAGE_ROOM,
 
     /**
      * Egyéb.

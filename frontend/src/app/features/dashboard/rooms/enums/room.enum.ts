@@ -1,7 +1,7 @@
 export enum RoomType {
   CLASSROOM = 'Terem',
-  LAB = 'Laboratórium',
+  LABORATORY = 'Laboratórium',
   OFFICE = 'Iroda',
-  STORAGE = 'Raktár',
+  STORAGE_ROOM = 'Raktár',
   OTHER = 'Egyéb'
 }

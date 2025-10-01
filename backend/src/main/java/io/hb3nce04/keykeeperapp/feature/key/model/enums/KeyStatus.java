@@ -7,12 +7,12 @@ public enum KeyStatus {
     /**
      * A kulcs birtoklás alatt van.
      */
-    BORROWED,
+    CHECKED_OUT,
 
     /**
      * A kulcs vissza lett adva.
      */
-    RETURNED,
+    AVAILABLE,
 
     /**
      * A kulcs elveszett.
@@ -20,8 +20,8 @@ public enum KeyStatus {
     LOST,
 
     /**
-     * A kulcs megsérült / eltört.
+     * A kulcs sérült.
      */
-    BROKEN
+    DAMAGED
 
 }

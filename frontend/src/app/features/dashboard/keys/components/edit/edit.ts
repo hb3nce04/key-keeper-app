@@ -67,13 +67,12 @@ export class EditKey implements OnInit {
           label: "Elveszett"
         },
         {
-          value: "BROKEN",
+          value: "DAMAGED",
           label: "Sérült"
         }
       ]
     }
   ]
-  statusChangable: boolean = true;
 
   ngOnInit(): void {
     this.roomService.findAll().subscribe(
@@ -94,7 +93,7 @@ export class EditKey implements OnInit {
             field.value = data.room.id
           }
         })
-        if (data.status.toString() === "LOST" || data.status.toString() === "BROKEN") {
+        if (data.status.toString() === "LOST" || data.status.toString() === "DAMAGED") {
           this.fields[2].visible = false
         }
       }
@@ -113,7 +112,7 @@ export class EditKey implements OnInit {
         this.messageService.error(responseDto.message);
       }
     })
-    if (status === 'LOST' || status === 'BROKEN') {
+    if (status === 'LOST' || status === 'DAMAGED') {
       this.modalService.confirm({
         nzTitle: "Kulcs-állapot módosítás",
         nzContent: "Biztosan módosítani szeretnéd a kulcs állapotát? Figyelem! A művelet később nem vonható vissza.",

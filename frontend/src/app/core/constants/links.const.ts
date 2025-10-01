@@ -6,10 +6,10 @@ export const NAV_LINKS: {
   name: Page
 }[] = [
   {label: 'Főoldal', path: '/dashboard/home', name: 'home'},
-  {label: 'Nyilvántartás', path: '/dashboard/borrowings', name: 'borrowings'},
+  {label: 'Nyilvántartás', path: '/dashboard/assignments', name: 'assignments'},
   {label: 'Kulcsok', path: '/dashboard/keys', name: 'keys'},
   {label: 'Helyiségek', path: '/dashboard/rooms', name: 'rooms'},
-  {label: 'Igénylők', path: '/dashboard/requesters', name: 'requesters'},
+  {label: 'Igénylők', path: '/dashboard/applicants', name: 'applicants'},
   {label: 'Felhasználók', path: '/dashboard/users', name: 'users'},
 ]
 
