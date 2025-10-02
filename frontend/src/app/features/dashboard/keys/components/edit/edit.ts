@@ -12,6 +12,8 @@ import {NZ_DRAWER_DATA, NzDrawerRef} from 'ng-zorro-antd/drawer';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ApiErrorResponseDto} from '../../../../../core/dtos/api-error-response.dto';
 import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
+import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-edit-key',
@@ -20,13 +22,27 @@ import {NzModalModule, NzModalService} from 'ng-zorro-antd/modal';
     AsyncPipe,
     NzButtonComponent,
     FormsModule,
-    NzModalModule
+    NzModalModule,
+    NzDividerComponent,
+    NzIconDirective
   ],
   template: `
     <app-form [fields]="fields" (validSubmit)="handleSubmit($event)">
       <button nz-button nzType="primary"
               [disabled]="this.loadingService.$loading | async">
         Mentés
+      </button>
+    </app-form>
+    <nz-divider [nzText]="text">
+      <ng-template #text>
+        <nz-icon nzType="key"/>
+        Állapot módosítása
+      </ng-template>
+    </nz-divider>
+    <app-form [fields]="statusFields" (validSubmit)="handleStatusSubmit($event)">
+      <button nz-button nzType="primary"
+              [disabled]="this.loadingService.$loading | async">
+        Frissítés
       </button>
     </app-form>
   `
@@ -56,10 +72,12 @@ export class EditKey implements OnInit {
       type: 'select',
       showSearch: true,
       validators: [Validators.required],
-    },
+    }
+  ]
+
+  statusFields: FieldConfig[] = [
     {
       name: 'status',
-      label: 'Állapot',
       type: 'radio',
       options: [
         {
@@ -101,7 +119,7 @@ export class EditKey implements OnInit {
   }
 
   handleSubmit(form: FormGroup) {
-    const {code, roomId, status} = form.value;
+    const {code, roomId} = form.value;
     this.keyService.put(this.drawerData.id, {code, roomId}).subscribe({
       next: () => {
         this.messageService.success("Kulcs sikeresen módosítva!")
@@ -112,6 +130,10 @@ export class EditKey implements OnInit {
         this.messageService.error(responseDto.message);
       }
     })
+  }
+
+  handleStatusSubmit(form: FormGroup) {
+    const {status} = form.value;
     if (status === 'LOST' || status === 'DAMAGED') {
       this.modalService.confirm({
         nzTitle: "Kulcs-állapot módosítás",
@@ -130,6 +152,9 @@ export class EditKey implements OnInit {
               this.messageService.error(responseDto.message);
             }
           })
+        },
+        nzOnCancel: () => {
+          this.drawerRef.close();
         }
       })
     }

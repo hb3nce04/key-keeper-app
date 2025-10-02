@@ -152,7 +152,6 @@ export class Assignments implements OnInit {
   returnBackById(id: number) {
     this.assignmentService.returnBack({assignmentId: id}).subscribe({
       next: (data) => {
-        console.log(data);
         if (data.toString() === 'AVAILABLE') {
           this.messageService.success("Kulcs sikeresen átvéve!")
         }

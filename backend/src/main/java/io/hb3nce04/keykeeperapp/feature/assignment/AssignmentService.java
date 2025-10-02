@@ -146,7 +146,7 @@ public class AssignmentService extends AbstractCrudService<Assignment, Assignmen
         Assignment entity = findEntityByIdOrThrow(dto.getAssignmentId());
         Key key = entity.getKey();
 
-        KeyStatus status = keyService.changeStatusToReturned(key);
+        KeyStatus status = keyService.changeStatusToAvailable(key);
 
         entity.setEndTime(LocalTime.now());
         repository.save(entity);

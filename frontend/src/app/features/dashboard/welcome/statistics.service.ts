@@ -10,6 +10,7 @@ export class StatisticsService {
   private baseUrl = "/statistics"
 
   getStatistics(): Observable<StatisticsDto> {
-    return this.httpClient.get<StatisticsDto>(environment.apiUrl + this.baseUrl);
+    return this.httpClient
+      .get<StatisticsDto>(`${environment.apiUrl}${this.baseUrl}`)
   }
 }

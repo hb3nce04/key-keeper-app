@@ -9,6 +9,7 @@
   - Spring MVC
   - Spring Data
   - Spring Security
+  - Spring Mail
   - Lombok
   - MapStruct
 - **Frontend:** TypeScript – Angular
@@ -27,7 +28,6 @@ A rendszer célja egy intézményen vagy épületen belüli **kulcsnyilvántart�
   - Jogosultságkezelés (adminisztrátor, portás vagy felhasználó)
   - Hitelesítés JSON Web Token (JWT) segítségével
 - **Kulcsnyilvántartás** (jogkörtől függően)
-  - Keresés és szűrés
   - Kulcsok kiadásának és visszavételének adminisztrációja
     - egyszerűsített módon QR-kód alapján
   - Aktuálisan kiadott kulcsok nyomon követése
@@ -35,9 +35,25 @@ A rendszer célja egy intézményen vagy épületen belüli **kulcsnyilvántart�
   - Helyiségek hozzáadása, módosítása, törlése
   - Igénylők hozzáadása, módosítása, törlése
   - Felhasználók hozzáadása, módosítása, törlése
+  - E-mail küldése a hozzáadott felhasználónak generált jelszóval
+- **Jogosultságkezelés**
+  - admin: teljes körű (globális) hozzáférés
+  - portás / felhasználó: nyilvántartás kezelése (igénylés, leadás), kulcsok és igénylők megtekintése, QR-kódok igénylése és olvasása
 - **PDF generálás**
   - A kulcsokhoz QR-kód generálható PDF formátumban, amely egyszerűsíti a kezelést és gyorsabbá teszi az adminisztrációt.
-
+- A kulcs lehetséges állapotai a rendszerben:
+```mermaid
+stateDiagram-v2
+    [*] --> Kiadva
+    Kiadva --> Elérhető: átadás
+    Elérhető --> Kiadva: átvétel
+    Kiadva --> Elveszett: elvesztés
+    Elérhető --> Elveszett: elvesztés
+    Kiadva --> Sérült: sérülés
+    Elérhető --> Sérült: sérülés
+    Elveszett --> [*]
+    Sérült --> [*]
+```
 ## 👤 Példafelhasználók
 | Jogosultság         | Felhasználónév | Jelszó |
 |--------------------|----------------|--------|
@@ -47,5 +63,23 @@ A rendszer célja egy intézményen vagy épületen belüli **kulcsnyilvántart�
 ## 🗄 Adatbázisséma
 ![ER diagramm](https://github.com/hb3nce04/key-keeper-app/blob/master/docs/ER.png)
 
+## 🚀 Üzembe helyezés (deploy)
+```bash
+git clone https://github.com/hb3nce04/key-keeper-app.git
+cd key-keeper-app
+```
+majd a [Docker Compose](https://docs.docker.com/) használatával:
+```bash
+docker compose up
+```
+
 ## 📸 Képernyőképek
-TODO
+![Bejelentkezés](docs/screenshots/01.png)
+![Főoldal](docs/screenshots/02.png)
+![Nyilvántartás](docs/screenshots/03.png)
+![Nyilvántartás](docs/screenshots/04.png)
+![Kulcsok](docs/screenshots/05.png)
+![Helyiségek](docs/screenshots/06.png)
+![Igénylők](docs/screenshots/07.png)
+![Felhasználók](docs/screenshots/08.png)
+![Reszponzivitás](docs/screenshots/09.png)

@@ -13,8 +13,8 @@ export abstract class AbstractCrudService<REQ, RES extends BaseResponseDto> {
   ) {
   }
 
-  findAll(): Observable<RES[]> {
-    if (!this.data$.getValue().length) {
+  findAll(forcedUpdate: boolean = false): Observable<RES[]> {
+    if (!this.data$.getValue().length || forcedUpdate) {
       this.httpClient.get<RES[]>(environment.apiUrl + this.baseUrl).subscribe(data => this.data$.next(data));
     }
     return this.data$.asObservable();
