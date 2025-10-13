@@ -3,6 +3,7 @@ package io.hb3nce04.keykeeperapp.common.mapper;
 import java.util.List;
 
 import org.mapstruct.MapperConfig;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import io.hb3nce04.keykeeperapp.common.model.dto.BaseDto;
@@ -22,6 +23,7 @@ public interface BaseMapper<REQ, RES extends BaseDto, E extends BaseEntity> {
 
     List<RES> toDtoList(List<E> entityList);
 
+    @Mapping(target = "id", ignore = true)
     void updateEntity(
             REQ dto,
             @MappingTarget E entity);
