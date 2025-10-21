@@ -1,4 +1,4 @@
-import {Component, Inject, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, inject, ViewChild} from '@angular/core';
 import {Form} from '../../../../../shared/components/form/form';
 import {FieldConfig, Option} from '../../../../../shared/components/form/form.type';
 import {FormGroup, FormsModule, Validators} from '@angular/forms';
@@ -27,33 +27,42 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
     NzIconDirective
   ],
   template: `
-    <app-form [fields]="fields" (validSubmit)="handleSubmit($event)">
-      <button nz-button nzType="primary"
-              [disabled]="this.loadingService.$loading | async">
-        Mentés
-      </button>
-    </app-form>
-    <nz-divider [nzText]="text">
-      <ng-template #text>
-        <nz-icon nzType="key"/>
-        Állapot módosítása
-      </ng-template>
-    </nz-divider>
-    <app-form [fields]="statusFields" (validSubmit)="handleStatusSubmit($event)">
-      <button nz-button nzType="primary"
-              [disabled]="this.loadingService.$loading | async">
-        Frissítés
-      </button>
-    </app-form>
+    @if (this.updatable) {
+      <app-form #form [fields]="fields" (validSubmit)="handleSubmit($event)">
+        <button nz-button nzType="primary"
+                [disabled]="this.loadingService.$loading | async">
+          Mentés
+        </button>
+      </app-form>
+      <nz-divider [nzText]="text">
+        <ng-template #text>
+          <nz-icon nzType="key"/>
+          Állapot módosítása
+        </ng-template>
+      </nz-divider>
+      <app-form #statusForm [fields]="statusFields" (validSubmit)="handleStatusSubmit($event)">
+        <button nz-button nzType="primary"
+                [disabled]="this.loadingService.$loading | async">
+          Frissítés
+        </button>
+      </app-form>
+    } @else {
+      <p>Elveszett vagy sérült kulcsot nem lehet módosítani!</p>
+    }
   `
 })
-export class EditKey implements OnInit {
+export class EditKey implements AfterViewInit {
   private drawerRef = inject(NzDrawerRef<EditKey>);
   private keyService: KeyService = inject(KeyService);
   private roomService: RoomService = inject(RoomService);
   protected loadingService: LoadingService = inject(LoadingService);
   protected messageService: NzMessageService = inject(NzMessageService);
   protected modalService: NzModalService = inject(NzModalService);
+
+  updatable = true;
+
+  @ViewChild("form") form!: Form;
+  @ViewChild("statusForm") statusForm!: Form;
 
   constructor(@Inject(NZ_DRAWER_DATA) public readonly drawerData: { id: number }) {
   }
@@ -92,7 +101,7 @@ export class EditKey implements OnInit {
     }
   ]
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.roomService.findAll().subscribe(
       data => {
         this.fields[1].options = data.map(room => ({
@@ -103,16 +112,11 @@ export class EditKey implements OnInit {
     )
     this.keyService.findById(this.drawerData.id).subscribe(
       data => {
-        this.fields.map((field: FieldConfig) => {
-          if (field.name === 'code') {
-            field.value = data.code
-          }
-          if (field.name === 'roomId') {
-            field.value = data.room.id
-          }
-        })
+        this.form.setValue(this.fields[0], data.code)
+        this.form.setValue(this.fields[1], data.room.id)
+        this.statusForm.setValue(this.statusFields[0], data.status)
         if (data.status.toString() === "LOST" || data.status.toString() === "DAMAGED") {
-          this.fields[2].visible = false
+          this.updatable = false;
         }
       }
     )

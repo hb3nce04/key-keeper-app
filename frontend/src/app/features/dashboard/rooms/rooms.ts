@@ -40,10 +40,7 @@ export class Rooms implements OnInit {
       field: 'floor',
       header: 'Szint',
       valueFn: (dto: RoomResponseDto) => {
-        if (dto.floor == 0) {
-          return 'Földszint'
-        }
-        return `${dto.floor}. emelet`
+        return dto.floor ? `${dto.floor}. emelet` : '-'
       }
     },
     {
@@ -53,12 +50,12 @@ export class Rooms implements OnInit {
     {
       field: 'capacity',
       header: 'Kapacitás',
-      valueFn: (dto: RoomResponseDto) => `${dto.capacity} fő`
+      valueFn: (dto: RoomResponseDto) => dto.capacity ? `${dto.capacity} fő` : '-'
     },
     {
       field: 'area',
       header: 'Terület',
-      valueFn: (dto: RoomResponseDto) => `${dto.area} nm`
+      valueFn: (dto: RoomResponseDto) => dto.area ? `${dto.area} nm` : '-'
     },
     {
       field: 'type',

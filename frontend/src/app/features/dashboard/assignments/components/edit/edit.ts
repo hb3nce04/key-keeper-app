@@ -1,4 +1,4 @@
-import {Component, Inject, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, inject, ViewChild} from '@angular/core';
 import {AsyncPipe} from '@angular/common';
 import {Form} from '../../../../../shared/components/form/form';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -29,13 +29,15 @@ import {ApiErrorResponseDto} from '../../../../../core/dtos/api-error-response.d
     </app-form>
   `
 })
-export class EditAssignment implements OnInit {
+export class EditAssignment implements AfterViewInit {
   private drawerRef = inject(NzDrawerRef<EditAssignment>);
   protected loadingService: LoadingService = inject(LoadingService);
   protected messageService: NzMessageService = inject(NzMessageService);
   protected applicantService: ApplicantService = inject(ApplicantService);
   protected keyService: KeyService = inject(KeyService);
   protected assignmentService: AssignmentService = inject(AssignmentService);
+
+  @ViewChild(Form) form!: Form;
 
   constructor(@Inject(NZ_DRAWER_DATA) public readonly drawerData: { id: number }) {}
 
@@ -73,7 +75,7 @@ export class EditAssignment implements OnInit {
     }
   ]
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.applicantService.findAll().subscribe(
       data => {
         this.fields[0].options = data.map(applicant => ({
@@ -92,25 +94,11 @@ export class EditAssignment implements OnInit {
     )
     this.assignmentService.findById(this.drawerData.id).subscribe(
       data => {
-        this.fields.map((field: FieldConfig) => {
-          if (field.name === 'applicantId') {
-            field.value = data.applicant.id;
-          }
-          if (field.name === 'date') {
-            field.value = data.date;
-          }
-          if (field.name === 'startTime') {
-            field.value = this.convertTimeToDate(data.startTime);
-          }
-          if (field.name === 'endTime') {
-            if (data.endTime) {
-              field.value = this.convertTimeToDate(data.endTime);
-            }
-          }
-          if (field.name === 'keyId') {
-            field.value = data.key.id;
-          }
-        })
+        this.form.setValue(this.fields[0], data.applicant.id)
+        this.form.setValue(this.fields[1], data.date)
+        this.form.setValue(this.fields[2], this.convertTimeToDate(data.startTime))
+        this.form.setValue(this.fields[3], this.convertTimeToDate(data.endTime))
+        this.form.setValue(this.fields[4], data.key.id)
       }
     )
   }

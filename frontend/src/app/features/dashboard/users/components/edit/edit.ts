@@ -1,4 +1,4 @@
-import {Component, Inject, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, inject, ViewChild} from '@angular/core';
 import {Form} from '../../../../../shared/components/form/form';
 import {FieldConfig} from '../../../../../shared/components/form/form.type';
 import {FormGroup, Validators} from '@angular/forms';
@@ -27,11 +27,13 @@ import {ApiErrorResponseDto} from '../../../../../core/dtos/api-error-response.d
     </app-form>
   `
 })
-export class EditUser implements OnInit {
+export class EditUser implements AfterViewInit {
   private drawerRef = inject(NzDrawerRef<EditUser>);
   protected loadingService: LoadingService = inject(LoadingService);
   protected userService: UserService = inject(UserService);
   protected messageService: NzMessageService = inject(NzMessageService);
+
+  @ViewChild(Form) form!: Form;
 
   constructor(@Inject(NZ_DRAWER_DATA) public readonly drawerData: { id: number }) {}
 
@@ -63,23 +65,13 @@ export class EditUser implements OnInit {
     }
   ]
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.userService.findById(this.drawerData.id).subscribe(
       data => {
-        this.fields.map((field: FieldConfig) => {
-          if (field.name === 'username') {
-            field.value = data.username
-          }
-          if (field.name === 'email_address') {
-            field.value = data.emailAddress
-          }
-          if (field.name === 'isAdmin') {
-            field.value = data.isAdmin
-          }
-          if (field.name === 'isDisabled') {
-            field.value = data.isDisabled
-          }
-        })
+        this.form.setValue(this.fields[0], data.username)
+        this.form.setValue(this.fields[1], data.emailAddress)
+        this.form.setValue(this.fields[2], data.isAdmin)
+        this.form.setValue(this.fields[3], data.isDisabled)
       }
     )
   }

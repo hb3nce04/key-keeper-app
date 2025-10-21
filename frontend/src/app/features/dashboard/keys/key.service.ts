@@ -26,10 +26,6 @@ export class KeyService extends AbstractCrudService<KeyRequestDto, KeyResponseDt
     );
   }
 
-  findAvailable(): Observable<KeyResponseDto[]> {
-    return this.httpClient.get<KeyResponseDto[]>(environment.apiUrl + this.baseUrl + '/available');
-  }
-
   findReturned(): Observable<KeyResponseDto[]> {
     return this.httpClient.get<KeyResponseDto[]>(environment.apiUrl + this.baseUrl + '/returned');
   }

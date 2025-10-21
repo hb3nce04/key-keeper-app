@@ -1,4 +1,4 @@
-import {Component, Inject, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, inject, ViewChild} from '@angular/core';
 import {AsyncPipe} from '@angular/common';
 import {Form} from '../../../../../shared/components/form/form';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -26,11 +26,13 @@ import {NzMessageService} from 'ng-zorro-antd/message';
     </app-form>
   `
 })
-export class EditRoom implements OnInit {
+export class EditRoom implements AfterViewInit {
   private drawerRef = inject(NzDrawerRef<EditRoom>);
   protected loadingService: LoadingService = inject(LoadingService);
   protected roomService: RoomService = inject(RoomService);
   protected messageService: NzMessageService = inject(NzMessageService);
+
+  @ViewChild(Form) form!: Form;
 
   constructor(@Inject(NZ_DRAWER_DATA) public readonly drawerData: { id: number }) {}
 
@@ -79,32 +81,16 @@ export class EditRoom implements OnInit {
     }
   ]
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.roomService.findById(this.drawerData.id).subscribe(
       data => {
-        this.fields.map((field: FieldConfig) => {
-          if (field.name === 'code') {
-            field.value = data.code
-          }
-          if (field.name === 'name') {
-            field.value = data.name
-          }
-          if (field.name === 'floor') {
-            field.value = data.floor
-          }
-          if (field.name === 'building') {
-            field.value = data.building
-          }
-          if (field.name === 'capacity') {
-            field.value = data.capacity
-          }
-          if (field.name === 'area') {
-            field.value = data.area
-          }
-          if (field.name === 'type') {
-            field.value = data.type
-          }
-        })
+        this.form.setValue(this.fields[0], data.code)
+        this.form.setValue(this.fields[1], data.name)
+        this.form.setValue(this.fields[2], data.floor)
+        this.form.setValue(this.fields[3], data.building)
+        this.form.setValue(this.fields[4], data.capacity)
+        this.form.setValue(this.fields[5], data.area)
+        this.form.setValue(this.fields[6], data.type)
       }
     )
   }

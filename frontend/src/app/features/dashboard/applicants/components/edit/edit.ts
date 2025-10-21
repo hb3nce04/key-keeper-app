@@ -1,4 +1,4 @@
-import {Component, Inject, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, inject, ViewChild} from '@angular/core';
 import {Form} from '../../../../../shared/components/form/form';
 import {AsyncPipe} from '@angular/common';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -25,11 +25,13 @@ import {ApplicantType} from '../../enums/applicant.enum';
       </button>
     </app-form>`
 })
-export class EditApplicant implements OnInit {
+export class EditApplicant implements AfterViewInit {
   private drawerRef = inject(NzDrawerRef<EditApplicant>);
   protected loadingService: LoadingService = inject(LoadingService);
   private applicantService: ApplicantService = inject(ApplicantService);
   private messageService: NzMessageService = inject(NzMessageService);
+
+  @ViewChild(Form) form!: Form;
 
   constructor(@Inject(NZ_DRAWER_DATA) public readonly drawerData: { id: number }) {}
 
@@ -76,31 +78,17 @@ export class EditApplicant implements OnInit {
     }
   ]
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.applicantService.findById(this.drawerData.id).subscribe(
       data => {
-        this.fields.map((field: FieldConfig) => {
-          if (field.name === 'lastName') {
-            field.value = data.lastName
-          }
-          if (field.name === 'firstName') {
-            field.value = data.firstName
-          }
-          if (field.name === 'personalIdNumber') {
-            field.value = data.personalIdNumber
-          }
-          if (field.name === 'emailAddress') {
-            field.value = data.emailAddress
-          }
-          if (field.name === 'phoneNumber') {
-            field.value = data.phoneNumber
-          }
-          if (field.name === 'type') {
-            field.value = data.type
-          }
-        })
+        this.form.setValue(this.fields[0], data.lastName)
+        this.form.setValue(this.fields[1], data.firstName)
+        this.form.setValue(this.fields[2], data.personalIdNumber)
+        this.form.setValue(this.fields[3], data.emailAddress)
+        this.form.setValue(this.fields[4], data.phoneNumber)
+        this.form.setValue(this.fields[5], data.type)
       }
-    )
+    );
   }
 
   handleSubmit(form: FormGroup) {

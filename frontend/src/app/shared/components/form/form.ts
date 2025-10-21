@@ -59,6 +59,10 @@ export class Form implements OnInit {
     this.formGroup = this.formBuilder.group(group)
   }
 
+  setValue(field: FieldConfig, value: any): void {
+    this.formGroup.get(field.name)?.setValue(value);
+  }
+
   handleSubmit() {
     if (!this.formGroup.dirty) return;
     if (this.formGroup.valid) {
