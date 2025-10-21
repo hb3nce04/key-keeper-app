@@ -56,6 +56,10 @@ public class KeyService extends AbstractCrudService<Key, KeyRequestDto, KeyRespo
         Room room = roomService.findEntityByIdOrThrow(dto.getRoomId());
         Key entity = findEntityByIdOrThrow(id);
 
+        if (entity.getStatus().equals(KeyStatus.LOST) || entity.getStatus().equals(KeyStatus.DAMAGED)) {
+            throw new BusinessLogicException("Elveszett vagy sérült kulcsot nem lehet közvetlenül módosítani!");
+        }
+
         mapper.updateEntity(dto, entity);
         entity.setRoom(room);
 
